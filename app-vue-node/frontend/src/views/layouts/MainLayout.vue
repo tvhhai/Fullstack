@@ -16,7 +16,9 @@
       </v-btn>
     </v-app-bar>
 
-    <v-main></v-main>
+    <v-main>
+      <RouterView />
+    </v-main>
   </v-app>
 </template>
 
