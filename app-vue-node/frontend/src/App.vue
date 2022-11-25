@@ -6,4 +6,11 @@ import { RouterView } from "vue-router";
   <RouterView />
 </template>
 
-<style scoped></style>
+<style>
+.v-list-item__prepend > .v-icon {
+  margin-inline-end: 16px;
+}
+.v-list-group {
+  --prepend-width: 20px;
+}
+</style>

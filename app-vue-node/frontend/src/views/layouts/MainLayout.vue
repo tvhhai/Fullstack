@@ -1,6 +1,8 @@
 <template>
   <v-app :theme="theme">
-    <v-navigation-drawer v-model="drawer"></v-navigation-drawer>
+    <v-navigation-drawer v-model="drawer">
+      <Sidebar />
+    </v-navigation-drawer>
 
     <v-app-bar title="Application" :elevation="2">
       <template v-slot:prepend>
@@ -24,9 +26,12 @@
 
 <script lang="ts">
 import { ref } from "vue";
-
+import Sidebar from "./Sidebar.vue";
 export default {
   name: "MainLayout",
+  components: {
+    Sidebar,
+  },
 
   setup() {
     const theme = ref("light");
