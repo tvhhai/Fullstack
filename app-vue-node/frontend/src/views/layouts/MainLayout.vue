@@ -26,7 +26,7 @@
 
 <script lang="ts">
 import { ref } from "vue";
-import Sidebar from "./Sidebar.vue";
+import Sidebar from "../../components/sidebar/Sidebar.vue";
 export default {
   name: "MainLayout",
   components: {
