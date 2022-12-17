@@ -49,7 +49,7 @@ export default {
       sortable: true,
       filter: true,
       resizable: true,
-      lockPinned: true, // Dont allow pinning for this example
+      lockPinned: true, // Don't allow pinning for this example
     };
 
     // Example load data from sever
@@ -76,6 +76,4 @@ export default {
 };
 </script>
 
-<style  lang="scss">
-
-</style>
+<style lang="scss"></style>

@@ -16,7 +16,20 @@ export default {
   sidebar: {
     home: "Home",
     dashboard: "Dashboard",
-    product: "Product",
+    product: {
+      title: "Product",
+      manager: "Manager",
+      type: "Type",
+    },
+    user: {
+      title: "User",
+      admin: "Admin",
+      action: "Action",
+      manager: "Manager",
+      setting: "Setting",
+      create: "Create",
+      edit: "Edit",
+    },
   },
 
   product: {
