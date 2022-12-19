@@ -31,10 +31,12 @@ export default defineComponent({
 
     const dashboard = sidebars.dashboard;
 
+    const phone = sidebars.phone;
+
     const users = sidebars.users;
 
     const open = ref(["Users"]);
-    const sidebarsData = ref([dashboard, products, users]);
+    const sidebarsData = ref([dashboard, phone, products, users]);
 
     return {
       sidebarsData,

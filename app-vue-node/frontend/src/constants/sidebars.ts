@@ -6,6 +6,13 @@ export const sidebars = {
     icon: "mdi-home",
     type: 0,
   },
+  phone: {
+    id: "phone",
+    url: "/phone",
+    i18nKey: "sidebar.phone",
+    icon: "mdi-home",
+    type: 0,
+  },
   users: {
     type: 2,
     id: "user",

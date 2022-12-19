@@ -1,9 +1,10 @@
 <template>
+  <AppLoader :is-loading="loading" />
   <ag-grid-vue
     class="ag-theme-alpine"
     style="height: 500px"
-    :columnDefs="columnDefs.value"
-    :rowData="rowData.value"
+    :columnDefs="columnDefs"
+    :rowData="rowData"
     :defaultColDef="defaultColDef"
     :floatingFilter="true"
     rowSelection="multiple"
@@ -19,61 +20,45 @@
   </ag-grid-vue>
 </template>
 
-<script>
-import { reactive, onMounted, ref } from "vue";
-
+<script setup lang="ts">
+import { reactive, onMounted, ref, defineEmits } from "vue";
+import AppLoader from "@/components/loader.vue";
 import { AgGridVue } from "ag-grid-vue3";
-export default {
-  name: "AppAgGrid",
-  components: {
-    AgGridVue,
+
+
+const props = defineProps({
+  columnDefs: {
+    type: Object,
+    require: true
   },
-  setup() {
-    const gridApi = ref(null); // Optional - for accessing Grid's API
-
-    // Obtain API from grid's onGridReady event
-    const onGridReady = (params) => {
-      gridApi.value = params.api;
-    };
-
-    const rowData = reactive({}); // Set rowData to Array of Objects, one Object per Row
-
-    // Each Column Definition results in one Column.
-    const columnDefs = reactive({
-      value: [{ field: "name" }, { field: "price" }, { field: "image" }],
-    });
-
-    // DefaultColDef sets props common to all Columns
-    const defaultColDef = {
-      editable: false,
-      sortable: true,
-      filter: true,
-      resizable: true,
-      lockPinned: true, // Don't allow pinning for this example
-    };
-
-    // Example load data from sever
-    onMounted(() => {
-      fetch("https://5fa04305e21bab0016dfd001.mockapi.io/api/v1/listphone")
-        .then((result) => result.json())
-        .then((remoteRowData) => (rowData.value = remoteRowData));
-    });
-
-    return {
-      onGridReady,
-      columnDefs,
-      rowData,
-      defaultColDef,
-      cellWasClicked: (event) => {
-        // Example of consuming Grid Event
-        console.log("cell was clicked", event);
-      },
-      deselectRows: () => {
-        gridApi.value.deselectAll();
-      },
-    };
+  rowData: {
+    type: Object,
+    require: true
   },
+  loading: {
+    type: Boolean,
+    require: true
+  }
+});
+const emit = defineEmits(["grid-ready"]);
+
+// setup(props, { emit }) {
+const gridApi = ref(null); // Optional - for accessing Grid's API
+const onGridReady = (params: any) => {
+  console.log(params);
+  emit("grid-ready", params);
+  gridApi.value = params.api;
 };
+
+// DefaultColDef sets props common to all Columns
+const defaultColDef = {
+  editable: false,
+  sortable: true,
+  filter: true,
+  resizable: true,
+  lockPinned: true // Don't allow pinning for this example
+};
+
 </script>
 
 <style lang="scss"></style>

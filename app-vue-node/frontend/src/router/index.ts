@@ -3,8 +3,8 @@ import MainLayout from "@/views/layouts/MainLayout.vue";
 import Dashboard from "@/views/Dashboard.vue";
 import ProductManager from "@/views/product/ProductManager.vue";
 import ProductType from "@/views/product/ProductType.vue";
-import SignIn from "@/views/auth/SignIn";
-import SignUp from "@/views/auth/SignUp";
+import SignIn from "@/views/auth/SignIn.vue";
+import SignUp from "@/views/auth/SignUp.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +44,11 @@ const router = createRouter({
           path: "/dashboard",
           name: "dashboard",
           component: Dashboard,
+        },
+        {
+          path: "/phone",
+          name: "phone",
+          component: () => import("@/views/phone/PhoneManager.vue"),
         },
         {
           path: "product-manager",
