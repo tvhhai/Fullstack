@@ -1,0 +1,32 @@
+.brand-logo {
+  width: 30px;
+  height: 30px;
+}
+
+.sidebar-header {
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  //         height: variables.$toolbar-height-desktop;
+  padding: 0 8px;
+  overflow: hidden;
+
+  //         @include breakpoints.bp-lt(small) {
+  //           & {
+  // //             height: variables.$toolbar-height-mobile;
+  //           }
+  //         }
+
+  // Colorful
+  .matero-header-white & {
+    background-color: white;
+  }
+  a {
+    display: flex;
+    align-items: center;
+  }
+}

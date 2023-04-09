@@ -1,0 +1,33 @@
+<div class="nav-links">
+    <ng-container *ngIf="!data.child; else subMenu">
+        <div class="sidebar-item">
+            <a class="sidebar-item-link" [routerLink]="data.route" routerLinkActive="active-link">
+                <mat-icon class="sidebar-item-icon" aria-label="Toggle icon">{{data.icon}}</mat-icon>
+                <span class="link-name">{{data.name}}</span>
+            </a>
+        </div>
+    </ng-container>
+
+    <ng-template #subMenu>
+        <div class="sidebar-item-collapse" (click)="openDropdown()">
+            <div class="collapse-title">
+                <mat-icon class="collapse-title-icon" aria-label="Toggle icon">{{data.icon}}</mat-icon>
+                <div class="collapse-title-text">
+                    <span class="collapse-link-name">{{data.name}}</span>
+                </div>
+                <mat-icon class="collapse-icon-drop" aria-label="Toggle icon">chevron_left</mat-icon>
+            </div>
+
+            <div class="collapse-sub-menu" *ngIf="open">
+                <ul>
+                    <li *ngFor="let item of data.child">
+                        <a class="sidebar-item-link" [routerLink]="item.router" routerLinkActive="active-link">
+                            <span class="dot-icon"></span>
+                            <span class="collapse-link-name">{{item.name}}</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </ng-template>
+</div>

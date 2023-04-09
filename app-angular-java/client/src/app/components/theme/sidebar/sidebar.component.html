@@ -1,0 +1,9 @@
+<div class="matero-sidebar-header" *ngIf="showHeader">
+    <app-branding></app-branding>
+</div>
+
+<div class="matero-sidebar-main scrollbar-none">
+    <div class="sidebar">
+        <app-sidebar-item *ngFor="let item of sidebarItems" [data]="item"></app-sidebar-item>
+    </div>
+</div>

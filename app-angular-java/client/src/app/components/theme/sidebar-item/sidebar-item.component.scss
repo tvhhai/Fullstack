@@ -1,0 +1,121 @@
+.nav-links {
+  .sidebar-item {
+    position: relative;
+    list-style: none;
+    transition: all 0.4s ease;
+    &:before {
+      position: absolute;
+      left: 0;
+      top: 0;
+      content: "";
+      width: 4px;
+      height: 100%;
+      background: #93181a;
+      opacity: 0;
+      transition: all 0.25s ease-in-out;
+      border-radius: 5px;
+    }
+
+    &.active:before,
+    &:hover:before {
+      opacity: 1;
+    }
+
+    .active-link {
+      background: red;
+    }
+
+    &.show-menu {
+      .collapse-sub-menu {
+        display: block;
+      }
+    }
+
+    .sidebar-item-link {
+      display: flex;
+      align-items: center;
+      padding: 8px 16px;
+      .sidebar-item-icon {
+        flex-shrink: 0;
+        display: inline-flex;
+        min-width: 40px;
+      }
+    }
+  }
+
+  .sidebar-item-collapse {
+    position: relative;
+    list-style: none;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    align-items: center;
+    &:before {
+      position: absolute;
+      left: 0;
+      top: 0;
+      content: "";
+      width: 4px;
+      height: 100%;
+      background: #93181a;
+      opacity: 0;
+      transition: all 0.25s ease-in-out;
+      border-radius: 5px;
+    }
+
+    &.active:before,
+    &:hover:before {
+      opacity: 1;
+    }
+
+    .active-link {
+      background: red;
+    }
+
+    // &.show-menu {
+    //   .collapse-sub-menu {
+    //     display: block;
+    //   }
+    // }
+
+    .collapse-title {
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+
+      .collapse-title-icon {
+        flex-shrink: 0;
+        display: inline-flex;
+        min-width: 40px;
+      }
+
+      .collapse-title-text {
+        flex: 1 1 auto;
+        min-width: 0;
+        margin: 4px 0;
+      }
+
+      .collapse-icon-drop {
+        user-select: none;
+        width: 1em;
+        height: 1em;
+        display: inline-block;
+        fill: currentColor;
+        flex-shrink: 0;
+        transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+        font-size: 1.5rem;
+      }
+    }
+
+    .collapse-sub-menu {
+      // display: none;
+
+      .li {
+        display: flex;
+      }
+
+      .sidebar-item-link {
+        padding: 8px 48px !important;
+      }
+    }
+  }
+}
