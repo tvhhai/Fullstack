@@ -1,21 +1,21 @@
-import {BreakpointObserver, Breakpoints, MediaMatcher} from '@angular/cdk/layout';
-import {ChangeDetectorRef, Component, Input, OnDestroy, ViewChild} from '@angular/core';
-import {Observable} from "rxjs";
-import {map, shareReplay} from "rxjs/operators";
-import {MatSidenav} from "@angular/material/sidenav";
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { MatSidenav } from '@angular/material/sidenav';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
-  selector: 'app-layout',
-  templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.scss']
+  selector: 'app-admin-layout',
+  templateUrl: './admin-layout.component.html',
+  styleUrls: ['./admin-layout.component.scss'],
 })
-export class LayoutComponent {
+export class AdminLayoutComponent {
   @ViewChild(MatSidenav)
   sidenav!: MatSidenav;
-  opened!:boolean;
+  opened!: boolean;
 
-  constructor(private breakpointObserver: BreakpointObserver, private cdr: ChangeDetectorRef) {}
-
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private cdr: ChangeDetectorRef
+  ) {}
   ngAfterViewInit() {
     this.breakpointObserver.observe(['(max-width: 800px)']).subscribe((res) => {
       if (res.matches) {
@@ -42,5 +42,4 @@ export class LayoutComponent {
   setIsOpenSidebar(opened: boolean) {
     this.opened = opened;
   }
-
 }

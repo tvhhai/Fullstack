@@ -200,6 +200,15 @@
   dependencies:
     tslib "^2.3.0"
 
+"@angular/localize@^15.2.6":
+  version "15.2.6"
+  resolved "https://registry.yarnpkg.com/@angular/localize/-/localize-15.2.6.tgz#d984a6e1ba9b91d13e5c2f7efdb54b1b7e3cf51d"
+  integrity sha512-2WJBYRJ6aulo0fS9BUGr4fsdyk+5WcbZoiFURgs0sNrJtYCd51I9rQNwl3OGyYReNmFx8GgLc4K7+rEKhKfSbA==
+  dependencies:
+    "@babel/core" "7.19.3"
+    glob "8.1.0"
+    yargs "^17.2.1"
+
 "@angular/material@15.2.5":
   version "15.2.5"
   resolved "https://registry.yarnpkg.com/@angular/material/-/material-15.2.5.tgz#a0531b629334dfd2997dd01e549bd0c40680f4e9"
@@ -2145,10 +2154,31 @@
     "@material/theme" "15.0.0-canary.684e33d25.0"
     tslib "^2.1.0"
 
+"@ng-bootstrap/ng-bootstrap@^14.1.0":
+  version "14.1.0"
+  resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-14.1.0.tgz#5ba7c91534e02434666fdf75ce20e19df7873bb0"
+  integrity sha512-vFJ9SLpALrkUjnhdOONrABojmPFZDkP5DYVZbuel4ug045DKi7bBNvSfBOEG1tvpxP1mPmbKg5REPAMsxHmShQ==
+  dependencies:
+    tslib "^2.3.0"
+
 "@ngtools/webpack@15.2.5":
   version "15.2.5"
   resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-15.2.5.tgz#679c509fde254e92442ce97bc512638f4189453a"
   integrity sha512-wD6GY4xghVK+SQL0dy/M3saGx5pqi7+1VHEr+BBI7IUNYGSqPNzylKNxLBgQiTzfkzvbrZ6MhfaMNkhvSCYr5w==
+
+"@ngx-translate/core@^14.0.0":
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/@ngx-translate/core/-/core-14.0.0.tgz#af421d0e1a28376843f0fed375cd2fae7630a5ff"
+  integrity sha512-UevdwNCXMRCdJv//0kC8h2eSfmi02r29xeE8E9gJ1Al4D4jEJ7eiLPdjslTMc21oJNGguqqWeEVjf64SFtvw2w==
+  dependencies:
+    tslib "^2.3.0"
+
+"@ngx-translate/http-loader@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@ngx-translate/http-loader/-/http-loader-7.0.0.tgz#905f38d8d13342621516635bf480ff9a4f73e9fc"
+  integrity sha512-j+NpXXlcGVdyUNyY/qsJrqqeAdJdizCd+GKh3usXExSqy1aE9866jlAIL+xrfDU4w+LiMoma5pgE4emvFebZmA==
+  dependencies:
+    tslib "^2.3.0"
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -2238,6 +2268,11 @@
     node-gyp "^9.0.0"
     read-package-json-fast "^3.0.0"
     which "^3.0.0"
+
+"@popperjs/core@^2.11.6":
+  version "2.11.7"
+  resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.7.tgz#ccab5c8f7dc557a52ca3288c10075c9ccd37fff7"
+  integrity sha512-Cr4OjIkipTtcXKjAsm8agyleBuDHvxzeBoa1v543lbv1YaIwQjESsVcmjiWiPEbC1FIeHOG/Op9kdCmAmiS3Kw==
 
 "@schematics/angular@15.2.5":
   version "15.2.5"

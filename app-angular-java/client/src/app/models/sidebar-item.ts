@@ -1,7 +1,7 @@
 export interface SidebarItem {
-    id: number;
-    name: string;
-    icon: string;
-    route: string;
-    child?: Array<any>;
+  id: number;
+  name: string;
+  icon: string;
+  route: string;
+  child?: Array<any>;
 }

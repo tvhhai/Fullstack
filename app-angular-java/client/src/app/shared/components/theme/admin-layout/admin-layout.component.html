@@ -1,18 +1,12 @@
 <mat-sidenav-container class="sidenav-container">
 
     <mat-sidenav class="sidenav">
-
-
         <app-sidebar></app-sidebar>
-
-
     </mat-sidenav>
 
     <mat-sidenav-content>
 
         <app-header (clicked)="toggleSideNav()" [opened]="opened"></app-header>
-
-        <!--    <app-dashboard></app-dashboard>-->
         <router-outlet></router-outlet>
 
     </mat-sidenav-content>
