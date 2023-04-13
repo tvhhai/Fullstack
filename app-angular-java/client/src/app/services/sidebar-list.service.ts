@@ -11,25 +11,23 @@ export class SidebarListService {
             id: 1,
             name: 'Dashboard',
             icon: 'dashboard',
-            route: '/dashboard',
+            route: 'dashboard',
         },
         {
             id: 2,
             name: 'Customers',
             icon: 'people',
-            route: '/test1',
+            route: 'test2',
             child: [
                 {
                     id: 2,
                     name: 'Customers',
-                    icon: 'people',
-                    route: '/test1',
+                    route: 'test2',
                 },
                 {
                     id: 2,
                     name: 'Customers',
-                    icon: 'people',
-                    route: '/test1',
+                    route: 'test1',
                 }
             ]
         },
@@ -37,31 +35,68 @@ export class SidebarListService {
             id: 3,
             name: 'Orders',
             icon: 'shopping_cart',
-            route: '/test2',
+            route: 'test2',
             child: [
                 {
-                    id: 2,
-                    name: 'Customers',
-                    icon: 'people',
-                    route: '/test1',
+                    id: 5,
+                    name: 'level 2',
+                    route: 'test1',
                 },
                 {
-                    id: 2,
-                    name: 'Customers',
-                    icon: 'people',
-                    route: '/test1',
+                    id: 6,
+                    name: 'level 2',
+                    route: 'test1',
                     child: [
                         {
-                            id: 2,
-                            name: 'Customers',
-                            icon: 'people',
-                            route: '/test1',
+                            id: 7,
+                            name: 'level 3',
+                            route: 'test1',
                         },
                         {
-                            id: 2,
-                            name: 'Customers',
-                            icon: 'people',
-                            route: '/test1',
+                            id: 8,
+                            name: 'level 3',
+                            route: 'test1',
+                            child: [
+                                {
+                                    id: 9,
+                                    name: 'level 4',
+                                    route: 'test1',
+                                },
+                                {
+                                    id: 10,
+                                    name: 'level 4',
+                                    route: 'test1',
+                                },
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 6,
+                    name: 'level 2',
+                    route: 'test1',
+                    child: [
+                        {
+                            id: 7,
+                            name: 'level 3',
+                            route: 'test1',
+                        },
+                        {
+                            id: 8,
+                            name: 'level 3',
+                            route: 'test1',
+                            child: [
+                                {
+                                    id: 9,
+                                    name: 'level 4',
+                                    route: 'test1',
+                                },
+                                {
+                                    id: 10,
+                                    name: 'level 4',
+                                    route: 'test1',
+                                },
+                            ]
                         }
                     ]
                 }
@@ -71,7 +106,7 @@ export class SidebarListService {
             id: 4,
             name: 'Settings',
             icon: 'settings',
-            route: '/settings',
+            route: 'test2',
         }
     ];
 

@@ -36,7 +36,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    MaterialModule,
+    // MaterialModule,
     LayoutModule,
     NgbModule,
     SharedModule,

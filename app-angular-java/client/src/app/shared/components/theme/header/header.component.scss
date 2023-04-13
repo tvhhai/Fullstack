@@ -1,3 +1,13 @@
-.example-spacer {
-  flex: 1 1 auto;
+.app-header {
+  //   position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+
+  .header-toolbar {
+    padding: 0 8px;
+  }
+  .example-spacer {
+    flex: 1 1 auto;
+  }
 }

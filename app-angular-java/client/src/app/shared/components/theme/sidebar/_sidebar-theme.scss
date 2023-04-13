@@ -1,0 +1,60 @@
+@use "sass:color";
+@use "sass:map";
+@use "@angular/material" as mat;
+
+@import "../../../../style/sidebar-variables";
+
+@mixin sidebar-item {
+  a {
+    color: black;
+  }
+  align-items: center;
+  background-attachment: $primaryBgSideBar;
+  cursor: pointer;
+  list-style: none;
+  position: relative;
+  transition: all 0.4s ease;
+
+  &.active:before,
+  &:hover:before {
+    opacity: 1;
+  }
+
+  .active-link {
+    // background-color: #f0f0f0;
+    background: red;
+  }
+
+  &.show-menu {
+    .collapse-sub-menu {
+      display: block;
+    }
+  }
+
+  .menu-heading {
+    &:hover:not(.active-link) {
+//       background: red;
+    }
+
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+
+    .menu-name {
+      flex: 1;
+      text-align: initial;
+    }
+
+    .menu-icon {
+      flex-shrink: 0;
+      display: inline-flex;
+      min-width: 40px;
+    }
+  }
+}
+
+// :hover
+// background active
+// menu item active
+// dropdown active rgba(231, 227, 252, 0.3)
+// dropdown active item

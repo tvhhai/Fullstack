@@ -1,17 +1,18 @@
-.sidenav-container {
+.sidebar-container {
   height: 100%;
-}
 
-.sidenav {
-  width: 200px;
-}
+  .sidebar {
+    width: 240px;
+    // background-color: rgba(40, 36, 61);
 
-.sidenav .mat-toolbar {
-  background: inherit;
-}
+    .mat-toolbar {
+      // background: $primary-palette;
+    }
 
-.mat-toolbar.mat-primary {
-  position: sticky;
-  top: 0;
-  z-index: 1;
+    .mat-toolbar.mat-primary {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+  }
 }

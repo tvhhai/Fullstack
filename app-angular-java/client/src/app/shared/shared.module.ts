@@ -12,8 +12,13 @@ import { SidebarComponent } from './components/theme/sidebar/sidebar.component';
 import { SidebarItemComponent } from './components/theme/sidebar-item/sidebar-item.component';
 import { SignInComponent } from './components/theme/auth-layout/sign-in/sign-in.component';
 import { SignUpComponent } from './components/theme/auth-layout/sign-up/sign-up.component';
-import { RouterLink, RouterOutlet } from '@angular/router';
 import { AppRoutingModule } from '../app-routing.module';
+
+import { SettingComponent } from './components/setting/setting.component';
+import { SidebarListItemComponent } from './components/theme/sidebar-list-item/sidebar-list-item.component';
+import { SidebarExpandComponent } from './components/theme/sidebar-expand/sidebar-expand.component';
+import { NavAccordionItemDirective } from './components/theme/sidebar-list-item/nav-accordion-item.directive';
+import { NavAccordionDirective } from './components/theme/sidebar-list-item/nav-accordion.directive';
 
 const MODULES: any[] = [
   CommonModule,
@@ -32,14 +37,15 @@ const COMPONENTS: any[] = [
   SidebarItemComponent,
   SignInComponent,
   SignUpComponent,
+  SettingComponent, SidebarListItemComponent, SidebarExpandComponent
 ];
 const COMPONENTS_DYNAMIC: any[] = [];
-const DIRECTIVES: any[] = [];
+const DIRECTIVES: any[] = [NavAccordionItemDirective, NavAccordionDirective];
 const PIPES: any[] = [];
 
 @NgModule({
-  imports: [...MODULES, RouterLink, RouterOutlet],
+  imports: [...MODULES],
   exports: [...MODULES, ...COMPONENTS, ...DIRECTIVES, ...PIPES],
-  declarations: [...COMPONENTS, ...COMPONENTS_DYNAMIC, ...DIRECTIVES, ...PIPES],
+  declarations: [...COMPONENTS, ...COMPONENTS_DYNAMIC, ...DIRECTIVES, ...PIPES ],
 })
 export class SharedModule {}

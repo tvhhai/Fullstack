@@ -1,0 +1,34 @@
+$white: #ffffff;
+$black: #000000;
+$grey: #eeeeee;
+
+
+$primaryTextColor: rgba(231, 227, 252, 0.87);
+
+
+//Side Bar
+$primaryColorSideBar: rgba(231, 227, 252, 0.87);
+$primaryBgSideBar: rgba(40, 36, 61);
+$primaryColorSideBarIcon: rgb(206, 203, 227);
+$activeBgCollapse: rgba(231, 227, 252, 0.3);
+$openCollapse: rgba(231, 227, 252, 0.08);
+$activeBgLink: rgba(158, 105, 253, 1);
+$activeColorLink: rgba(158, 105, 253, 1);
+$sideBarLinkHover: rgba(231, 227, 252, 0.04);
+$sideBarSectionItem: rgb(113, 108, 134);
+
+// Main
+//$primaryBgMain: rgb(49, 45, 75);
+//$primaryColorMain: rgba(231, 227, 252, 0.87);
+//$primaryBgMain: rgba(40, 36, 61);
+
+$primaryBgMain: $grey;
+$primaryBgMainWrapper: $white;
+$primaryColorWrapper: $black;
+
+
+
+//:export {
+//  color: $color;
+//  primary-color: $primaryTextColor;
+//}
