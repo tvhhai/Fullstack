@@ -24,7 +24,7 @@ const appRoutes: Routes = [
         // outlet: 'popup'
       },
       {
-        path: 'test2',
+        path: 'customers/test2',
         component: Test2Component,
         // outlet: 'popup'
       },

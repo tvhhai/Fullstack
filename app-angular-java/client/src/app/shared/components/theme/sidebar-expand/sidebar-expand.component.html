@@ -1,4 +1,4 @@
-<div class="sidebar-item expand" [ngClass]="{'expand-active':open}" appNavAccordionItem >
+<div class="sidebar-item expand" [ngClass]="{'expand-active':open}" appNavAccordionItem [route] = 'data.route'>
     <div class="menu-heading" (click)="openDropdown()" [style.padding-left.px]="level * 16">
         <mat-icon *ngIf="data.icon" class="menu-icon" aria-label="Toggle icon">{{ data.icon }}</mat-icon>
         <div *ngIf="!data.icon" class="dot-icon"></div>
@@ -7,8 +7,8 @@
         <mat-icon *ngIf="open" class="expand-icon" aria-label="Toggle icon">expand_more</mat-icon>
     </div>
 
-    <ng-container *ngIf="data.child"  >
-        <div class="expand-sub-menu"  [ngClass]="{'abc':open}"  [@dropDownMenu]>
+    <ng-container *ngIf="data.child">
+        <div class="expand-sub-menu" [@dropDownMenu]>
             <app-sidebar-list-item [data]="data.child " [level]="level + 1"></app-sidebar-list-item>
         </div>
     </ng-container>

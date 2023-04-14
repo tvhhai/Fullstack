@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgxPermissionsModule } from 'ngx-permissions';
 import { MaterialModule } from '../modules/material.module';
 import { TranslateComponent } from './components/translate/translate.component';
 import { AuthLayoutComponent } from './components/theme/auth-layout/auth-layout.component';
@@ -17,14 +18,20 @@ import { AppRoutingModule } from '../app-routing.module';
 import { SettingComponent } from './components/setting/setting.component';
 import { SidebarListItemComponent } from './components/theme/sidebar-list-item/sidebar-list-item.component';
 import { SidebarExpandComponent } from './components/theme/sidebar-expand/sidebar-expand.component';
-import { NavAccordionItemDirective } from './components/theme/sidebar-list-item/nav-accordion-item.directive';
-import { NavAccordionDirective } from './components/theme/sidebar-list-item/nav-accordion.directive';
+import { SidebarMenuComponent } from './components/theme/sidebar-menu/sidebar-menu.component';
+import { NavAccordionDirective } from './components/theme/sidebar-menu/nav-accordion.directive';
+import { NavAccordionItemDirective } from './components/theme/sidebar-menu/nav-accordion-item.directive';
+import { NavAccordionToggleDirective } from './components/theme/sidebar-menu/nav-accordion-toggle.directive';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const MODULES: any[] = [
   CommonModule,
-  MaterialModule,
   TranslateModule,
   AppRoutingModule,
+  NgxPermissionsModule,
+  ReactiveFormsModule,
+  MaterialModule,
+
 ];
 
 const COMPONENTS: any[] = [
@@ -37,15 +44,15 @@ const COMPONENTS: any[] = [
   SidebarItemComponent,
   SignInComponent,
   SignUpComponent,
-  SettingComponent, SidebarListItemComponent, SidebarExpandComponent
+  SettingComponent, SidebarListItemComponent, SidebarExpandComponent,SidebarMenuComponent
 ];
 const COMPONENTS_DYNAMIC: any[] = [];
-const DIRECTIVES: any[] = [NavAccordionItemDirective, NavAccordionDirective];
+const DIRECTIVES: any[] = [NavAccordionItemDirective, NavAccordionDirective, NavAccordionToggleDirective];
 const PIPES: any[] = [];
 
 @NgModule({
   imports: [...MODULES],
   exports: [...MODULES, ...COMPONENTS, ...DIRECTIVES, ...PIPES],
-  declarations: [...COMPONENTS, ...COMPONENTS_DYNAMIC, ...DIRECTIVES, ...PIPES ],
+  declarations: [...COMPONENTS, ...COMPONENTS_DYNAMIC, ...DIRECTIVES, ...PIPES],
 })
 export class SharedModule {}

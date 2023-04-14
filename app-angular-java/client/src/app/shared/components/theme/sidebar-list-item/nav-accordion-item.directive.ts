@@ -17,14 +17,14 @@ export class NavAccordionItemDirective {
     @Input()
     get expanded() {
         if(this.isExpanded){
-            console.log(this.isExpanded)
+            console.log('expanded',this.isExpanded)
         }
         return this.isExpanded;
     }
 
     set expanded(value: boolean) {
         // Only sub menu can be expanded
-        this.isExpanded =  value;
+        this.isExpanded =   value;
 
         if (value) {
             this.nav.closeOtherLinks(this);
@@ -32,12 +32,11 @@ export class NavAccordionItemDirective {
     }
 
     constructor(@Inject(NavAccordionDirective) nav: NavAccordionDirective) {
-        // console.log('constructor',nav)
+        // console.log(nav)
         this.nav = nav;
     }
 
     ngOnInit() {
-        // console.log('ngOnInit',this)
         this.nav.addLink(this);
     }
 

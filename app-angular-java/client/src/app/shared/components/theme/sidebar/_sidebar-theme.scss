@@ -20,9 +20,12 @@
     opacity: 1;
   }
 
-  .active-link {
-    // background-color: #f0f0f0;
-    background: red;
+  &.active-link {
+    background-color: #f0f0f0;
+    a {
+      color: red;
+    }
+    // background: red;
   }
 
   &.show-menu {
@@ -33,7 +36,8 @@
 
   .menu-heading {
     &:hover:not(.active-link) {
-//       background: red;
+      background-color: #f0f0f0;
+      color: red;
     }
 
     display: flex;
@@ -49,6 +53,7 @@
       flex-shrink: 0;
       display: inline-flex;
       min-width: 40px;
+      color: rgba(44, 56, 74, 0.681);
     }
   }
 }

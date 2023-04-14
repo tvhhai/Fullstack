@@ -1,25 +1,26 @@
 import { Directive } from '@angular/core';
 import {NavigationEnd, Router} from "@angular/router";
-import {SidebarListService} from "../../../../services/sidebar-list.service";
 import {filter} from "rxjs/operators";
+import {SidebarListService} from "../../../../services/sidebar-list.service";
 import {NavAccordionItemDirective} from "./nav-accordion-item.directive";
 
 @Directive({
-  selector: '[appNavAccordion]'
+  selector: '[appNavAccordion]',
 })
 export class NavAccordionDirective {
-
   protected navLinks: NavAccordionItemDirective[] = [];
+
   constructor(private router: Router, private menu: SidebarListService) {
     this.router.events
-        .pipe(filter(event => event instanceof NavigationEnd))
-        .subscribe(() => this.checkOpenLinks());
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => this.checkOpenLinks());
 
     // Fix opening status for async menu data
     this.menu.change().subscribe(() => {
       setTimeout(() => this.checkOpenLinks());
     });
   }
+
   addLink(link: NavAccordionItemDirective) {
     this.navLinks.push(link);
   }
@@ -30,10 +31,18 @@ export class NavAccordionDirective {
       this.navLinks.splice(index, 1);
     }
   }
-  private checkOpenLinks() {
-    this.navLinks.forEach(link => {
-      if (link.route) {
 
+  closeOtherLinks(openLink: NavAccordionItemDirective) {
+    this.navLinks.forEach((link) => {
+      if (link !== openLink) {
+        link.expanded = false;
+      }
+    });
+  }
+
+  checkOpenLinks() {
+    this.navLinks.forEach((link) => {
+      if (link.route) {
         if (this.router.url.split('/').includes(link.route)) {
           link.expanded = true;
           this.closeOtherLinks(link);
@@ -41,13 +50,4 @@ export class NavAccordionDirective {
       }
     });
   }
-
-  closeOtherLinks(openLink: NavAccordionItemDirective) {
-    this.navLinks.forEach(link => {
-      if (link !== openLink) {
-        link.expanded = false;
-      }
-    });
-  }
-
 }

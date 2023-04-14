@@ -18,6 +18,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { Test1Component } from './components/test1/test1.component';
 import { Test2Component } from './components/test2/test2.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import {NgxPermissionsModule} from "ngx-permissions";
 
 // Required for AOT compilation
 export function TranslateHttpLoaderFactory(http: HttpClient) {
@@ -31,6 +32,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     Test1Component,
     Test2Component,
     PageNotFoundComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -40,6 +42,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     LayoutModule,
     NgbModule,
     SharedModule,
+    NgxPermissionsModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

@@ -16,9 +16,9 @@
 <!--</div>-->
 
 
-<div class="sidebar-item" appNavAccordionItem [route]="data.route">
+<div class="sidebar-item" appNavAccordionItem>
     <a class="menu-heading" [routerLink]="data.route" routerLinkActive="active-link"
-       [style.padding-left.px]="level * 16">
+       [style.padding-left.px]="level!==1 ?level * 16:''">
         <mat-icon *ngIf="data.icon" class="menu-icon" aria-label="Toggle icon">{{data.icon}}</mat-icon>
         <div *ngIf="!data.icon" class="dot-icon"></div>
         <span class="menu-name">{{data.name}} {{level}}</span>
