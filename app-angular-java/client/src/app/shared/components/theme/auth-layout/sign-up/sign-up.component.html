@@ -37,20 +37,20 @@
                     </mat-error>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="mb-2">
-                    <mat-label>{{'common.password' | translate}}</mat-label>
-                    <input matInput type="password" placeholder="" formControlName="password">
+                <mat-label>{{'common.password' | translate}}</mat-label>
+                <input matInput type="password" placeholder="" formControlName="password">
 
-                    <mat-error *ngIf="f['password'].errors">
-                        <span *ngIf="f['password'].errors['required']">Password is required</span>
-                        <span *ngIf="f['password'].errors['minlength']">
+                <mat-error *ngIf="f['password'].errors">
+                    <span *ngIf="f['password'].errors['required']">Password is required</span>
+                    <span *ngIf="f['password'].errors['minlength']">
                             Password must be at least 6 characters
                         </span>
-                        <span *ngIf="f['password'].errors['maxlength']">
+                    <span *ngIf="f['password'].errors['maxlength']">
                             Password must not exceed 40 characters
                         </span>
-                    </mat-error>
-                </mat-form-field>
+                </mat-error>
+
+                <mat-form-field appearance="outline" class="mb-2"></mat-form-field>
 
                 <mat-form-field appearance="outline" class="mb-2">
                     <mat-label>{{'common.confirmPassword' | translate}}</mat-label>
