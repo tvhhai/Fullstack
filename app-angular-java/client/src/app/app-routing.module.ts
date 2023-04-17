@@ -35,7 +35,7 @@ const appRoutes: Routes = [
     component: AuthLayoutComponent,
     children: [
       { path: 'sign-in', component: SignInComponent },
-      { path: 'sign-un', component: SignUpComponent },
+      { path: 'sign-up', component: SignUpComponent },
     ],
   },
   { path: '**', component: PageNotFoundComponent },

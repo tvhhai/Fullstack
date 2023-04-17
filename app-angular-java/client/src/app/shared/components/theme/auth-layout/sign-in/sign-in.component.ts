@@ -1,57 +1,61 @@
-import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
-import { filter } from 'rxjs/operators';
+import {Component} from '@angular/core';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {HttpErrorResponse} from '@angular/common/http';
+import {filter} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-sign-in',
-  templateUrl: './sign-in.component.html',
-  styleUrls: ['./sign-in.component.scss'],
+    selector: 'app-sign-in',
+    templateUrl: './sign-in.component.html',
+    styleUrls: ['./sign-in.component.scss'],
 })
 export class SignInComponent {
-  isSubmitting = false;
 
-  loginForm = this.fb.nonNullable.group({
-    username: ['ng-matero', [Validators.required]],
-    password: ['ng-matero', [Validators.required]],
-    rememberMe: [false],
-  });
+    form: FormGroup = new FormGroup({
+        username: new FormControl(''),
+        password: new FormControl(''),
+        rememberMe: new FormControl(false),
+    });
+    submitted = false;
 
-  constructor(private fb: FormBuilder, private router: Router) {}
+    constructor(private formBuilder: FormBuilder) {
+    }
 
-  get username() {
-    return this.loginForm.get('username')!;
-  }
+    ngOnInit(): void {
+        this.form = this.formBuilder.group(
+            {
 
-  get password() {
-    return this.loginForm.get('password')!;
-  }
+                username: [
+                    '',
+                    [
+                        Validators.required,
+                        Validators.minLength(6),
+                        Validators.maxLength(20)
+                    ]
+                ],
+                password: [
+                    '',
+                    [
+                        Validators.required,
+                        Validators.minLength(6),
+                        Validators.maxLength(40)
+                    ]
+                ],
+                rememberMe: [false]
+            },
+        );
+    }
 
-  get rememberMe() {
-    return this.loginForm.get('rememberMe')!;
-  }
+    get f(): { [key: string]: AbstractControl } {
+        return this.form.controls;
+    }
 
-  // login() {
-  //   this.isSubmitting = true;
-  //
-  //   this.auth
-  //       .login(this.username.value, this.password.value, this.rememberMe.value)
-  //       .pipe(filter(authenticated => authenticated))
-  //       .subscribe(
-  //           () => this.router.navigateByUrl('/'),
-  //           (errorRes: HttpErrorResponse) => {
-  //             if (errorRes.status === 422) {
-  //               const form = this.loginForm;
-  //               const errors = errorRes.error.errors;
-  //               Object.keys(errors).forEach(key => {
-  //                 form.get(key === 'email' ? 'username' : key)?.setErrors({
-  //                   remote: errors[key][0],
-  //                 });
-  //               });
-  //             }
-  //             this.isSubmitting = false;
-  //           }
-  //       );
-  // }
+    onSubmit() {
+        if (this.form.invalid) {
+            return;
+        }
+        console.log(this.form.value)
+        console.log(JSON.stringify(this.form.value, null, 2));
+    }
+
 }
