@@ -1,0 +1,25 @@
+@import "../../../../style/scrollbar";
+
+.sidebar-header {
+    background: rgba(0, 0, 21, 0.2);
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    padding: 0 8px;
+    overflow: hidden;
+    color: rgba(255, 255, 255, 0.87);
+}
+.sidebar-main {
+    background: #3c4b64;
+    height: calc(100% - 64px);
+    color: rgba(255, 255, 255, 0.87);
+    overflow: auto;
+}
+.scrollbar-none{
+    @include none
+}

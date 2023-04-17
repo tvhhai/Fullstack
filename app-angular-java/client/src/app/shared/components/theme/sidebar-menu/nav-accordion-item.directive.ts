@@ -15,7 +15,6 @@ export class NavAccordionItemDirective {
   @Input()
   get expanded() {
     if(this.isExpanded) {
-      console.log('this.isExpanded',this.isExpanded)
     }
     return this.isExpanded;
   }

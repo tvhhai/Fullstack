@@ -1,0 +1,18 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"
+            *ngFor="let navLink of nav; trackBy: trackByNavlink; first as isFirst; last as isLast">
+
+            <a  [routerLink]="['dashboard']" class="link" *ngIf="isFirst">{{navLink}}</a>
+
+            <ng-container *ngIf="!isFirst && !isLast">
+                <span>{{navLink | translate}}</span>
+            </ng-container>
+
+            <ng-container *ngIf="isLast">
+                <span class="last">{{navLink | translate}}</span>
+            </ng-container>
+        </li>
+    </ol>
+</nav>
+<mat-divider></mat-divider>

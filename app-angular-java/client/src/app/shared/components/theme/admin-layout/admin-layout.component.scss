@@ -2,13 +2,8 @@
   height: 100%;
 
   .sidebar {
-    width: 240px;
-    // background-color: rgba(40, 36, 61);
-
-    .mat-toolbar {
-      // background: $primary-palette;
-    }
-
+    width: 256px;
+    background: #3c4b64;
     .mat-toolbar.mat-primary {
       position: sticky;
       top: 0;

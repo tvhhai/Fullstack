@@ -35,20 +35,10 @@ const appRoutes: Routes = [
     component: AuthLayoutComponent,
     children: [
       { path: 'sign-in', component: SignInComponent },
-      { path: 'sign-up', component: SignUpComponent },
+      { path: 'sign-un', component: SignUpComponent },
     ],
   },
   { path: '**', component: PageNotFoundComponent },
-  // {
-  //   path: 'admin',
-  //   loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
-  //   canMatch: [authGuard]
-  // },
-  // {
-  //   path: 'crisis-center',
-  //   loadChildren: () => import('./crisis-center/crisis-center.module').then(m => m.CrisisCenterModule),
-  //   data: { preload: true }
-  // },
 ];
 
 @NgModule({

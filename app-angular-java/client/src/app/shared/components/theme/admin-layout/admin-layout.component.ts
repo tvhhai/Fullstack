@@ -16,6 +16,7 @@ export class AdminLayoutComponent {
     private breakpointObserver: BreakpointObserver,
     private cdr: ChangeDetectorRef
   ) {}
+
   ngAfterViewInit() {
     this.breakpointObserver.observe(['(max-width: 800px)']).subscribe((res) => {
       if (res.matches) {

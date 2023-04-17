@@ -4,9 +4,18 @@
 $gutter: 16px !default;
 
 // Sidenav
-$sidenav-width: 240px !default;
-$sidenav-collapsed-width: 50px !default;
-$sidenav-width-mobile: 280px !default;
+$sidebar-width: 256px !default;
+$sidebar-collapsed-width: 50px !default;
+$sidebar-width-mobile: 280px !default;
+
+
+$sidebar-item-active-color: rgba(255, 255, 255, 0.87);
+$sidebar-item-active-bg: rgba(255, 255, 255, 0.05);
+$sidebar-item-submenu-bg: rgba(0, 0, 0, 0.2);
+
+
+$border-theme-light: 1px solid #d8dbe0;
+$border-theme-dark:  1px solid rgba(255, 255, 255, 0.1);
 
 // Toolbar
 $toolbar-height-desktop: 64px !default;

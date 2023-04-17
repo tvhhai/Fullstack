@@ -6,7 +6,7 @@
 
 @mixin sidebar-item {
   a {
-    color: black;
+    color: rgba(255, 255, 255, 0.87);
   }
   align-items: center;
   background-attachment: $primaryBgSideBar;
@@ -21,11 +21,10 @@
   }
 
   &.active-link {
-    background-color: #f0f0f0;
+    background-color: rgba(255, 255, 255, 0.05);
     a {
-      color: red;
+      color: rgba(255, 255, 255, 0.87);
     }
-    // background: red;
   }
 
   &.show-menu {
@@ -36,8 +35,8 @@
 
   .menu-heading {
     &:hover:not(.active-link) {
-      background-color: #f0f0f0;
-      color: red;
+      background-color: rgba(255, 255, 255, 0.05);
+      color: rgba(255, 255, 255, 0.87);
     }
 
     display: flex;
@@ -53,13 +52,7 @@
       flex-shrink: 0;
       display: inline-flex;
       min-width: 40px;
-      color: rgba(44, 56, 74, 0.681);
+      color: rgba(255, 255, 255, 0.87);
     }
   }
 }
-
-// :hover
-// background active
-// menu item active
-// dropdown active rgba(231, 227, 252, 0.3)
-// dropdown active item
