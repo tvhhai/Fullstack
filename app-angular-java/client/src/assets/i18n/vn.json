@@ -1,4 +1,27 @@
 {
-  "hello": "Xin chào",
-  "world": "Thế giới"
+  "common": {
+    "username": "Tên Tài Khoản",
+    "password": "Mât Khẩu"
+  },
+  "auth": {
+    "sign-in": {
+      "title":"Đăng Nhập",
+      "rememberMe": "Lưu đăng nhập cho lần sau",
+      "haveNoAccount": "Chưa có tài khoản?",
+      "createOneAccount": "Nhấn vào đây để tạo"
+    },
+    "sign-up": {
+      "title": "Đăng Kí"
+    }
+  },
+
+  "setting": {
+    "title": "Cài Đặt",
+    "userSetting": {
+      "title": "Cài Đặt Người Dùng"
+    },
+    "systemSetting": {
+      "title": "Cài Đặt Hệ Thống"
+    }
+  }
 }

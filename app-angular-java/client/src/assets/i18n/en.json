@@ -1,20 +1,27 @@
 {
-  "hello": "Hello",
-  "world": "World",
   "common": {
     "username": "Username",
     "password": "Password"
   },
   "auth": {
-
     "sign-in": {
       "title":"Sign In",
       "rememberMe": "Remember Me",
-      "have_no_account": "Don't have an account?",
-      "create_one_account": "Click here to create one"
+      "haveNoAccount": "Don't have an account?",
+      "createOneAccount": "Click here to create one"
     },
     "sign-up": {
-        "title": "Sign Up"
+      "title": "Sign Up"
+    }
+  },
+
+  "setting": {
+    "title": "Setting",
+    "userSetting": {
+      "title": "User Setting"
+    },
+    "systemSetting": {
+      "title": "System Setting"
     }
   }
 }

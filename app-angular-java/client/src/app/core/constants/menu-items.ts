@@ -119,9 +119,23 @@ export const MENU_ITEMS:Menu[] = [
     },
     {
         id: 4,
-        name: 'Settings',
+        name: 'setting.title',
         icon: 'settings',
-        route: 'test10',
-        type: 'link',
+        route: 'setting',
+        type: 'sub',
+        child: [
+            {
+                id: 9,
+                name: 'setting.userSetting.title',
+                route: 'userSetting',
+                type: 'link',
+            },
+            {
+                id: 10,
+                name: 'setting.systemSetting.title',
+                route: 'systemSetting',
+                type: 'link',
+            },
+        ],
     },
 ]
