@@ -4,7 +4,7 @@ import {CommonModule} from '@angular/common';
 import {ReactiveFormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgxPermissionsModule} from 'ngx-permissions';
-import {MaterialModule} from '../modules/material.module';
+import {MaterialModule} from './modules/material.module';
 import {AppRoutingModule} from '../app-routing.module';
 
 import {NavAccordionDirective} from './components/theme/sidebar-menu/nav-accordion.directive';

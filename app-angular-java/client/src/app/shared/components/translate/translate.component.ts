@@ -1,8 +1,5 @@
 import {Component} from '@angular/core';
 import {TranslateService} from "@ngx-translate/core";
-import {AppSettings} from "../../../models/setting";
-
-
 
 @Component({
     selector: 'app-translate',
@@ -11,12 +8,12 @@ import {AppSettings} from "../../../models/setting";
 })
 export class TranslateComponent {
     langs: {[key: string]: string} = {
-        'en-us': 'EN-US',
+        'en': 'EN',
         'vn': 'VN',
     };
 
     constructor(private translate: TranslateService) {
-        translate.addLangs(['en-us', 'vi']);
+        translate.addLangs(['en', 'vi']);
     }
 
     useLanguage(language: string) {

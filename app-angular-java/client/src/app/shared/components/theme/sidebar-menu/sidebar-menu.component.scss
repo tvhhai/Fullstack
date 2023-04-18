@@ -1,27 +1,2 @@
 @import "../sidebar/sidebar-theme";
-
-.sidebar-menu {
-    .sidebar-item {
-        @include sidebar-item;
-        &.expanded {
-            background: rgba(0, 0, 0, 0.05);
-            > .submenu {
-                height: 100%;
-            }
-
-            > .menu-toggle {
-                > .menu-caret {
-                    transform: rotate(-90deg);
-                }
-            }
-        }
-    }
-    .menu-caret {
-        transition: transform 0.2s ease-in-out;
-    }
-    &.submenu {
-        width: 100%;
-        height: 0;
-        overflow: hidden;
-    }
-}
+@include sidebar-item;

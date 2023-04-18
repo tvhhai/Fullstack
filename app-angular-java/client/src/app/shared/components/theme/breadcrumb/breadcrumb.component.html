@@ -1,7 +1,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"
-            *ngFor="let navLink of nav; trackBy: trackByNavlink; first as isFirst; last as isLast">
+            *ngFor="let navLink of nav; trackBy: trackByNavLink; first as isFirst; last as isLast">
 
             <a  [routerLink]="['dashboard']" class="link" *ngIf="isFirst">{{navLink}}</a>
 
@@ -15,4 +15,4 @@
         </li>
     </ol>
 </nav>
-<mat-divider></mat-divider>
+<!--<mat-divider></mat-divider>-->

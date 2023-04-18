@@ -43,4 +43,12 @@ export class AdminLayoutComponent {
   setIsOpenSidebar(opened: boolean) {
     this.opened = opened;
   }
+
+  // toggleDarkTheme(options: AppSettings) {
+  //   if (options.theme === 'dark') {
+  //     this.htmlElement.classList.add('theme-dark');
+  //   } else {
+  //     this.htmlElement.classList.remove('theme-dark');
+  //   }
+  // }
 }

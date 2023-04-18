@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-import { Test1Component } from './components/test1/test1.component';
-import { Test2Component } from './components/test2/test2.component';
+import { environment } from '@env/environment';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
@@ -19,14 +17,8 @@ const appRoutes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
       {
-        path: 'test1',
-        component: Test1Component,
-        // outlet: 'popup'
-      },
-      {
-        path: 'customers/test2',
-        component: Test2Component,
-        // outlet: 'popup'
+        path: 'test',
+        loadChildren: () => import('./modules/test/test.module').then(m => m.TestModule),
       },
     ],
   },
@@ -35,7 +27,7 @@ const appRoutes: Routes = [
     component: AuthLayoutComponent,
     children: [
       { path: 'sign-in', component: SignInComponent },
-      { path: 'sign-un', component: SignUpComponent },
+      { path: 'sign-up', component: SignUpComponent },
     ],
   },
   { path: '**', component: PageNotFoundComponent },
@@ -45,6 +37,7 @@ const appRoutes: Routes = [
   imports: [
     RouterModule.forRoot(appRoutes, {
       enableTracing: false, // <-- debugging purposes only
+      useHash: environment.useHash,
       // preloadingStrategy: SelectivePreloadingStrategyService,
     }),
   ],

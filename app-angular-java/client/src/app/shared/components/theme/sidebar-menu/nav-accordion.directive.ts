@@ -1,8 +1,8 @@
 import { Directive } from '@angular/core';
 import {NavigationEnd, Router} from "@angular/router";
 import {filter} from "rxjs/operators";
-import {SidebarListService} from "../../../../services/sidebar-list.service";
 import {NavAccordionItemDirective} from "./nav-accordion-item.directive";
+import {MenuService} from "../../../../core/services/menu.service";
 
 @Directive({
   selector: '[appNavAccordion]',
@@ -10,7 +10,7 @@ import {NavAccordionItemDirective} from "./nav-accordion-item.directive";
 export class NavAccordionDirective {
   protected navLinks: NavAccordionItemDirective[] = [];
 
-  constructor(private router: Router, private menu: SidebarListService) {
+  constructor(private router: Router, private menu: MenuService) {
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe(() => this.checkOpenLinks());

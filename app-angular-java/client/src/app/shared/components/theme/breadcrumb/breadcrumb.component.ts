@@ -1,17 +1,18 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ViewEncapsulation} from '@angular/core';
 import {NavigationEnd, Router} from "@angular/router";
-import {SidebarListService} from "../../../../services/sidebar-list.service";
 import {filter} from "rxjs/operators";
+import {MenuService} from "../../../../core/services/menu.service";
 
 @Component({
   selector: 'app-breadcrumb',
   templateUrl: './breadcrumb.component.html',
-  styleUrls: ['./breadcrumb.component.scss']
+  styleUrls: ['./breadcrumb.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class BreadcrumbComponent {
   @Input() nav: string[] = [];
 
-  constructor(private router: Router, private menu: SidebarListService) {
+  constructor(private router: Router, private menu: MenuService) {
     this.router.events
         .pipe(filter((event) => event instanceof NavigationEnd))
         .subscribe(() => this.genBreadcrumb());
@@ -25,7 +26,7 @@ export class BreadcrumbComponent {
     }
   }
 
-  trackByNavlink(index: number, navLink: string): string {
+  trackByNavLink(index: number, navLink: string): string {
     return navLink;
   }
 

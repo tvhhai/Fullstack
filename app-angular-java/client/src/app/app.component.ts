@@ -9,7 +9,7 @@ import {TranslateService} from "@ngx-translate/core";
 export class AppComponent {
   title = 'Angular app';
   constructor(private translateService: TranslateService) {
-    translateService.setDefaultLang('en-us');
-    translateService.use('en-us');
+    translateService.setDefaultLang('en');
+    translateService.use('en');
   }
 }
