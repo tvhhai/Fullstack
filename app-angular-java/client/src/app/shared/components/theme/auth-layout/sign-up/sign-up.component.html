@@ -27,55 +27,52 @@
                     <input matInput type="text" placeholder="" formControlName="email">
 
                     <mat-error *ngIf="f['email'].errors">
-                        <span *ngIf="f['email'].errors['required']">Username is required</span>
-                        <span *ngIf="f['email'].errors['minlength']">
-                            Username must be at least 6 characters
-                        </span>
-                        <span *ngIf="f['email'].errors['maxlength']">
-                            Username must not exceed 20 characters
+                        <span *ngIf="f['email'].errors['required']">Email is required</span>
+                        <span *ngIf="f['email'].errors['email']">
+                            Email must be in the correct format
                         </span>
                     </mat-error>
                 </mat-form-field>
 
-                <mat-label>{{'common.password' | translate}}</mat-label>
-                <input matInput type="password" placeholder="" formControlName="password">
+                <mat-form-field appearance="outline" class="mb-2">
+                    <mat-label>{{'common.password' | translate}}</mat-label>
+                    <input matInput type="password" placeholder="" formControlName="password">
 
-                <mat-error *ngIf="f['password'].errors">
-                    <span *ngIf="f['password'].errors['required']">Password is required</span>
-                    <span *ngIf="f['password'].errors['minlength']">
-                            Password must be at least 6 characters
+                    <mat-error *ngIf="f['password'].errors">
+                        <span *ngIf="f['password'].errors['required']">Password is required</span>
+                        <span *ngIf="f['password'].errors['minlength']">
+                            Password must be at least 3 characters
                         </span>
-                    <span *ngIf="f['password'].errors['maxlength']">
+                        <span *ngIf="f['password'].errors['maxlength']">
                             Password must not exceed 40 characters
                         </span>
-                </mat-error>
-
-                <mat-form-field appearance="outline" class="mb-2"></mat-form-field>
+                    </mat-error>
+                </mat-form-field>
 
                 <mat-form-field appearance="outline" class="mb-2">
                     <mat-label>{{'common.confirmPassword' | translate}}</mat-label>
                     <input matInput type="password" placeholder="" formControlName="confirmPassword">
 
                     <mat-error *ngIf="f['confirmPassword'].errors">
-                        <span *ngIf="f['confirmPassword'].errors['required']">Password is required</span>
-                        <span *ngIf="f['confirmPassword'].errors['minlength']">
-                            Password must be at least 6 characters
+                        <span *ngIf="f['confirmPassword'].errors['required']">
+                            Confirm Password is required
                         </span>
-                        <span *ngIf="f['confirmPassword'].errors['maxlength']">
-                            Password must not exceed 40 characters
+                        <span *ngIf="f['confirmPassword'].errors['matching']">
+                             Confirm Password does not match
                         </span>
                     </mat-error>
                 </mat-form-field>
 
-                <mat-checkbox class="mb-2" formControlName="rememberMe">{{'auth.sign-in.rememberMe' | translate}}
+                <mat-checkbox class="mb-2"
+                              formControlName="agreeTermOfService">{{'auth.sign-up.agreeTermOfService' | translate}}
                 </mat-checkbox>
 
                 <button class="w-100 mb-2" mat-raised-button color="primary" [disabled]="this.form.invalid">
-                    {{'auth.sign-in.title' | translate}}
+                    {{'auth.sign-up.title' | translate}}
                 </button>
 
-                <div>{{'auth.sign-in.have_no_account' | translate }}
-                    <a routerLink="/auth/sign-up">{{'auth.sign-in.create_one_account' | translate}}</a>
+                <div>{{'auth.sign-up.haveAnAccount' | translate }}
+                    <a routerLink="/auth/sign-in">{{'auth.sign-in.title' | translate}}</a>
                 </div>
             </form>
         </mat-card-content>

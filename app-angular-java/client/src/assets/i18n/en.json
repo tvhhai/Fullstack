@@ -1,7 +1,9 @@
 {
   "common": {
     "username": "Username",
-    "password": "Password"
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password"
   },
   "auth": {
     "sign-in": {
@@ -11,7 +13,10 @@
       "createOneAccount": "Click here to create one"
     },
     "sign-up": {
-      "title": "Sign Up"
+      "title": "Sign Up",
+      "haveAnAccount": "Already have an account?",
+      "agreeTermOfService": "I have read and agree to the terms of service"
+
     }
   },
 

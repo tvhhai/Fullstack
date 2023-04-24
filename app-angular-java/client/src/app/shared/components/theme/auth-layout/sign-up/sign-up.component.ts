@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import ConfirmPasswordValidator from "../../../../validation/confirm-password.validator";
 
 @Component({
   selector: 'app-sign-up',
@@ -13,7 +14,7 @@ export class SignUpComponent {
     email: new FormControl(''),
     password: new FormControl(''),
     confirmPassword: new FormControl(''),
-    rememberMe: new FormControl(false),
+    agreeTermOfService: new FormControl(false),
   });
   submitted = false;
 
@@ -28,7 +29,7 @@ export class SignUpComponent {
             '',
             [
               Validators.required,
-              Validators.minLength(6),
+              Validators.minLength(3),
               Validators.maxLength(20)
             ]
           ],
@@ -42,8 +43,11 @@ export class SignUpComponent {
             ]
           ],
           confirmPassword: ['', Validators.required],
-          rememberMe: [false]
+          agreeTermOfService: [false]
         },
+        {
+          validators: [ConfirmPasswordValidator.match('password', 'confirmPassword')],
+        }
     );
   }
 
