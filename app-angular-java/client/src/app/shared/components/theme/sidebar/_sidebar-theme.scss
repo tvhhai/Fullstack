@@ -7,7 +7,8 @@
 
 @mixin sidebar-item {
   .sidebar-menu {
-    .sidebar-item {
+
+    > .sidebar-item {
       a {
         color: $activeLinkColor;
       }
@@ -43,7 +44,7 @@
 
         display: flex;
         align-items: center;
-        padding: spacing(3) spacing(6);
+        padding: spacing(3) spacing(4);
 
         .menu-name {
           flex: 1;
@@ -58,7 +59,11 @@
         }
       }
       &.expanded {
-        background: $activeLinkBg;
+        background: $subMenuBg;
+//          .menu-heading {
+//             background: red
+//         }
+
         > .submenu {
           height: 100%;
         }

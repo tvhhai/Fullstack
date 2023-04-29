@@ -14,8 +14,6 @@ export class NavAccordionItemDirective {
   @HostBinding('class.expanded')
   @Input()
   get expanded() {
-    if(this.isExpanded) {
-    }
     return this.isExpanded;
   }
   set expanded(value: boolean) {

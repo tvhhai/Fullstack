@@ -1,6 +1,7 @@
 export const environment = {
-    production: true,
-    baseUrl: '',
+    production: false,
+    baseUrl: 'http://localhost:8080/',
     useHash: false,
 };
+
   

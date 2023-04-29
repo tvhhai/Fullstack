@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import ConfirmPasswordValidator from "../../../../validation/confirm-password.validator";
+import {AuthService} from "../../../../../core/authentication/services/auth.service";
 
 @Component({
   selector: 'app-sign-up',
@@ -14,11 +15,11 @@ export class SignUpComponent {
     email: new FormControl(''),
     password: new FormControl(''),
     confirmPassword: new FormControl(''),
-    agreeTermOfService: new FormControl(false),
+    // agreeTermOfService: new FormControl(false),
   });
   submitted = false;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -43,7 +44,7 @@ export class SignUpComponent {
             ]
           ],
           confirmPassword: ['', Validators.required],
-          agreeTermOfService: [false]
+          // agreeTermOfService: [false]
         },
         {
           validators: [ConfirmPasswordValidator.match('password', 'confirmPassword')],
@@ -61,5 +62,23 @@ export class SignUpComponent {
     }
     console.log(this.form.value)
     console.log(JSON.stringify(this.form.value, null, 2));
+
+    const { username, email, password } = this.form.value;
+
+    console.log( username, email, password);
+
+    this.authService.register(username, email, password).subscribe({
+      next: data => {
+        console.log(data);
+        // this.isSuccessful = true;
+        // this.isSignUpFailed = false;
+      },
+      error: err => {
+        // this.errorMessage = err.error.message;
+        // this.isSignUpFailed = true;
+      }
+    });
+
+
   }
 }

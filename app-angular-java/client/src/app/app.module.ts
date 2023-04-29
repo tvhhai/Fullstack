@@ -1,10 +1,11 @@
 import { NgModule, isDevMode } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import {HttpClientModule, HttpClient} from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrModule } from "ngx-toastr";
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -20,6 +21,9 @@ import { Test2Component } from './components/test2/test2.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { NgxPermissionsModule } from "ngx-permissions";
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { httpInterceptorProviders } from "./core/interceptor";
+import { BASE_URL } from "./core/interceptor/base-url.interceptor";
+import { environment } from "@env/environment";
 
 
 // Required for AOT compilation
@@ -34,8 +38,6 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
         Test1Component,
         Test2Component,
         PageNotFoundComponent,
-
-
     ],
     imports: [
         BrowserModule,
@@ -44,6 +46,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
         CoreModule,
         LayoutModule,
         NgbModule,
+        ToastrModule.forRoot(),
         SharedModule,
         NgxPermissionsModule.forRoot(),
         TranslateModule.forRoot({
@@ -60,7 +63,13 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
             registrationStrategy: 'registerWhenStable:30000'
         }),
     ],
-    providers: [],
+    providers: [
+        {
+            provide: BASE_URL,
+            useValue: environment.baseUrl,
+        },
+        httpInterceptorProviders
+    ],
     bootstrap: [AppComponent],
 })
 export class AppModule {

@@ -3,6 +3,7 @@ import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '
 import {Router} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
 import {filter} from 'rxjs/operators';
+import {AuthService} from "../../../../../core/authentication/services/auth.service";
 
 @Component({
     selector: 'app-sign-in',
@@ -18,7 +19,7 @@ export class SignInComponent {
     });
     submitted = false;
 
-    constructor(private formBuilder: FormBuilder) {
+    constructor(private formBuilder: FormBuilder, private authService: AuthService) {
     }
 
     ngOnInit(): void {
@@ -29,7 +30,7 @@ export class SignInComponent {
                     '',
                     [
                         Validators.required,
-                        Validators.minLength(6),
+                        Validators.minLength(3),
                         Validators.maxLength(20)
                     ]
                 ],
@@ -56,6 +57,18 @@ export class SignInComponent {
         }
         console.log(this.form.value)
         console.log(JSON.stringify(this.form.value, null, 2));
+        const { username, password } = this.form.value;
+        this.authService.login(username, password).subscribe({
+            next: data => {
+                console.log(data);
+                // this.isSuccessful = true;
+                // this.isSignUpFailed = false;
+            },
+            error: err => {
+                // this.errorMessage = err.error.message;
+                // this.isSignUpFailed = true;
+            }
+        });
     }
 
 }
