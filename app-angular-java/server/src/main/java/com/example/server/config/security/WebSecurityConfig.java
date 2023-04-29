@@ -12,18 +12,22 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class WebSecurityConfig {
+
     @Autowired
     private AuthenticationEntryPoint authenticationEntryPoint;
 
@@ -56,53 +60,46 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(BCryptPasswordEncoder bCryptPasswordEncoder) {
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername("user")
-                .password(bCryptPasswordEncoder.encode("userPass"))
-                .roles("USER")
-                .build());
-        manager.createUser(User.withUsername("admin")
-                .password(bCryptPasswordEncoder.encode("adminPass"))
-                .roles("USER", "ADMIN")
-                .build());
-        return manager;
-    }
-
-//    @Bean
-//    public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserServiceImpl userServiceImpl)
-//            throws Exception {
-//        return http.getSharedObject(AuthenticationManagerBuilder.class)
-//                .userDetailsService(userServiceImpl)
-//                .passwordEncoder(bCryptPasswordEncoder)
-//                .and()
-//                .build();
-//    }
-
-
-    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        return http.csrf().disable()
-
-                .exceptionHandling()
-                    .authenticationEntryPoint(authenticationEntryPoint)
-                    .and()
-
-                .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and()
+        return http.cors().configurationSource(request -> {
+                            CorsConfiguration configuration = new CorsConfiguration();
+                            configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+                            configuration.setAllowedMethods(List.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH","OPTIONS"));
+                            configuration.setAllowCredentials(true);
+                            configuration.addExposedHeader("Message");
+                            configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+                            return configuration;
+                        }).and().csrf().disable()
 
                 .authorizeHttpRequests()
-                    .requestMatchers("/api/test/**", "/api/auth/**", "/js/**", "/css/**", "/img/**")
+                    .requestMatchers(  "/api/auth/sign-up", "/api/auth/sign-in", "/api/auth/sign-out", "/api/token/refresh", "/js/**", "/css/**", "/img/**")
                         .permitAll()
                     .anyRequest()
                         .authenticated()
                     .and()
 
+                .exceptionHandling()
+                     .authenticationEntryPoint(authenticationEntryPoint)
+                        .and()
+
+                .sessionManagement()
+                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .and()
+                .authenticationProvider(authenticationProvider())
+
                 .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
 
+    }
+
+    @Bean
+    public SessionRegistry sessionRegistry(){
+        return  new SessionRegistryImpl();
+    }
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher(){
+        return  new HttpSessionEventPublisher();
     }
 
 
