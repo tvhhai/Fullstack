@@ -1,17 +1,25 @@
 package com.example.server.config.security.jwt;
 
+import com.example.server.entity.RefreshToken;
+import com.example.server.repository.RefreshTokenRepository;
+import com.example.server.service.RefreshTokenService;
 import com.example.server.service.impl.CustomUserDetailImpl;
+import com.example.server.util.CookieUtil;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.Optional;
 
 
 @Component
@@ -22,9 +30,18 @@ public class JwtTokenProvider {
     private String jwtSecretKey;
 
     @Value("${jwt.jwtExpirationMs}")
-    private long jwtExpirationInMs;
+    private int jwtExpirationInMs;
 
     private final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
+
+    private final RefreshTokenService refreshTokenService;
+
+    private final RefreshTokenRepository refreshTokenRepository;
+
+    public JwtTokenProvider(RefreshTokenService refreshTokenService, RefreshTokenRepository refreshTokenRepository) {
+        this.refreshTokenService = refreshTokenService;
+        this.refreshTokenRepository = refreshTokenRepository;
+    }
 
     public String generateJwtToken(Authentication authentication) {
 
@@ -87,4 +104,35 @@ public class JwtTokenProvider {
         return false;
     }
 
+    public Date getExpirationDateFromToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(jwtSecretKey.getBytes(StandardCharsets.UTF_8))
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getExpiration();
+    }
+
+    public void refreshToken( HttpServletResponse response) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null) {
+            CustomUserDetailImpl currentUserName = (CustomUserDetailImpl) authentication.getPrincipal();
+
+            Optional<RefreshToken> optionalRefreshToken = refreshTokenRepository.findUserId(currentUserName.getId());
+
+            optionalRefreshToken
+                    .map(refreshTokenService::verifyExpiration)
+                    .map(RefreshToken::getUser)
+                    .map(user -> {
+                        String accessToken = generateTokenFromUsername(user.getUsername());
+                        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
+
+                        CookieUtil.create(response, "accessToken", accessToken, false, jwtExpirationInMs, null);
+                        CookieUtil.create(response, "refreshToken", refreshToken.getToken(), false, jwtExpirationInMs, null);
+                return null;
+            });
+        }
+    }
 }

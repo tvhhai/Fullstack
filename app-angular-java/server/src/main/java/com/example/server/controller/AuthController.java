@@ -1,5 +1,6 @@
 package com.example.server.controller;
 
+import com.example.server.dto.response.ErrorMessage;
 import com.example.server.util.CookieUtil;
 import com.example.server.dto.request.LoginRequest;
 import com.example.server.dto.request.SignupRequest;
@@ -19,9 +20,10 @@ import com.example.server.service.UserService;
 import com.example.server.service.impl.CustomUserDetailImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,10 +32,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -43,23 +44,31 @@ public class AuthController {
     @Value("${jwt.jwtExpirationMs}")
     private Integer jwtExpirationInMs;
 
-    @Autowired
-    AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    RoleService roleService;
+    private final RoleService roleService;
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    RefreshTokenService refreshTokenService;
+    private final RefreshTokenService refreshTokenService;
+
+    public AuthController(AuthenticationManager authenticationManager,
+                          JwtTokenProvider jwtTokenProvider,
+                          UserService userService,
+                          RoleService roleService,
+                          UserRepository userRepository,
+                          RefreshTokenService refreshTokenService) {
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.userService = userService;
+        this.roleService = roleService;
+        this.userRepository = userRepository;
+        this.refreshTokenService = refreshTokenService;
+    }
 
 
     @PostMapping("/auth/sign-in")
@@ -87,57 +96,80 @@ public class AuthController {
                 refreshToken.getToken(),
                 customUserDetail.getId(),
                 customUserDetail.getUsername(),
-                customUserDetail.getPassword(),
                 customUserDetail.getEmail(),
                 roles));
     }
 
     @PostMapping("/auth/sign-up")
     public ResponseEntity<?> registerAuth(@Validated @RequestBody SignupRequest signupRequest) {
-        System.out.println(signupRequest.getUsername() + " " + signupRequest.getEmail());
-        if (userService.checkExistUsername(signupRequest.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
+        try {
+            if (userService.checkExistUsername(signupRequest.getUsername())) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse<>(HttpStatus.BAD_REQUEST, "Error: Username is already taken!", new ArrayList<>()));
+            }
+
+            if (userService.checkExistEmail(signupRequest.getEmail())) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse<>(HttpStatus.BAD_REQUEST, "Error: Email is already in use!", new ArrayList<>()));
+            }
+
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+            User user = new User(signupRequest.getUsername(), signupRequest.getEmail(), passwordEncoder.encode(signupRequest.getPassword()));
+
+//            Set<String> strRoles = signupRequest.getRole();
+//            Set<Role> roles = new HashSet<>();
+//
+//            if (strRoles == null) {
+//                Role userRole = roleService.findByName(ERole.ROLE_USER).orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+//                roles.add(userRole);
+//            } else {
+//                strRoles.forEach(role -> {
+//                    switch (role) {
+//                        case "admin" -> {
+//                            Role adminRole = roleService.findByName(ERole.ROLE_ADMIN).orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+//                            roles.add(adminRole);
+//                        }
+//                        case "mod" -> {
+//                            Role modRole = roleService.findByName(ERole.ROLE_MODERATOR).orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+//                            roles.add(modRole);
+//                        }
+//                        default -> {
+//                            Role userRole = roleService.findByName(ERole.ROLE_USER).orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+//                            roles.add(userRole);
+//                        }
+//                    }
+//                });
+
+//                strRoles.forEach(role -> {
+//                    Role newRole = roleService.findByName(ERole.valueOf(role.toUpperCase())).orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+//                    roles.add(newRole);
+//                });
+//            }
+//            user.setRoles(roles);
+
+            user.setRoles(new HashSet<>(getRoles(signupRequest.getRole())));
+
+            userRepository.save(user);
+
+            CustomUserDetailImpl userDetails = CustomUserDetailImpl.build(user);
+            UserResponse authResponse = new UserResponse(
+                    userDetails.getId(),
+                    userDetails.getUsername(),
+                    userDetails.getEmail(),
+                    userDetails.getAuthorities().stream()
+                            .map(GrantedAuthority::getAuthority)
+                            .collect(Collectors.toList()));
+
+            List<UserResponse> userList = new ArrayList<>();
+            userList.add(authResponse);
+
+            return ResponseEntity.ok(new MessageResponse<>(HttpStatus.OK, "User registered successfully", userList));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(new MessageResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Error: " + e.getMessage(), new ArrayList<>()));
         }
-
-        if (userService.checkExistEmail(signupRequest.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
-        }
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-        User user = new User(signupRequest.getUsername(), signupRequest.getEmail(), passwordEncoder.encode(signupRequest.getPassword()));
-        System.out.println(user);
-
-        Set<String> strRoles = signupRequest.getRole();
-        Set<Role> roles = new HashSet<>();
-
-        if (strRoles == null) {
-            Role userRole = roleService.findByName(ERole.ROLE_USER).orElseThrow(() -> new RuntimeException("Error: Role is not found"));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin":
-                        Role adminRole = roleService.findByName(ERole.ROLE_ADMIN).orElseThrow(() -> new RuntimeException("Error: Role is not found"));
-                        roles.add(adminRole);
-                        break;
-                    case "mod":
-                        Role modRole = roleService.findByName(ERole.ROLE_MODERATOR).orElseThrow(() -> new RuntimeException("Error: Role is not found"));
-                        roles.add(modRole);
-                        break;
-                    default:
-                        Role userRole = roleService.findByName(ERole.ROLE_USER).orElseThrow(() -> new RuntimeException("Error: Role is not found"));
-                        roles.add(userRole);
-                        break;
-                }
-            });
-        }
-        user.setRoles(roles);
-        userRepository.save(user);
-        return ResponseEntity.ok(new MessageResponse("User registered successfully"));
     }
 
     @PostMapping("/auth/sign-out")
@@ -145,7 +177,7 @@ public class AuthController {
         CookieUtil.clear(response, "accessToken");
         CookieUtil.clear(response, "refreshToken");
 
-        return ResponseEntity.ok(new MessageResponse("Log out successful!"));
+        return ResponseEntity.ok(new MessageResponse<>(HttpStatus.OK, "Log out successful!", new ArrayList<>()));
     }
 
     @GetMapping("/token/refresh")
@@ -167,40 +199,62 @@ public class AuthController {
                         CookieUtil.create(response, "refreshToken", token.getToken(), false, jwtExpirationInMs, null);
 
                         return ResponseEntity.ok()
-                                .body(new MessageResponse("Token is refreshed successfully!"));
+                                .body(new MessageResponse<>(HttpStatus.OK, "Token is refreshed successfully!", new ArrayList<>()));
                     })
                     .orElseThrow(() -> new TokenRefreshException(refreshToken,
                             "Refresh token is not in database!"));
         }
-        return ResponseEntity.badRequest().body(new MessageResponse("Refresh Token is empty!"));
+        return ResponseEntity.badRequest().body(new MessageResponse<>(HttpStatus.BAD_REQUEST, "Refresh Token is empty!", new ArrayList<>()));
     }
 
 
-    @GetMapping("/user")
-    public ResponseEntity<?> getUser(HttpServletResponse httpServletResponse) {
+    @GetMapping("/current-user")
+    public ResponseEntity<?> getUser(WebRequest request) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            CustomUserDetailImpl customUserDetail = (CustomUserDetailImpl) authentication.getPrincipal();
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+            List<String> roles = customUserDetail.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toList());
 
-        CustomUserDetailImpl customUserDetail = (CustomUserDetailImpl) authentication.getPrincipal();
 
-        List<String> roles = customUserDetail.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+            return ResponseEntity.ok(new MessageResponse<>(
+                    HttpStatus.OK,
+                    HttpStatus.OK.name(),
+                    new UserResponse(
+                            customUserDetail.getId(),
+                            customUserDetail.getUsername(),
+                            customUserDetail.getEmail(),
+                            roles)));
 
-        return ResponseEntity.ok(new UserResponse(
-                customUserDetail.getId(),
-                customUserDetail.getUsername(),
-                customUserDetail.getEmail(),
-                customUserDetail.getPassword(),
-                roles));
+        } catch (Exception e) {
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorMessage(
+                            HttpStatus.INTERNAL_SERVER_ERROR,
+                            new Date(),
+                            e.getMessage(),
+                            request.getDescription(true)));
+        }
     }
 
     @GetMapping("/admin")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String admin() {
         return "ADMIN";
     }
 
+
+    private List<Role> getRoles(Set<String> strRoles) {
+        if (strRoles == null || strRoles.isEmpty()) {
+            return Collections.singletonList(roleService.findByName(ERole.ROLE_USER).orElseThrow(() -> new RuntimeException("Error: Role is not found")));
+        }
+
+        return strRoles.stream()
+                .map(role -> roleService.findByName(ERole.valueOf(role.toUpperCase())).orElseThrow(() -> new RuntimeException("Error: Role is not found")))
+                .collect(Collectors.toList());
+    }
 
 }

@@ -24,4 +24,8 @@ public class Role extends BaseEntity {
     public Role(String name) {
         this.name = ERole.valueOf(name);
     }
+
+    public Role(ERole roleUser) {
+        this.name = roleUser;
+    }
 }

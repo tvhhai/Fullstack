@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -20,6 +21,8 @@ import org.springframework.web.util.WebUtils;
 
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @Slf4j
@@ -43,6 +46,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             if (jwt != null && jwtTokenProvider.validateToken(jwt)) {
                 String userName = jwtTokenProvider.getUsernameFromToken(jwt);
 
+                checkRefreshToken(response, jwt);
+
                 UserDetails userDetails = userServiceImpl.loadUserByUsername(userName);
                 UsernamePasswordAuthenticationToken auth =
                         new UsernamePasswordAuthenticationToken(
@@ -53,13 +58,24 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
-        }
-
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error("Cannot set user authentication: {}", e);
         }
 
         filterChain.doFilter(request, response);
+    }
 
+    private void checkRefreshToken(HttpServletResponse response, String accessToken) {
+        Date expirationDate = jwtTokenProvider.getExpirationDateFromToken(accessToken);
+        Date currentDate = new Date();
+
+        long timeDiff = expirationDate.getTime() - currentDate.getTime();
+        long minutesDiff = TimeUnit.MILLISECONDS.toMinutes(timeDiff);
+
+        log.info("Time remaining until token expiration: " + minutesDiff + " minutes");
+
+        if (timeDiff <= TimeUnit.MINUTES.toMillis(5)) {
+            jwtTokenProvider.refreshToken(response);
+        }
     }
 }
