@@ -7,8 +7,8 @@ import {
     Output,
     ViewEncapsulation
 } from '@angular/core';
-import { FormControl } from "@angular/forms";
-import { DOCUMENT } from '@angular/common';
+import {FormControl} from "@angular/forms";
+import {DOCUMENT} from '@angular/common';
 
 
 @Component({
@@ -16,7 +16,7 @@ import { DOCUMENT } from '@angular/common';
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],
     encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
     @Output() clicked = new EventEmitter<number>();
@@ -27,9 +27,7 @@ export class HeaderComponent {
     private htmlElement!: HTMLHtmlElement;
 
 
-    constructor(
-        @Optional() @Inject(DOCUMENT) private document: Document,
-    ) {
+    constructor(@Optional() @Inject(DOCUMENT) private document: Document) {
         this.htmlElement = this.document.querySelector('html')!;
     }
 
@@ -39,13 +37,13 @@ export class HeaderComponent {
                 this.htmlElement.classList.add('theme-dark');
             } else {
                 this.htmlElement.classList.remove('theme-dark');
-
             }
         });
     }
 
-
     toggle() {
         this.clicked.emit();
     }
+
+
 }

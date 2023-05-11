@@ -1,9 +1,11 @@
-
 // regular style toast
 @import 'ngx-toastr/toastr';
 
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
+
+@import 'ag-grid-community/styles/ag-grid.css';
+@import 'ag-grid-community/styles/ag-theme-alpine.css';
 
 body {
     font-family: Roboto, "Helvetica Neue", sans-serif;
@@ -27,6 +29,9 @@ body {
         background: rgb(206, 203, 227);
         display: inline-flex;
         margin-right: 16px;
+    }
+    .grid-container {
+      margin: 20px;
     }
 }
 

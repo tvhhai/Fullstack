@@ -1,18 +1,32 @@
 {
   "common": {
+    "home": "Trang chủ",
     "username": "Tên Tài Khoản",
-    "password": "Mât Khẩu"
+    "email": "Email",
+    "password": "Mât Khẩu",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "dashboard": "Bảng Điều Khiển"
   },
+
   "auth": {
     "sign-in": {
-      "title":"Đăng Nhập",
+      "title": "Đăng Nhập",
       "rememberMe": "Lưu đăng nhập cho lần sau",
       "haveNoAccount": "Chưa có tài khoản?",
       "createOneAccount": "Nhấn vào đây để tạo"
     },
     "sign-up": {
-      "title": "Đăng Kí"
-    }
+      "title": "Đăng Kí",
+      "haveAnAccount": "Bạn đã đăng ký trước đó?",
+      "agreeTermOfService": "Tôi đã đọc và đồng ý với các điều khoản dịch vụ"
+    },
+    "logout": "Đăng xuất"
+  },
+
+  "user": {
+    "title": "User",
+    "profile": "Hồ sơ",
+    "editProfile": "Chỉnh sửa hồ sơ"
   },
 
   "setting": {

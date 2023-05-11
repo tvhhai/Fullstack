@@ -1,104 +1,113 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, share} from "rxjs";
-import {MENU_ITEMS} from "../constants/menu-items";
-import {Menu} from "../models/menu";
+import {IMenuSection, IMenuItem} from "../models/menu";
 
-
-
+type MenuEntry = IMenuSection | IMenuItem;
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
+
 export class MenuService {
 
-  private menu$: BehaviorSubject<Menu[]> = new BehaviorSubject<Menu[]>([]);
+    private menu$: BehaviorSubject<MenuEntry[]> = new BehaviorSubject<MenuEntry[]>([]);
 
-  constructor() {
-    this.menu$.next(MENU_ITEMS);
-  }
+    getAll(): Observable<MenuEntry[]> {
+        return this.menu$.asObservable();
+    }
 
-  getAll(): Observable<Menu[]> {
-    return this.menu$.asObservable();
-  }
+    change(): Observable<MenuEntry[]> {
+        return this.menu$.pipe(share());
+    }
 
-  change(): Observable<Menu[]> {
-    return this.menu$.pipe(share());
-  }
+    set(menu: MenuEntry[]): Observable<MenuEntry[]> {
+        this.menu$.next(menu);
+        return this.menu$.asObservable();
+    }
 
-  add(menu: Menu) {
-    const tmpMenu = this.menu$.value;
-    tmpMenu.push(menu);
-    this.menu$.next(tmpMenu);
-  }
+    add(menu: MenuEntry) {
+        const tmpMenu = this.menu$.value;
+        tmpMenu.push(menu);
+        this.menu$.next(tmpMenu);
+    }
 
-  buildRoute(routeArr: string[]): string {
-    let route = '';
-    routeArr.forEach((item) => {
-      if (item && item.trim()) {
-        route += '/' + item.replace(/^\/+|\/+$/g, '');
-      }
-    });
-    return route;
-  }
+    buildRoute(routeArr: string[]): string {
+        let route = '';
+        routeArr.forEach((item) => {
+            if (item && item.trim()) {
+                route += '/' + item.replace(/^\/+|\/+$/g, '');
+            }
+        });
+        return route;
+    }
 
-  /** Reset the menu data. */
-  reset() {
-    this.menu$.next([]);
-  }
+    /** Reset the menu data. */
+    reset() {
+        this.menu$.next([]);
+    }
 
-  // Whether is a leaf menu
-  private isLeafItem(item: Menu): boolean {
-    const cond0 = item.route === undefined;
-    const cond1 = item.child === undefined;
-    const cond2 = !cond1 && item.child?.length === 0;
-    return cond0 || cond1 || cond2;
-  }
+    // Whether is a leaf menu
+    private isLeafItem(item: MenuEntry): boolean {
+        item = item as IMenuItem;
+        const cond0 = item.route === undefined;
+        const cond1 = item.child === undefined;
+        const cond2 = !cond1 && item.child?.length === 0;
+        return cond0 || cond1 || cond2;
+    }
 
-  // Deep clone object could be jsonized
-  private deepClone(obj: any): any {
-    return JSON.parse(JSON.stringify(obj));
-  }
+    // Deep clone object could be jsonized
+    private deepClone(obj: any): any {
+        return JSON.parse(JSON.stringify(obj));
+    }
 
-  // Whether two objects could be jsonized equal
-  private isJsonObjEqual(obj0: any, obj1: any): boolean {
-    return JSON.stringify(obj0) === JSON.stringify(obj1);
-  }
+    // Whether two objects could be jsonized equal
+    private isJsonObjEqual(obj0: any, obj1: any): boolean {
+        return JSON.stringify(obj0) === JSON.stringify(obj1);
+    }
 
-  private isRouteEqual(routeArr: Array<string> | string, realRouteArr: Array<string>): boolean {
-    realRouteArr = this.deepClone(realRouteArr);
-    realRouteArr = realRouteArr.filter(r => r !== '');
-    return this.isJsonObjEqual(routeArr, realRouteArr);
-  }
+    private isRouteEqual(routeArr: Array<string> | string, realRouteArr: Array<string>): boolean {
+        realRouteArr = this.deepClone(realRouteArr);
+        realRouteArr = realRouteArr.filter(r => r !== '');
+        return this.isJsonObjEqual(routeArr, realRouteArr);
+    }
 
-  /** Get the menu level. */
-  getLevel(routeArr: string[]): string[] {
-    let tmpArr: any[] = [];
-    this.menu$.value.forEach(item => {
-      // Breadth-first traverse
-      let unhandledLayer = [{item, parentNamePathList: [], realRouteArr: []}];
-      while (unhandledLayer.length > 0) {
-        let nextUnhandledLayer: any[] = [];
-        for (const ele of unhandledLayer) {
-          const eachItem = ele.item;
-          const currentNamePathList = this.deepClone(ele.parentNamePathList).concat(eachItem.name);
-          const currentRealRouteArr = this.deepClone(ele.realRouteArr).concat(eachItem.route);
-          // Compare the full Array for expandable
-          if (this.isRouteEqual(routeArr, currentRealRouteArr)) {
-            tmpArr = currentNamePathList;
-            break;
-          }
-          if (!this.isLeafItem(eachItem)) {
-            const wrappedChildren = eachItem.child?.map(child => ({
-              item: child,
-              parentNamePathList: currentNamePathList,
-              realRouteArr: currentRealRouteArr,
-            }));
-            nextUnhandledLayer = nextUnhandledLayer.concat(wrappedChildren);
-          }
-        }
-        unhandledLayer = nextUnhandledLayer;
-      }
-    });
-    return tmpArr;
-  }
+    /** Get the menu level generate breadcrumb. */
+    getLevel(routeArr: string[]): string[] {
+        let tmpArr: any[] = [];
+
+        const traverse = (item: any, parentNamePathList: string[], realRouteArr: string[]) => {
+            if (item.apps) {
+                item.apps.forEach((val: any) => {
+                    const eachItem = val;
+                    const currentNamePathList = [...parentNamePathList, eachItem.name];
+                    const currentRealRouteArr = [...realRouteArr, eachItem.route];
+                    // Compare the full Array for expandable
+                    if (this.isRouteEqual(routeArr, currentRealRouteArr)) {
+                        tmpArr = currentNamePathList;
+                        return;
+                    }
+                    if (!this.isLeafItem(eachItem)) {
+                        eachItem.child?.forEach((child: any) => traverse(child, currentNamePathList, currentRealRouteArr));
+                    }
+                });
+            } else {
+                const currentNamePathList = [...parentNamePathList, item.name];
+                const currentRealRouteArr = [...realRouteArr, item?.route];
+                // Compare the full Array for expandable
+                if (this.isRouteEqual(routeArr, currentRealRouteArr)) {
+                    tmpArr = currentNamePathList;
+                    return;
+                }
+                if (!this.isLeafItem(item)) {
+                    item.child?.forEach((child: any) => traverse(child, currentNamePathList, currentRealRouteArr));
+                }
+            }
+        };
+
+        this.menu$.value.forEach(item => {
+            traverse(item, [], []);
+        });
+
+        return tmpArr;
+    }
 }

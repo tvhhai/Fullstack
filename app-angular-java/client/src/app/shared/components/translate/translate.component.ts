@@ -2,11 +2,12 @@ import {Component} from '@angular/core';
 import {TranslateService} from "@ngx-translate/core";
 
 @Component({
-    selector: 'app-translate',
+    selector: ' app-translate',
     templateUrl: './translate.component.html',
     styleUrls: ['./translate.component.scss']
 })
 export class TranslateComponent {
+    i18n:string = localStorage.getItem("lang") || "en";
     langs: {[key: string]: string} = {
         'en': 'EN',
         'vn': 'VN',
@@ -18,6 +19,7 @@ export class TranslateComponent {
 
     useLanguage(language: string) {
         this.translate.use(language);
-        // this.settings.setLanguage(language);
+        localStorage.setItem("lang", language);
+        this.i18n = localStorage.getItem("lang") || language;
     }
 }

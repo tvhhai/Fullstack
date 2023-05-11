@@ -9,21 +9,24 @@ import { ToastrModule } from "ngx-toastr";
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { LayoutModule } from '@angular/cdk/layout';
-import { CoreModule } from "./core/core.module";
+import { CoreModule } from "@core/core.module";
+import { SharedModule } from '@shared/shared.module';
 
-import { SharedModule } from './shared/shared.module';
 
 // Component
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { Test1Component } from './components/test1/test1.component';
-import { Test2Component } from './components/test2/test2.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { NgxPermissionsModule } from "ngx-permissions";
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { httpInterceptorProviders } from "./core/interceptor";
-import { BASE_URL } from "./core/interceptor/base-url.interceptor";
+import { BASE_URL } from "@core/interceptor/base-url.interceptor";
 import { environment } from "@env/environment";
+
+//Providers
+import { httpInterceptorProviders } from "@core/interceptor";
+import { appInitializerProviders } from "@core/initializer";
+import {LoaderService} from "@shared/services/loader.service";
+import {FeaturesModule} from "./features/features.module";
+import {AppRoutingModule} from "./app-routing.module";
 
 
 // Required for AOT compilation
@@ -35,9 +38,6 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     declarations: [
         AppComponent,
         DashboardComponent,
-        Test1Component,
-        Test2Component,
-        PageNotFoundComponent,
     ],
     imports: [
         BrowserModule,
@@ -46,8 +46,10 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
         CoreModule,
         LayoutModule,
         NgbModule,
-        ToastrModule.forRoot(),
+        AppRoutingModule,
         SharedModule,
+        FeaturesModule,
+        ToastrModule.forRoot(),
         NgxPermissionsModule.forRoot(),
         TranslateModule.forRoot({
             loader: {
@@ -68,7 +70,9 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
             provide: BASE_URL,
             useValue: environment.baseUrl,
         },
-        httpInterceptorProviders
+        httpInterceptorProviders,
+        appInitializerProviders,
+        LoaderService
     ],
     bootstrap: [AppComponent],
 })

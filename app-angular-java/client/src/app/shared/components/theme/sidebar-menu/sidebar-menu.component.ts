@@ -14,7 +14,7 @@ export class SidebarMenuComponent {
   buildRoute = this.menu.buildRoute;
 
   ngOnInit() {
-    console.log(this.menu.getAll())
+    // console.log(this.menu$);
   }
 
   constructor(private menu: MenuService) {}

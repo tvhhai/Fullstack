@@ -3,12 +3,14 @@ import {
     HttpRequest,
     HttpHandler,
     HttpEvent,
-    HttpInterceptor, HttpErrorResponse
+    HttpInterceptor, HttpErrorResponse, HttpClient
 } from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {Router} from "@angular/router";
-import {SIGN_IN_URL} from "../constants/app.constant";
+import {AppConstant} from "../constants/app.constant";
+import {ToastrService} from "ngx-toastr";
+import {AuthService} from "../authentication/services/auth.service";
 
 export enum STATUS {
     UNAUTHORIZED = 401,
@@ -32,7 +34,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         return `${error.status} ${error.statusText}`;
     };
 
-    constructor(private router: Router) {
+    constructor(private router: Router, private http: HttpClient, private toast: ToastrService, private authService: AuthService) {
     }
 
     intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -42,16 +44,30 @@ export class ErrorInterceptor implements HttpInterceptor {
     }
 
     private handleError(error: HttpErrorResponse) {
+
         if (this.errorPages.includes(error.status)) {
             this.router.navigateByUrl(`/${error.status}`, {
                 skipLocationChange: true,
             });
         } else {
             console.error('ERROR', error);
-            // TODO handle show error
-            console.log(this.getMessage(error))
-            if (error.status === STATUS.UNAUTHORIZED) {
-                this.router.navigateByUrl(SIGN_IN_URL);
+            this.toast.error(this.getMessage(error));
+
+            if (error.status === STATUS.UNAUTHORIZED && this.authService.isRefreshTokenExist()) {
+                this.authService.refreshToken().subscribe({
+                    next: () => {
+                        window.location.reload();
+                    },
+                    error: () => {
+                        this.authService.logout().subscribe(() => {
+                            // this.router.navigate([`${AppConstant.PAGE.SIGN_IN_PAGE}`]);
+                            window.location.href = AppConstant.PAGE.SIGN_IN_PAGE
+
+                        });
+                    }
+                });
+            } else {
+
             }
         }
 

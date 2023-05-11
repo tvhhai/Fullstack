@@ -1,13 +1,22 @@
 {
   "common": {
+    "home": "Home",
     "username": "Username",
     "email": "Email",
     "password": "Password",
-    "confirmPassword": "Confirm Password"
+    "confirmPassword": "Confirm Password",
+    "dashboard": "Dashboard"
+  },
+  "agGrid": {
+  },
+  "pagination": {
+    "pageInform1": "Showing <b>{{fromIndex}}</b> - <b>{{toIndex}}</b> of <b>{{totalRow}}</b> records",
+    "pageInform2": "Page <b>{{currentPage}}</b> of <b>{{totalPage}}</b>"
+
   },
   "auth": {
     "sign-in": {
-      "title":"Sign In",
+      "title": "Sign In",
       "rememberMe": "Remember Me",
       "haveNoAccount": "Don't have an account?",
       "createOneAccount": "Click here to create one"
@@ -16,10 +25,15 @@
       "title": "Sign Up",
       "haveAnAccount": "Already have an account?",
       "agreeTermOfService": "I have read and agree to the terms of service"
-
-    }
+    },
+    "logout": "Logout"
   },
-
+  "user": {
+    "title": "User",
+    "titlePage": "User Management",
+    "profile": "Profile",
+    "editProfile": "Edit Profile"
+  },
   "setting": {
     "title": "Setting",
     "userSetting": {

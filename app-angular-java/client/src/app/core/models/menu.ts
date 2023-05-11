@@ -1,23 +1,30 @@
-export interface Menu {
-    id: number;
+export interface IMenuSection {
+    sectionId: number | string,
+    sectionName: string,
+    sectionType: true,
+    apps?: IMenuItem[],
+}
+
+export interface IMenuItem {
+    id: number | string;
     type: 'link' | 'sub' | 'extLink' | 'extTabLink';
     name: string;
     icon: string;
     route: string;
-    child?: MenuChildrenItem[];
-    permissions?: MenuPermissions
+    child?: IMenuChildrenItem[];
+    permissions?: IMenuPermissions
 }
 
-export interface MenuChildrenItem {
-    id: number;
+export interface IMenuChildrenItem {
+    id: number | string;
     route: string;
     name: string;
     type: 'link' | 'sub' | 'extLink' | 'extTabLink';
-    child?: MenuChildrenItem[];
-    permissions?: MenuPermissions;
+    child?: IMenuChildrenItem[];
+    permissions?: IMenuPermissions;
 }
 
-export interface MenuPermissions {
+export interface IMenuPermissions {
     only?: string | string[];
     except?: string | string[];
 }

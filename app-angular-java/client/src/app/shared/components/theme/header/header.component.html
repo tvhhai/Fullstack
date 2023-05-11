@@ -3,12 +3,15 @@
         <mat-icon aria-label="Side nav toggle icon">{{ opened ? 'menu' : 'chevron_left' }}</mat-icon>
     </button>
 
-    <span>App Header</span>
+<!--    <span>App Header</span>-->
     <span class="example-spacer"></span>
-    <app-translate></app-translate>
+<!--    <div>-->
+<!--        <mat-slide-toggle [formControl]="toggleControl"  >-->
+<!--        </mat-slide-toggle>-->
+<!--    </div>-->
 
-    <div >
-        <mat-slide-toggle [formControl]="toggleControl" class="mr-8">
-        </mat-slide-toggle>
-    </div>
+    <app-translate></app-translate>
+    <app-user></app-user>
 </mat-toolbar>
+<mat-divider></mat-divider>
+<app-breadcrumb></app-breadcrumb>

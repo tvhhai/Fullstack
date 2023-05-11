@@ -1,4 +1,6 @@
-<button mat-button [matMenuTriggerFor]="menu">Menu</button>
+<button mat-button [matMenuTriggerFor]="menu">
+    {{langs[i18n]}}
+</button>
 
 <mat-menu #menu="matMenu">
     <button mat-menu-item *ngFor="let lang of langs | keyvalue" (click)="useLanguage(lang.key)">

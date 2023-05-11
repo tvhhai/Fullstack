@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
 import {filter} from 'rxjs/operators';
 import {AuthService} from "../../../../../core/authentication/services/auth.service";
+import {LoaderService} from "../../../../services/loader.service";
 
 @Component({
     selector: 'app-sign-in',
@@ -15,11 +16,10 @@ export class SignInComponent {
     form: FormGroup = new FormGroup({
         username: new FormControl(''),
         password: new FormControl(''),
-        rememberMe: new FormControl(false),
+        // rememberMe: new FormControl(false),
     });
-    submitted = false;
 
-    constructor(private formBuilder: FormBuilder, private authService: AuthService) {
+    constructor(private formBuilder: FormBuilder, private authService: AuthService, private loaderService: LoaderService) {
     }
 
     ngOnInit(): void {
@@ -42,7 +42,7 @@ export class SignInComponent {
                         Validators.maxLength(40)
                     ]
                 ],
-                rememberMe: [false]
+                // rememberMe: [false]
             },
         );
     }
@@ -52,21 +52,18 @@ export class SignInComponent {
     }
 
     onSubmit() {
+        this.loaderService.isLoading.next(true);
         if (this.form.invalid) {
             return;
         }
-        console.log(this.form.value)
-        console.log(JSON.stringify(this.form.value, null, 2));
-        const { username, password } = this.form.value;
+
+        const {username, password} = this.form.value;
         this.authService.login(username, password).subscribe({
-            next: data => {
-                console.log(data);
-                // this.isSuccessful = true;
-                // this.isSignUpFailed = false;
+            next: () => {
+                this.loaderService.isLoading.next(false);
             },
-            error: err => {
-                // this.errorMessage = err.error.message;
-                // this.isSignUpFailed = true;
+            error: () => {
+                this.loaderService.isLoading.next(false);
             }
         });
     }

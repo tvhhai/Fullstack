@@ -1,0 +1,15 @@
+.app-form-field {
+  .mat-mdc-form-field-infix {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+    width: auto;
+    min-height: auto;
+    .mat-mdc-select-value {
+      margin-right: 8px;
+    }
+  }
+}
+
+.cdk-overlay-container .cdk-overlay-pane {
+  width: fit-content !important;
+}

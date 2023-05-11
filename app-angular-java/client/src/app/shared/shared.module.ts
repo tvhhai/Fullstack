@@ -1,11 +1,14 @@
 import {NgModule} from '@angular/core';
 
 import {CommonModule} from '@angular/common';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgxPermissionsModule} from 'ngx-permissions';
 import {MaterialModule} from './modules/material.module';
-import {AppRoutingModule} from '../app-routing.module';
+import {RouterModule} from "@angular/router";
+import {AgGridModule} from "ag-grid-angular";
+import {NgxPaginationModule} from "ngx-pagination";
+
 
 import {NavAccordionDirective} from './components/theme/sidebar-menu/nav-accordion.directive';
 import {NavAccordionItemDirective} from './components/theme/sidebar-menu/nav-accordion-item.directive';
@@ -22,15 +25,22 @@ import {SidebarComponent} from './components/theme/sidebar/sidebar.component';
 import {SignInComponent} from './components/theme/auth-layout/sign-in/sign-in.component';
 import {SignUpComponent} from './components/theme/auth-layout/sign-up/sign-up.component';
 import {BreadcrumbComponent} from './components/theme/breadcrumb/breadcrumb.component';
+import {LoaderComponent} from './components/loader/loader.component';
+import {UserComponent} from './components/user/user.component';
+import {AgGridComponent} from './components/common/ag-grid/ag-grid.component';
+import {SelectComponent} from './components/common/select/select.component';
+import {PaginationComponent} from './components/common/pagination/pagination.component';
 
 const MODULES: any[] = [
     CommonModule,
-    TranslateModule,
-    AppRoutingModule,
+    RouterModule,
+    FormsModule,
     NgxPermissionsModule,
     ReactiveFormsModule,
     MaterialModule,
-
+    TranslateModule,
+    AgGridModule,
+    NgxPaginationModule
 ];
 
 const COMPONENTS: any[] = [
@@ -44,7 +54,10 @@ const COMPONENTS: any[] = [
     SignUpComponent,
     SettingComponent,
     SidebarMenuComponent,
-    BreadcrumbComponent
+    BreadcrumbComponent,
+    UserComponent,
+    LoaderComponent,
+    AgGridComponent, SelectComponent, PaginationComponent
 ];
 const COMPONENTS_DYNAMIC: any[] = [];
 const DIRECTIVES: any[] = [NavAccordionItemDirective, NavAccordionDirective, NavAccordionToggleDirective];

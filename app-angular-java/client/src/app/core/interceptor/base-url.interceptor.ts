@@ -13,7 +13,8 @@ export const BASE_URL = new InjectionToken<string>('BASE_URL');
 export class BaseUrlInterceptor implements HttpInterceptor {
     private hasScheme = (url: string) => this.baseUrl && new RegExp('^http(s)?://', 'i').test(url);
 
-    constructor(@Optional() @Inject(BASE_URL) private baseUrl?: string) {}
+    constructor(@Optional() @Inject(BASE_URL) private baseUrl?: string) {
+    }
 
     intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
         if (request.url.startsWith('./assets/')) {
@@ -21,7 +22,7 @@ export class BaseUrlInterceptor implements HttpInterceptor {
         }
 
         return this.hasScheme(request.url) === false
-            ? next.handle(request.clone({ url: this.prependBaseUrl(request.url) }))
+            ? next.handle(request.clone({url: this.prependBaseUrl(request.url)}))
             : next.handle(request);
     }
 

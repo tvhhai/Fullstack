@@ -6,7 +6,7 @@
 
         <mat-card-content>
 
-            <form class="form-field-full" [formGroup]="form" (ngSubmit)="onSubmit()">
+            <form class="form-field-full" [formGroup]="form">
                 <mat-form-field appearance="outline" class="mb-2">
                     <mat-label>{{'common.username' | translate}}</mat-label>
                     <input matInput type="text" placeholder="" formControlName="username">
@@ -63,10 +63,13 @@
                     </mat-error>
                 </mat-form-field>
 
-<!--                <mat-checkbox class="mb-2" formControlName="agreeTermOfService">{{'auth.sign-up.agreeTermOfService' | translate}}-->
-<!--                </mat-checkbox>-->
+                <!--                <mat-checkbox class="mb-2" formControlName="agreeTermOfService">{{'auth.sign-up.agreeTermOfService' | translate}}-->
+                <!--                </mat-checkbox>-->
 
-                <button class="w-100 mb-2" mat-raised-button color="primary" [disabled]="this.form.invalid">
+                <button type="button" class="w-100 mb-2"
+                        mat-raised-button color="primary"
+                        [disabled]="this.form.invalid"
+                        (click)="onSubmit()">
                     {{'auth.sign-up.title' | translate}}
                 </button>
 
@@ -75,5 +78,6 @@
                 </div>
             </form>
         </mat-card-content>
+
     </mat-card>
 </div>
