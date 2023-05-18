@@ -1,16 +1,19 @@
 import {Component, EventEmitter, Input, Output, ViewChild, ViewEncapsulation} from '@angular/core';
-import {CellClickedEvent, ColDef, ColumnApi, GridApi, GridOptions, GridReadyEvent} from "ag-grid-community";
+import {ColDef, ColumnApi, GridApi, GridOptions, GridReadyEvent} from "ag-grid-community";
 import {AgGridAngular} from "ag-grid-angular";
 import {AgGridConstant} from "@shared/components/common/ag-grid/ag-grid.component.constant";
 import {isEmptyArray} from "@shared/helpers";
-import {cloneDeep} from 'lodash';
+import {cloneDeep} from 'lodash-es';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'app-ag-grid',
     templateUrl: './ag-grid.component.html',
     styleUrls: ['./ag-grid.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class AgGridComponent {
+
     @Input() gridName!: string;
     @Input() rowData!: any[];
     @Input() columnDefs!: ColDef[];
@@ -23,6 +26,7 @@ export class AgGridComponent {
     // For accessing the Grid's API
     @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
 
+
     gridApi!: GridApi;
     columnApi!: ColumnApi;
     gridOptions!: GridOptions;
@@ -32,19 +36,26 @@ export class AgGridComponent {
     totalPage: number = 0;
     fromIndex: number = 0;
     toIndex: number = 0;
-    rowDataBk!: any[];
+    rowDataPagination!: any[];
     searchValue!: string;
 
     ITEMS_PER_PAGE_OPTIONS = AgGridConstant.ITEMS_PER_PAGE_OPTIONS;
 
-    constructor() {
+    public overlayNoRowsTemplate =
+        '<div class="custom-overlay-no-rows">' +
+        '<span>' +
+        this.translateService.instant('agGrid.agGridNoData') +
+        '</span>' +
+        '</div>';
+
+    constructor(private translateService: TranslateService) {
     }
 
     ngOnInit() {
         this.defaultColDef = this.defaultColDef || AgGridConstant.DEFAULT_COL_DEFS;
         this.itemsPerPage = this.itemsPerPage || this.ITEMS_PER_PAGE_OPTIONS[0];
 
-        this.rowDataBk = cloneDeep(this.rowData);
+        this.rowDataPagination = cloneDeep(this.rowData);
     }
 
     onGridReady(params: GridReadyEvent) {
@@ -67,7 +78,7 @@ export class AgGridComponent {
 
         isEmptyArray(filteredRows) ? this.gridApi.showNoRowsOverlay() : this.gridApi.hideOverlay();
 
-        this.rowData = value ? filteredRows : this.rowDataBk;
+        this.rowDataPagination = !!value ? filteredRows : this.rowData;
     }
 
 

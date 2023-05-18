@@ -3,3 +3,17 @@
   padding: 8px 16px;
 }
 
+.app-ag-grid-body {
+  .ag-overlay-wrapper {
+    align-items: end;
+
+    .custom-overlay-no-rows {
+      background: white;
+      width: 100%;
+      height: calc(100% - 49px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}

@@ -5,9 +5,11 @@
     "email": "Email",
     "password": "Password",
     "confirmPassword": "Confirm Password",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "searchAll": "Search All"
   },
   "agGrid": {
+    "agGridNoData": "No items to show"
   },
   "pagination": {
     "pageInform1": "Showing <b>{{fromIndex}}</b> - <b>{{toIndex}}</b> of <b>{{totalRow}}</b> records",

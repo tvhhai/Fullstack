@@ -1,7 +1,8 @@
 <div class="row align-items-center">
+
     <!--    Tip use ngx-pagination with ag-grid-->
     <ul [hidden]="true">
-        <li *ngFor="let item of dataPagination| paginate: {  itemsPerPage: itemsPerPage, currentPage: currentPage }">
+        <li *ngFor="let item of dataPagination | paginate: {  itemsPerPage: itemsPerPage, currentPage: currentPage }">
 
         </li>
     </ul>

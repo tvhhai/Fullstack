@@ -27,9 +27,10 @@ import {SignUpComponent} from './components/theme/auth-layout/sign-up/sign-up.co
 import {BreadcrumbComponent} from './components/theme/breadcrumb/breadcrumb.component';
 import {LoaderComponent} from './components/loader/loader.component';
 import {UserComponent} from './components/user/user.component';
-import {AgGridComponent} from './components/common/ag-grid/ag-grid.component';
-import {SelectComponent} from './components/common/select/select.component';
-import {PaginationComponent} from './components/common/pagination/pagination.component';
+import { AgGridComponent } from './components/common/ag-grid/ag-grid.component';
+import { SelectComponent } from './components/common/select/select.component';
+import { PaginationComponent } from './components/common/pagination/pagination.component';
+import { InputComponent } from './components/common/input/input.component';
 
 const MODULES: any[] = [
     CommonModule,
@@ -56,8 +57,7 @@ const COMPONENTS: any[] = [
     SidebarMenuComponent,
     BreadcrumbComponent,
     UserComponent,
-    LoaderComponent,
-    AgGridComponent, SelectComponent, PaginationComponent
+    LoaderComponent
 ];
 const COMPONENTS_DYNAMIC: any[] = [];
 const DIRECTIVES: any[] = [NavAccordionItemDirective, NavAccordionDirective, NavAccordionToggleDirective];
@@ -65,8 +65,8 @@ const PIPES: any[] = [];
 
 @NgModule({
     imports: [...MODULES],
-    exports: [...MODULES, ...COMPONENTS, ...DIRECTIVES, ...PIPES],
-    declarations: [...COMPONENTS, ...COMPONENTS_DYNAMIC, ...DIRECTIVES, ...PIPES],
+    exports: [...MODULES, ...COMPONENTS, ...DIRECTIVES, ...PIPES, AgGridComponent],
+    declarations: [...COMPONENTS, ...COMPONENTS_DYNAMIC, ...DIRECTIVES, ...PIPES, AgGridComponent, SelectComponent, PaginationComponent, InputComponent,  ],
 })
 export class SharedModule {
 }
