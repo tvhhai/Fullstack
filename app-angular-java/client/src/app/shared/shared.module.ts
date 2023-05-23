@@ -31,6 +31,7 @@ import { AgGridComponent } from './components/common/ag-grid/ag-grid.component';
 import { SelectComponent } from './components/common/select/select.component';
 import { PaginationComponent } from './components/common/pagination/pagination.component';
 import { InputComponent } from './components/common/input/input.component';
+import { ButtonComponent } from './components/common/button/button.component';
 
 const MODULES: any[] = [
     CommonModule,
@@ -66,7 +67,7 @@ const PIPES: any[] = [];
 @NgModule({
     imports: [...MODULES],
     exports: [...MODULES, ...COMPONENTS, ...DIRECTIVES, ...PIPES, AgGridComponent],
-    declarations: [...COMPONENTS, ...COMPONENTS_DYNAMIC, ...DIRECTIVES, ...PIPES, AgGridComponent, SelectComponent, PaginationComponent, InputComponent,  ],
+    declarations: [...COMPONENTS, ...COMPONENTS_DYNAMIC, ...DIRECTIVES, ...PIPES, AgGridComponent, SelectComponent, PaginationComponent, InputComponent, ButtonComponent,  ],
 })
 export class SharedModule {
 }

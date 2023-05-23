@@ -11,7 +11,7 @@ import {Router} from "@angular/router";
 })
 export class UserComponent {
     constructor(private user: UserService, private authService: AuthService, private router: Router) {
-        // console.log(this.user$)
+        // console.log(this.user-manager$)
     }
 
     user$ = this.user.get();
