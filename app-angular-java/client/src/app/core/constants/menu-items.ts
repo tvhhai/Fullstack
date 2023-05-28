@@ -56,12 +56,12 @@ export class MenuConstant {
 
         user: {
             sectionId: 'user',
-            sectionName: 'user-manager.title',
+            sectionName: 'user.title',
             sectionType: true,
             apps: [
                 {
                     id: 4,
-                    name: 'user-manager.title',
+                    name: 'user.title',
                     icon: 'manage_accounts',
                     route: 'user',
                     type: 'link',

@@ -19,12 +19,6 @@ export class AppHttpInterceptor implements HttpInterceptor {
         req = req.clone({
             withCredentials: true
         });
-        if(req.url === "https://www.ag-grid.com/example-assets/row-data.json"){
-            req = req.clone({
-                withCredentials: false
-            });
-        }
-
         return next.handle(req).pipe(mergeMap((event: HttpEvent<any>) => this.handleOkReq(event)));
     }
 

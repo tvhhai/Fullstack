@@ -1,0 +1,19 @@
+<mat-sidenav-container class="sidebar-container">
+
+    <mat-sidenav class="app-sidebar">
+        <app-sidebar></app-sidebar>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <app-header class="app-header" (clicked)="toggleSideNav()" [opened]="opened"></app-header>
+<!--        <mat-divider></mat-divider>-->
+<!--        <app-breadcrumb></app-breadcrumb>-->
+
+        <div class="app-main-container">
+            <mat-card class="card-container">
+                <router-outlet></router-outlet>
+            </mat-card>
+        </div>
+    </mat-sidenav-content>
+
+</mat-sidenav-container>

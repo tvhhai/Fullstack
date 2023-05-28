@@ -1,0 +1,83 @@
+<div>
+  <h1 class="mat-h1">{{gridName | translate}}</h1>
+
+  <div class="row">
+    <div class="col-md-6">
+      <app-button
+        class="me-2"
+        *ngFor="let item of toolbarLeftAction"
+        [btnType]="ButtonTypes.IconSquareOutline"
+        [btnColor]="item.color"
+        [btnIcon]="item.icon"
+        [btnDisabled]="item.disable"
+        (click)="item.disable ? null : item.onClick()"
+      ></app-button>
+
+    </div>
+    <div class="col-md-6">
+      <div class="d-flex justify-content-end">
+        <app-input
+          [(inputModel)]="searchValue"
+          (inputModelChange)="onSearchChange(searchValue)"
+          [inputLabel]="'common.searchAll'"
+          [inputSize]="'small'"
+        ></app-input>
+      </div>
+    </div>
+  </div>
+
+  <ag-grid-angular
+    style="width: 100%; height: 500px"
+    class="app-ag-grid-body ag-theme-alpine"
+
+    [suppressCellFocus]="true"
+    [suppressPaginationPanel]="false"
+    [suppressMenuHide]=true
+    [suppressDragLeaveHidesColumns]="true"
+    [rowMultiSelectWithClick]="true"
+    [animateRows]="true"
+    [pagination]="true"
+
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [rowData]="rowData "
+
+    [rowSelection]="'multiple'"
+    [paginationPageSize]="itemsPerPage"
+
+    [overlayNoRowsTemplate]="overlayNoRowsTemplate"
+
+
+    (gridReady)="onGridReady($event)"
+    (paginationChanged)="onPaginationChanged() "
+    (selectionChanged)="onSelectionChanged($event)"
+  ></ag-grid-angular>
+
+
+  <div class="app-ag-grid-paging">
+
+    <app-pagination
+      [dataPagination]="rowDataPagination"
+      [itemsPerPage]="itemsPerPage"
+      [fromIndex]="fromIndex"
+      [toIndex]="toIndex"
+      [currentPage]="currentPage"
+      [totalPage]="totalPage"
+      [totalRow]="totalRow"
+      [showPageInfo]="true"
+      [displayedRecordRange]="true"
+      (pageChange)="onPageChange($event)"
+    >
+
+      <app-select [arrVal]="ITEMS_PER_PAGE_OPTIONS"
+                  [(modelValue)]="itemsPerPage"
+                  (selectionChange)="onItemsPerPageChange($event)"
+      >
+      </app-select>
+
+    </app-pagination>
+
+
+  </div>
+</div>
+

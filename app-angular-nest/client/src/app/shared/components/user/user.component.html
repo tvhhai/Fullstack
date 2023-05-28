@@ -1,0 +1,19 @@
+<button class="" mat-button [matMenuTriggerFor]="menu">
+    <img matButtonIcon class="avatar" [src]="(user$ | async)?.avatar || './assets/images/default_image_profile.png'"
+         width="24" alt="avatar"/>
+
+    <span class="mx-2">{{ (user$ | async)?.username }}</span>
+</button>
+
+<mat-menu #menu="matMenu" xPosition="before">
+
+    <button routerLink="user/profile" mat-menu-item>
+        <mat-icon>account_circle</mat-icon>
+        <span>{{ 'user-manager.profile' | translate }}</span>
+    </button>
+
+    <button mat-menu-item (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>{{ 'auth.logout' | translate }}</span>
+    </button>
+</mat-menu>

@@ -1,0 +1,12 @@
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  .header-toolbar {
+    padding: 0 8px;
+    background: white;
+  }
+  .example-spacer {
+    flex: 1 1 auto;
+  }
+}

@@ -76,7 +76,7 @@ export class AuthService {
     }
 
     isLoggedIn() {
-        return this.doesHttpOnlyCookieExist('accessToken') && this.doesHttpOnlyCookieExist('refreshToken');
+        return this.doesHttpOnlyCookieExist('accessToken') && this.doesHttpOnlyCookieExist('refreshToken') ||  this.doesHttpOnlyCookieExist('auth-cookie');
     }
 
     isRefreshTokenExist() {

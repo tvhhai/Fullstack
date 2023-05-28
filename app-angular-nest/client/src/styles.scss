@@ -1,0 +1,37 @@
+// regular style toast
+@import 'ngx-toastr/toastr';
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
+
+@import 'ag-grid-community/styles/ag-grid.css';
+@import 'ag-grid-community/styles/ag-theme-alpine.css';
+
+body {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    margin: 0;
+}
+
+html,
+body {
+    height: 100%;
+    ul {
+        padding: 0;
+        margin: 0;
+    }
+    a {
+        text-decoration: none;
+    }
+    .dot-icon {
+        width: 8px;
+        height: 8px;
+        border-radius: 100%;
+        background: rgb(206, 203, 227);
+        display: inline-flex;
+        margin-right: 16px;
+    }
+    .grid-container {
+      margin: 20px;
+    }
+}
+

@@ -1,0 +1,17 @@
+<mat-toolbar class="header-toolbar">
+    <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="toggle()">
+        <mat-icon aria-label="Side nav toggle icon">{{ opened ? 'menu' : 'chevron_left' }}</mat-icon>
+    </button>
+
+<!--    <span>App Header</span>-->
+    <span class="example-spacer"></span>
+<!--    <div>-->
+<!--        <mat-slide-toggle [formControl]="toggleControl"  >-->
+<!--        </mat-slide-toggle>-->
+<!--    </div>-->
+
+    <app-translate></app-translate>
+    <app-user></app-user>
+</mat-toolbar>
+<mat-divider></mat-divider>
+<app-breadcrumb></app-breadcrumb>

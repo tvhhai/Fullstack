@@ -1,0 +1,13 @@
+<button mat-button [matMenuTriggerFor]="menu">
+    {{langs[i18n]}}
+</button>
+
+<mat-menu #menu="matMenu">
+    <button mat-menu-item *ngFor="let lang of langs | keyvalue" (click)="useLanguage(lang.key)">
+        <div class="d-flex align-items-center">
+            <img class="image-i18n" [src]="'./assets/images/i18n/'+ lang.key + '.png'" alt="">
+            <span>{{ lang.value }}</span>
+        </div>
+    </button>
+</mat-menu>
+
