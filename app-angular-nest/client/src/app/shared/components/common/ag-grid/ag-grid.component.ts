@@ -1,20 +1,31 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
   Output,
   SimpleChanges,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
-import {ColDef, ColumnApi, GridApi, GridOptions, GridReadyEvent, SelectionChangedEvent} from "ag-grid-community";
-import {AgGridAngular} from "ag-grid-angular";
-import {AgGridConstant} from "@shared/components/common/ag-grid/ag-grid.component.constant";
-import {isEmptyArray} from "@shared/helpers";
-import {cloneDeep} from 'lodash-es';
+import {
+  ColDef,
+  ColumnApi,
+  GridApi,
+  GridOptions,
+  GridReadyEvent,
+  SelectionChangedEvent,
+} from 'ag-grid-community';
+import {AgGridAngular} from 'ag-grid-angular';
+import {AgGridConstant} from '@shared/components/common/ag-grid/ag-grid.component.constant';
+import {isEmptyArray} from '@shared/helpers';
+import {cloneDeep, forEach, isEqual} from 'lodash-es';
 import {TranslateService} from '@ngx-translate/core';
-import {ButtonColor, ButtonTypes} from "@shared/components/common/button/button.enum";
+import {
+  ButtonColor,
+  ButtonTypes,
+} from '@shared/components/common/button/button.enum';
+import {AgGridService} from '@shared/components/common/ag-grid/ag-grid.service';
+import {SubscriptSizing} from "@angular/material/form-field";
 
 interface ButtonAction {
   id: string;
@@ -24,7 +35,7 @@ interface ButtonAction {
   icon: string;
   color: ButtonColor;
   // permission: string;
-} // Import Object từ core-js
+}
 
 @Component({
   selector: 'app-ag-grid',
@@ -35,6 +46,8 @@ interface ButtonAction {
 export class AgGridComponent {
   public ButtonTypes = ButtonTypes;
   public ButtonColor = ButtonColor;
+  private _selectMultiWithCheckbox: boolean = false;
+  private _selectSingleWithoutCheckbox: boolean = false;
 
   @Input() gridName!: string;
   @Input() rowData!: any[];
@@ -43,14 +56,38 @@ export class AgGridComponent {
   @Input() defaultColDef!: ColDef;
   @Input() itemsPerPage!: number;
 
-  @Input() toolbarLeftAction!:  any;
+  @Input() toolbarLeftAction!: ButtonAction[];
 
-  @Output() gridReady: EventEmitter<{ api: GridApi, columnApi: ColumnApi }> = new EventEmitter();
-  @Output() selectionChanged = new EventEmitter<any>()
+  get selectMultiWithCheckbox(): boolean {
+    return this._selectMultiWithCheckbox;
+  }
 
-  // For accessing the Grid's API
-  @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
+  @Input()
+  set selectMultiWithCheckbox(value: boolean) {
+    this._selectMultiWithCheckbox = value;
+    if (this._selectMultiWithCheckbox) {
+      this._selectSingleWithoutCheckbox = false;
+    }
+  }
 
+  get selectSingleWithoutCheckbox(): boolean {
+    return this._selectSingleWithoutCheckbox;
+  }
+
+  @Input()
+  set selectSingleWithoutCheckbox(value: boolean) {
+    this._selectSingleWithoutCheckbox = value;
+    if (this._selectSingleWithoutCheckbox) {
+      this._selectMultiWithCheckbox = false;
+    }
+  }
+
+  @Output() gridReady: EventEmitter<{ api: GridApi; columnApi: ColumnApi }> =
+    new EventEmitter();
+  @Output() selectionChanged = new EventEmitter<any>();
+  @Output() clickRefresh = new EventEmitter<void>();
+
+  @ViewChild(AgGridAngular) agGrid!: AgGridAngular; // For accessing the Grid's API
 
   gridApi!: GridApi;
   columnApi!: ColumnApi;
@@ -63,8 +100,12 @@ export class AgGridComponent {
   toIndex: number = 0;
   rowDataPagination!: any[];
   searchValue!: string;
+  subscriptSizing: SubscriptSizing = 'dynamic';
+  isShowRefreshBtn: boolean = false;
+  isFullScreen: boolean = false;
 
   ITEMS_PER_PAGE_OPTIONS = AgGridConstant.ITEMS_PER_PAGE_OPTIONS;
+  AG_GRID_CHECKBOX_SELECTION = AgGridConstant.AG_GRID_CHECKBOX_SELECTION;
 
   public overlayNoRowsTemplate =
     '<div class="custom-overlay-no-rows">' +
@@ -73,24 +114,47 @@ export class AgGridComponent {
     '</span>' +
     '</div>';
 
-  constructor(private translateService: TranslateService) {
+  constructor(
+    private translateService: TranslateService,
+    private agGridService: AgGridService
+  ) {
   }
 
   ngOnInit() {
     this.defaultColDef = this.defaultColDef || AgGridConstant.DEFAULT_COL_DEFS;
     this.itemsPerPage = this.itemsPerPage || this.ITEMS_PER_PAGE_OPTIONS[0];
 
-    this.rowDataPagination = cloneDeep(this.rowData);
-    console.log(this.toolbarLeftAction)
+    if (this.rowData.length > 0) {
+      this.assignRowData(this.rowData);
+    }
+    this.addCheckboxSelectionToColumnDefs();
+    this.showRefreshBtn();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // Xử lý các thay đổi của các đầu vào tại đây
-    console.log(changes)
+    if (changes['rowData']) {
+      this.assignRowData(changes['rowData'].currentValue);
+    }
+  }
+
+  ngOnDestroy(): void {
+  }
+
+  showRefreshBtn(){
+    this.isShowRefreshBtn = this.clickRefresh.observed;
+  }
+
+  fullScreen() {
+    this.isFullScreen = !this.isFullScreen
+  }
+
+  assignRowData(rowData: any[]) {
+    this.rowDataPagination = cloneDeep(rowData);
   }
 
   onSelectionChanged(event: SelectionChangedEvent) {
     this.selectionChanged.emit(event);
+    this.agGridService.selectedRows = event.api.getSelectedRows();
   }
 
   onGridReady(params: GridReadyEvent) {
@@ -98,10 +162,8 @@ export class AgGridComponent {
     this.columnApi = params.columnApi;
     this.gridReady.emit(params);
     this.onPaginationChanged();
-
-    this.gridApi.sizeColumnsToFit()
+    this.gridApi.sizeColumnsToFit();
   }
-
 
   onSearchChange(value: string) {
     this.gridApi.setQuickFilter(value);
@@ -111,11 +173,12 @@ export class AgGridComponent {
       filteredRows.push(rowNode.data);
     });
 
-    isEmptyArray(filteredRows) ? this.gridApi.showNoRowsOverlay() : this.gridApi.hideOverlay();
+    isEmptyArray(filteredRows)
+      ? this.gridApi.showNoRowsOverlay()
+      : this.gridApi.hideOverlay();
 
     this.rowDataPagination = !!value ? filteredRows : this.rowData;
   }
-
 
   onPageChange(number: number) {
     this.currentPage = number;
@@ -144,11 +207,29 @@ export class AgGridComponent {
     }
   }
 
+  refresh() {
+    this.clickRefresh.emit();
+  }
+
   private updatePageIndices() {
-    let fromIndex = this.currentPage >= 1 ? (this.currentPage - 1) * this.itemsPerPage + 1 : 0;
+    let fromIndex =
+      this.currentPage >= 1
+        ? (this.currentPage - 1) * this.itemsPerPage + 1
+        : 0;
     let toIndex = Math.min(fromIndex + this.itemsPerPage - 1, this.totalRow);
     this.fromIndex = fromIndex;
     this.toIndex = toIndex;
   }
 
+  private addCheckboxSelectionToColumnDefs() {
+    if (this.selectMultiWithCheckbox && !this.isHaveCheckBox()) {
+      this.columnDefs.unshift(this.AG_GRID_CHECKBOX_SELECTION as ColDef);
+    }
+  }
+
+  private isHaveCheckBox() {
+    return this.columnDefs.find((val) => {
+      return val.colId === this.AG_GRID_CHECKBOX_SELECTION.colId;
+    });
+  }
 }

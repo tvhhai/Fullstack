@@ -1,66 +1,84 @@
 <div class="row align-items-center">
+  <!--    Tip use ngx-pagination with ag-grid-->
+  <ul [hidden]="true">
+    <li
+      *ngFor="
+        let item of dataPagination
+          | paginate : { itemsPerPage: itemsPerPage, currentPage: currentPage }
+      "
+    ></li>
+  </ul>
 
-    <!--    Tip use ngx-pagination with ag-grid-->
-    <ul [hidden]="true">
-        <li *ngFor="let item of dataPagination | paginate: {  itemsPerPage: itemsPerPage, currentPage: currentPage }">
+  <div class="col-sm-6 pull-left">
+    <div class="d-flex align-items-center">
+      <div class="page-size-selection">
+        <ng-content></ng-content>
+      </div>
 
-        </li>
-    </ul>
-
-    <div class="col-md-6 pull-left">
-        <div class="d-flex align-items-center">
-            <div class="page-size-selection">
-                <ng-content></ng-content>
-            </div>
-
-            <div *ngIf="displayedRecordRange">
-                <span [innerHtml]="'pagination.pageInform1' | translate:{fromIndex, toIndex, totalRow}"></span>
-            </div>
-        </div>
-
+      <div *ngIf="displayedRecordRange">
+        <span
+          [innerHtml]="
+            'pagination.pageInform1'
+              | translate : { fromIndex, toIndex, totalRow }
+          "
+        ></span>
+      </div>
     </div>
+  </div>
 
-    <div class="col-md-6 app-ag-grid-pager-nav pull-right">
-        <div class="d-flex align-items-center justify-content-end">
-            <div class="page-inform" *ngIf="showPageInfo">
-                <span [innerHtml]="'pagination.pageInform2' | translate:{currentPage, totalPage}"></span>
+  <div class="col-sm-6 app-ag-grid-pager-nav pull-right">
+    <div class="d-flex align-items-center justify-content-end">
+      <div class="page-inform" *ngIf="showPageInfo">
+        <span
+          [innerHtml]="
+            'pagination.pageInform2' | translate : { currentPage, totalPage }
+          "
+        ></span>
+      </div>
+
+      <pagination-template
+        #p="paginationApi"
+        (pageChange)="onPageChange($event)"
+        [maxSize]="5"
+      >
+        <div class="custom-pagination">
+          <div class="pagination-previous" [class.disabled]="p.isFirstPage()">
+            <button
+              class="d-flex"
+              (click)="p.previous()"
+              [disabled]="p.isFirstPage()"
+            >
+              <mat-icon> chevron_left </mat-icon>
+            </button>
+          </div>
+
+          <div
+            *ngFor="let page of p.pages"
+            [class.active]="p.getCurrent() === page.value"
+          >
+            <div
+              (click)="p.setCurrent(page.value)"
+              *ngIf="p.getCurrent() !== page.value"
+            >
+              <span>{{ page.label }}</span>
             </div>
 
-            <pagination-template #p="paginationApi"
-                                 (pageChange)="onPageChange($event)"
-                                 [maxSize]="5">
+            <div *ngIf="p.getCurrent() === page.value" class="active">
+              <span>{{ page.label }}</span>
+            </div>
+          </div>
 
-                <div class="custom-pagination">
-                    <div class="pagination-previous" [class.disabled]="p.isFirstPage()">
-                        <button class="d-flex" (click)="p.previous()" [disabled]="p.isFirstPage()">
-                            <mat-icon>
-                                chevron_left
-                            </mat-icon>
-                        </button>
-                    </div>
-
-
-                    <div *ngFor="let page of p.pages" [class.active]="p.getCurrent() === page.value">
-
-                        <div (click)="p.setCurrent(page.value)" *ngIf="p.getCurrent() !== page.value">
-                            <span>{{ page.label }}</span>
-                        </div>
-
-                        <div *ngIf="p.getCurrent() === page.value" class="active">
-                            <span>{{ page.label }}</span>
-                        </div>
-                    </div>
-
-                    <div class="pagination-next" [class.disabled]="p.isLastPage()">
-                        <button class="d-flex" (click)="p.next()" [disabled]="p.isLastPage()">
-                            <mat-icon>
-                                chevron_right
-                            </mat-icon>
-                        </button>
-                    </div>
-                </div>
-
-            </pagination-template>
+          <div class="pagination-next" [class.disabled]="p.isLastPage()">
+            <button
+              class="d-flex"
+              (click)="p.next()"
+              [disabled]="p.isLastPage()"
+            >
+              <mat-icon> chevron_right </mat-icon>
+            </button>
+          </div>
         </div>
+      </pagination-template>
     </div>
+  </div>
 </div>

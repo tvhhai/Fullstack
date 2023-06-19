@@ -1,3 +1,2 @@
-export function isEmptyArray(arr: any[]): boolean {
-    return !Array.isArray(arr) || arr.length === 0;
-}
+export * from './common.helper';
+export * from './obj.helper';

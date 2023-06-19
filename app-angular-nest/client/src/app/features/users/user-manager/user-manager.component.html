@@ -1,0 +1,59 @@
+<div class="grid-container" *ngIf="rowData.length > 0">
+  <ng-container [ngSwitch]="viewMod">
+    <div *ngSwitchCase="'view'">
+      <app-ag-grid
+        [gridName]="'user.titlePage'"
+        [columnDefs]="columnDefs"
+        [rowData]="rowData"
+        [selectMultiWithCheckbox]="true"
+        [toolbarLeftAction]="toolbarLeftAction"
+        (selectionChanged)="onSelectionChanged($event)"
+        (gridReady)="onGridReady($event)"
+        (clickRefresh)="refresh()"
+      >
+      </app-ag-grid>
+    </div>
+
+    <div *ngSwitchCase="'create'">
+      <div class="d-flex align-items-center">
+        <ng-container [ngTemplateOutlet]="backButtonTemplate"></ng-container>
+        <h1 class="mat-h1 my-0">Create User</h1>
+      </div>
+
+      <div>
+        <add-edit-user-mng-form
+          (save)="save()"
+          (cancel)="cancel()"
+          [viewMode]="viewMod"
+        >
+        </add-edit-user-mng-form>
+      </div>
+    </div>
+
+    <div *ngSwitchCase="'edit'">
+      <div class="d-flex align-items-center">
+        <ng-container [ngTemplateOutlet]="backButtonTemplate"></ng-container>
+        <h1 class="mat-h1 my-0">Edit User</h1>
+      </div>
+
+      <div>
+        <add-edit-user-mng-form
+          *ngIf="!isEmptyObj(dataEdit)"
+          (save)="save()"
+          (cancel)="cancel()"
+          [viewMode]="viewMod"
+          [dataEdit]="dataEdit"
+        ></add-edit-user-mng-form>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #backButtonTemplate>
+  <app-button
+    [btnType]="ButtonTypes.Icon"
+    [btnIcon]="'arrow_back'"
+    (click)="backToView()"
+  >
+  </app-button>
+</ng-template>

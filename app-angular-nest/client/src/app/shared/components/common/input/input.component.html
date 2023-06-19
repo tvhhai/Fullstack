@@ -1,15 +1,19 @@
-<mat-form-field class="app-input-container"
-                [ngClass]="{'app-input-small': inputSize==='small'}"
-                [appearance]="appearance">
+<mat-form-field
+  class="app-input-container"
+  [ngClass]="{ 'app-input-small': inputSize === 'small' }"
+  [appearance]="appearance"
+  [subscriptSizing]="subscriptSizing"
+>
+  <mat-label *ngIf="inputLabel">{{ inputLabel | translate }}</mat-label>
 
-    <mat-label *ngIf="inputLabel">{{inputLabel | translate}}</mat-label>
+  <input
+    matInput
+    class="app-input"
+    [type]="inputType"
+    [(ngModel)]="inputModel"
+    (ngModelChange)="inputModelChange.emit($event)"
+    (change)="inputOnChange.emit($event)"
+    [placeholder]="inputPlaceholder"
 
-    <input matInput
-           class="app-input"
-           [type]="inputType"
-           [(ngModel)]="inputModel"
-           (ngModelChange)="inputModelChange.emit($event)"
-           (change)="inputOnChange.emit($event)"
-           [placeholder]="inputPlaceholder"
-    >
+  />
 </mat-form-field>

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { map } from 'rxjs/operators';
-import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
+import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-dashboard',

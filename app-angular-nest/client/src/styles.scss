@@ -1,3 +1,5 @@
+@use "@angular/material" as mat;
+
 // regular style toast
 @import 'ngx-toastr/toastr';
 
@@ -6,7 +8,6 @@
 
 @import 'ag-grid-community/styles/ag-grid.css';
 @import 'ag-grid-community/styles/ag-theme-alpine.css';
-
 body {
     font-family: Roboto, "Helvetica Neue", sans-serif;
     margin: 0;
@@ -33,5 +34,9 @@ body {
     .grid-container {
       margin: 20px;
     }
+  .app-input {
+    @include mat.all-component-densities(-3);
+    width: 100%;
+  }
 }
 

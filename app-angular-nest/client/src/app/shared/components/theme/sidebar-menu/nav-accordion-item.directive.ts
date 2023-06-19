@@ -1,5 +1,5 @@
-import {Directive, HostBinding, Inject, Input} from '@angular/core';
-import {NavAccordionDirective} from "./nav-accordion.directive";
+import { Directive, HostBinding, Inject, Input } from '@angular/core';
+import { NavAccordionDirective } from './nav-accordion.directive';
 
 @Directive({
   selector: '[appNavAccordionItem]',

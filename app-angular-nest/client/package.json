@@ -27,6 +27,7 @@
     "ag-grid-angular": "^29.3.4",
     "ag-grid-community": "^29.3.4",
     "bootstrap": "^5.2.3",
+    "dayjs": "^1.11.7",
     "ngx-pagination": "^6.0.3",
     "ngx-permissions": "^15.0.1",
     "ngx-toastr": "^16.1.1",

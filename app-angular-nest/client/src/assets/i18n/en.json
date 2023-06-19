@@ -6,7 +6,9 @@
     "password": "Password",
     "confirmPassword": "Confirm Password",
     "dashboard": "Dashboard",
-    "searchAll": "Search All"
+    "searchAll": "Search All",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At"
   },
   "agGrid": {
     "agGridNoData": "No items to show"
@@ -14,7 +16,6 @@
   "pagination": {
     "pageInform1": "Showing <b>{{fromIndex}}</b> - <b>{{toIndex}}</b> of <b>{{totalRow}}</b> records",
     "pageInform2": "Page <b>{{currentPage}}</b> of <b>{{totalPage}}</b>"
-
   },
   "auth": {
     "sign-in": {
@@ -34,7 +35,16 @@
     "title": "User",
     "titlePage": "User Management",
     "profile": "Profile",
-    "editProfile": "Edit Profile"
+    "editProfile": "Edit Profile",
+    "columns": {
+      "id": "ID",
+      "username": "Username",
+      "email": "Email",
+      "role": "Role",
+      "status": "Status",
+      "firstName": "First Name",
+      "lastName": "Last Name"
+    }
   },
   "setting": {
     "title": "Setting",

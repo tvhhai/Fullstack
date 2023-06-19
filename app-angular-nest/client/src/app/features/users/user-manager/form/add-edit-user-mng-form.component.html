@@ -1,0 +1,100 @@
+<form class="form-field-full" [formGroup]="form">
+  <div class="row">
+    <div class="col-md-6">
+      <mat-label>{{ "common.username" | translate }}</mat-label>
+      <mat-form-field appearance="outline" class="mb-2 app-input">
+        <input matInput type="text" placeholder="" formControlName="username" />
+        <mat-error *ngIf="f['username'].errors">
+          <span *ngIf="f['username'].errors?.['required']"
+            >Username is required</span
+          >
+          <span *ngIf="f['username'].errors?.['minlength']">
+            Username must be at least 3 characters
+          </span>
+          <span *ngIf="f['username'].errors?.['maxlength']">
+            Username must not exceed 20 characters
+          </span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-md-6">
+      <mat-label>{{ "common.email" | translate }}</mat-label>
+      <mat-form-field appearance="outline" class="mb-2 app-input">
+        <input matInput type="text" placeholder="" formControlName="email" />
+
+        <mat-error *ngIf="f['email'].errors">
+          <span *ngIf="f['email'].errors?.['required']">Email is required</span>
+          <span *ngIf="f['email'].errors?.['email']">
+            Email must be in the correct format
+          </span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6">
+      <mat-label>{{ "common.password" | translate }}</mat-label>
+
+      <mat-form-field appearance="outline" class="mb-2 app-input">
+        <input
+          matInput
+          type="password"
+          placeholder=""
+          formControlName="password"
+          [appPasswordDefaultDirective]="isEditMode()"
+        />
+
+        <mat-error *ngIf="f['password'].errors">
+          <span *ngIf="f['password'].errors?.['required']"
+            >Password is required</span
+          >
+          <span *ngIf="f['password'].errors?.['minlength']">
+            Password must be at least 6 characters
+          </span>
+          <span *ngIf="f['password'].errors?.['maxlength']">
+            Password must not exceed 40 characters
+          </span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-md-6">
+      <mat-label>{{ "common.confirmPassword" | translate }}</mat-label>
+
+      <mat-form-field appearance="outline" class="mb-2 app-input">
+        <input
+          matInput
+          type="password"
+          placeholder=""
+          formControlName="confirmPassword"
+          [appPasswordDefaultDirective]="isEditMode()"
+          [formData]="this.form"
+        />
+
+        <mat-error *ngIf="f['confirmPassword'].errors">
+          <span *ngIf="f['confirmPassword'].errors?.['required']">
+            Confirm Password is required
+          </span>
+          <span *ngIf="f['confirmPassword'].errors?.['matching']">
+            Confirm Password does not match
+          </span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+</form>
+<div class="d-flex justify-content-end align-items-center">
+  <app-button
+    class="me-2"
+    [btnType]="ButtonTypes.Raised"
+    [btnText]="'Cancel'"
+    (click)="onCancelClick()"
+  >
+  </app-button>
+  <app-button
+    [btnDisabled]="!isValid"
+    [btnType]="ButtonTypes.Raised"
+    [btnColor]="ButtonColor.Primary"
+    [btnText]="'Save'"
+    (click)="onSaveClick()"
+  >
+  </app-button>
+</div>

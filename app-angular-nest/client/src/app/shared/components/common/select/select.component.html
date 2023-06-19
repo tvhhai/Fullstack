@@ -1,21 +1,24 @@
 <mat-form-field
-        class="app-form-field"
-        appearance="outline"
-        subscriptSizing="dynamic">
+  class="app-form-field"
+  appearance="outline"
+  subscriptSizing="dynamic"
+>
+  <mat-select
+    disableRipple
+    [(ngModel)]="modelValue"
+    (ngModelChange)="modelValueChange.emit($event)"
+    (selectionChange)="onValueChange($event)"
+  >
+    <ng-container *ngIf="!isListEmpty(arrVal)">
+      <mat-option *ngFor="let val of arrVal" [value]="val">{{
+        val
+      }}</mat-option>
+    </ng-container>
 
-    <mat-select disableRipple
-                [(ngModel)]="modelValue"
-                (ngModelChange)="modelValueChange.emit($event)"
-                (selectionChange)="onValueChange($event)">
-
-        <ng-container *ngIf="!isListEmpty(arrVal)">
-            <mat-option *ngFor="let val of arrVal" [value]="val">{{val}}</mat-option>
-        </ng-container>
-
-        <ng-container *ngIf="!isListEmpty(arrObjVal)">
-            <mat-option *ngFor="let val of arrObjVal" [value]="val.value">{{val.name}}</mat-option>
-        </ng-container>
-
-    </mat-select>
-
+    <ng-container *ngIf="!isListEmpty(arrObjVal)">
+      <mat-option *ngFor="let val of arrObjVal" [value]="val.value">{{
+        val.name
+      }}</mat-option>
+    </ng-container>
+  </mat-select>
 </mat-form-field>

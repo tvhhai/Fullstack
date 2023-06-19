@@ -1,19 +1,52 @@
-.app-ag-grid-paging {
-  border: 1px solid #babfc7;
-  padding: 8px 16px;
+.app-ag-grid {
+  transition: .1s linear;
+
+  .app-ag-grid-header {
+    background: white;
+  }
+
+  .app-ag-grid-body {
+    background: white;
+
+  }
+
+  .app-ag-grid-paging {
+    border: 1px solid #babfc7;
+    padding: 8px 16px;
+  }
+
+  .app-ag-grid-body {
+    .ag-overlay-wrapper {
+      align-items: end;
+
+      .custom-overlay-no-rows {
+        background: white;
+        width: 100%;
+        height: calc(100% - 49px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
 }
 
-.app-ag-grid-body {
-  .ag-overlay-wrapper {
-    align-items: end;
+.full-screen-backdrop {
+  background: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  padding: 24px;
+  z-index: 999;
 
-    .custom-overlay-no-rows {
-      background: white;
-      width: 100%;
-      height: calc(100% - 49px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+  &.full-screen {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .app-ag-grid {
+    padding: 16px;
+    background: white;
+    border-radius: 4px;
   }
 }

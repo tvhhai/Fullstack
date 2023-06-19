@@ -7,12 +7,12 @@ export enum ButtonTypes {
   IconFat = 'iconFat',
   IconCircle = 'iconMiniFat',
   IconSquareOutline = 'IconSquareOutline',
-  IconSquareContained = 'IconSquareContained'
+  IconSquareContained = 'IconSquareContained',
 }
 
 export enum ButtonColor {
   Primary = 'primary',
   Accent = 'accent',
   Warn = 'warn',
-  Basic = 'basic'
+  Basic = 'basic',
 }

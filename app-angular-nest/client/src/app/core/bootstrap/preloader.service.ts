@@ -1,11 +1,10 @@
-import {Inject, Injectable} from '@angular/core';
-import {DOCUMENT} from "@angular/common";
+import { Inject, Injectable } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PreloaderService {
-
   private selector = 'globalLoader';
 
   constructor(@Inject(DOCUMENT) private document: Document) {}

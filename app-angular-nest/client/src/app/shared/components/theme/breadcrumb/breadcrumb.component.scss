@@ -1,35 +1,35 @@
 .breadcrumb {
-    display: flex;
-    flex-wrap: wrap;
-    font-size: 0.875rem;
-    list-style: none;
-    background: white;
-    padding: 20px;
-    margin: 0;
-    box-shadow: 0 3px 1px -2px #0003, 0 2px 2px #00000024, 0 1px 5px #0000001f
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.875rem;
+  list-style: none;
+  background: white;
+  padding: 20px;
+  margin: 0;
+  box-shadow: 0 3px 1px -2px #0003, 0 2px 2px #00000024, 0 1px 5px #0000001f;
 }
 
 .breadcrumb-item {
-    line-height: 18px;
-//     text-transform: capitalize;
+  line-height: 18px;
+  //     text-transform: capitalize;
 
-    > * {
-        vertical-align: middle;
-    }
+  > * {
+    vertical-align: middle;
+  }
 
-    > a.link {
-        &:hover {
-        }
+  > a.link {
+    &:hover {
     }
+  }
 
-    > .chevron {
-        width: 18px;
-        height: 18px;
-        font-size: 18px;
-        user-select: none;
-    }
+  > .chevron {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+    user-select: none;
+  }
 
-    .last {
-        color: #8a93a2;
-    }
+  .last {
+    color: #8a93a2;
+  }
 }
