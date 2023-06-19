@@ -1,23 +1,30 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { UsersService } from '../../features/users/users.service';
 import { Request } from 'express';
+import { ConfigService } from '@nestjs/config';
+import { UsersService } from '../../features/users/users.service';
+import { AuthService } from '../auth.service';
+import { COOKIE_NAME } from 'src/shared/constants/common.constant';
 
 @Injectable()
 export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
-  constructor(private userService: UsersService) {
+  constructor(
+    private userService: UsersService,
+    private authService: AuthService,
+    config: ConfigService,
+  ) {
     super({
       ignoreExpiration: true,
       passReqToCallback: true,
-      secretOrKey: 'jwtSecret',
+      secretOrKey: config.get<string>('jwtConfig.jwtSecretKey'),
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request: Request) => {
-          const data = request?.cookies['auth-cookie'];
+          const data = request?.cookies[COOKIE_NAME];
           if (!data) {
             return null;
           }
-          return data.token;
+          return data.accessToken;
         },
       ]),
     });
@@ -27,18 +34,19 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
     if (!payload) {
       throw new BadRequestException('invalid jwt token');
     }
-    const data = req?.cookies['auth-cookie'];
+    const data = req?.cookies[COOKIE_NAME];
     if (!data?.refreshToken) {
       throw new BadRequestException('invalid refresh token');
     }
+
     const user = await this.userService.validRefreshToken(
-      payload.email,
+      payload.username,
       data.refreshToken,
     );
     if (!user) {
-      throw new BadRequestException('token expired');
+      throw new BadRequestException('Token expired');
     }
 
-    return user;
+    return payload;
   }
 }

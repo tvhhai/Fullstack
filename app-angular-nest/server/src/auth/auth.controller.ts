@@ -1,80 +1,150 @@
 import {
   Body,
-  Request,
   Controller,
-  Post,
-  HttpCode,
-  HttpStatus,
   Get,
-  Logger,
-  UseGuards,
+  HttpException,
+  HttpStatus,
+  Post,
   Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { GuardService } from './guard/guard.service';
-import { CurrentUser } from '../features/users/users.controller';
-import { Response } from 'express';
-import { LocalGuards } from './guards/local.guards';
-import { JwtGuards } from './guards/jwt.guards';
+import { Request, Response } from 'express';
+import { LocalGuards } from './guards/local.guard';
+import { JwtGuards } from './guards/jwt.guard';
+import { UserRes } from 'src/features/users/dto/res/user-res.dto';
+import { DataRes } from 'src/shared/dto/res/data-res.dto';
+import { get } from 'lodash';
+import { CreateUserDto } from 'src/features/users/dto/req/create-user.dto';
+import { RefreshGuard } from './guards/refresh.guard';
+import { Public } from './decorators/public.decorator';
+import { COOKIE_NAME } from 'src/shared/constants/common.constant';
 
 @Controller('api')
 export class AuthController {
   constructor(private authService: AuthService) {}
+  @Public()
+  @UseGuards(LocalGuards)
+  @Post('auth/sign-in')
+  async login(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    try {
+      const accessToken = await this.authService.getJwtToken(
+        req.user as UserRes,
+      );
+      const refreshToken = await this.authService.getRefreshToken(
+        get(req, 'user.id'),
+      );
 
-  @HttpCode(HttpStatus.OK)
-  @Post('login')
-  signIn(@Body() signInDto: Record<string, any>) {
-    Logger.log('info', signInDto);
-    return this.authService.signIn(signInDto.username, signInDto.password);
+      const secretData = {
+        accessToken,
+        refreshToken,
+      };
+
+      this.authService.setCookie(res, COOKIE_NAME, secretData);
+      return req.user;
+    } catch (error) {
+      throw new HttpException(
+        'Sing In failed',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
-  @UseGuards(GuardService)
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
+  @Public()
+  @Post('auth/sign-up')
+  async registerAuth(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+    @Body() createUserDto: CreateUserDto,
+  ) {
+    try {
+      await this.authService.signUp(createUserDto);
+      const dataResponse: DataRes<[]> = {
+        statusCode: HttpStatus.OK,
+        message: 'Success',
+        data: [],
+      };
+      return dataResponse;
+    } catch (error) {
+      const dataResponse: DataRes<[]> = {
+        statusCode: error.status,
+        message: error.response,
+        data: [],
+      };
+      return dataResponse;
+    }
+  }
+
+  @Public()
+  @Post('auth/sign-out')
+  async logoutUser(@Res({ passthrough: true }) res: Response) {
+    try {
+      this.authService.clearCookie(res, COOKIE_NAME);
+      const dataResponse: DataRes<[]> = {
+        statusCode: HttpStatus.OK,
+        message: 'Success',
+        data: [],
+      };
+      return dataResponse;
+    } catch (error) {
+      throw new HttpException(
+        'Logout failed',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+  @Public()
+  @UseGuards(RefreshGuard)
+  @Get('token/refresh')
+  async refreshToken(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    try {
+      const refreshTokenData = await this.authService.findRefreshToken(
+        get(req, 'cookies.auth-cookie.refreshToken'),
+      );
+
+      const refreshToken = await this.authService.verifyRefreshTokenExpiration(
+        refreshTokenData,
+      );
+
+      const accessToken = await this.authService.getJwtToken(
+        req.user as UserRes,
+      );
+
+      const secretData = {
+        accessToken,
+        refreshToken,
+      };
+
+      this.authService.setCookie(res, COOKIE_NAME, secretData);
+      const dataResponse: DataRes<[]> = {
+        statusCode: HttpStatus.OK,
+        message: 'Token is refreshed successfully!',
+        data: [],
+      };
+      return dataResponse;
+    } catch (error) {}
   }
 
   @UseGuards(JwtGuards)
   @Get('current-user')
-  async getCurrentUser(@Req() req) {
-    const user = req.user;
-    console.log('user', user);
-    return { user };
-    // return await this.usersService.getCurrentUser();
-  }
+  getCurrentUser(@Req() req): DataRes<UserRes> {
+    try {
+      const user = req.user;
 
-  @UseGuards(LocalGuards)
-  @Post('auth/sign-in')
-  async login(@Req() req, @Res({ passthrough: true }) res: Response) {
-    const token = await this.authService.getJwtToken(req.user as CurrentUser);
-    const refreshToken = await this.authService.getRefreshToken(
-      req.user.userId,
-    );
-
-    const secretData = {
-      token,
-      refreshToken,
-    };
-    console.log(secretData);
-    res.cookie('auth-cookie', secretData, {
-      httpOnly: true,
-      domain: '',
-      secure: true,
-      maxAge: 1800000,
-    });
-    // res.cookie('accessToken', token, {
-    //   maxAge: 1000 * 60 * 60 * 24 * 31,
-    //   httpOnly: true,
-    //   domain: '',
-    //   secure: true,
-    // });
-    // res.cookie('refreshToken', refreshToken, {
-    //   maxAge: 1000 * 60 * 60 * 24 * 31,
-    //   httpOnly: true,
-    //   domain: '',
-    //   secure: true,
-    // });
-    return req.user;
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Success',
+        data: user,
+      };
+    } catch (error) {
+      throw new HttpException(
+        'Get Current User Failed',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

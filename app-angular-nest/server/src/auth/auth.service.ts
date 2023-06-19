@@ -1,70 +1,114 @@
-import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
-import { CurrentUser, UsersService } from 'src/features/users/users.service';
+import { Injectable } from '@nestjs/common';
+import { UsersService } from 'src/features/users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../features/users/entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-import * as randomToken from "rand-token";
-import * as dayjs from "dayjs";
+import * as randomToken from 'rand-token';
+import * as dayjs from 'dayjs';
+import { UserRes } from 'src/features/users/dto/res/user-res.dto';
+import { Response } from 'express';
+import { ConfigService } from '@nestjs/config';
+import { CreateUserDto } from 'src/features/users/dto/req/create-user.dto';
+import { get, unset } from 'lodash';
+import { User } from 'src/features/users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
     private jwtService: JwtService,
+    private usersService: UsersService,
+    private configService: ConfigService,
   ) {}
 
-  public async validateUserCredentials(
+  async validateUserCredentials(
     username: string,
     password: string,
-  ): Promise<CurrentUser | null> {
+  ): Promise<UserRes | null> {
     const user = await this.usersService.findUser(username);
 
-    if (!user) {
+    if (!user || !(await bcrypt.compare(password, user.password))) {
       return null;
     }
 
-    const isValidPassword = await bcrypt.compare(password, user.password);
-
-    if (!isValidPassword) {
-      return null;
-    }
-    const currentUser = new CurrentUser();
-    currentUser.userId = user.id;
-    currentUser.firstName = user.firstName;
-    currentUser.lastName = user.lastName;
-    currentUser.email = user.email;
-
-    return currentUser;
+    return {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      roles: user.roles.map((role) => role.name),
+    };
   }
 
-  async getJwtToken(user: CurrentUser): Promise<string> {
+  async getJwtToken(user: UserRes): Promise<string> {
     const payload = {
       ...user,
     };
-    return this.jwtService.signAsync(payload);
+    if (get(payload, 'exp') && get(payload, 'iat')) {
+      unset(payload, 'exp');
+      unset(payload, 'iat');
+    }
+
+    return this.jwtService.sign(payload, {
+      expiresIn: this.configService.get('jwtConfig.jwtExpiresIn'),
+    });
   }
 
   async getRefreshToken(id: number): Promise<string> {
+    const expiration = dayjs().add(
+      this.configService.get<number>('jwtConfig.jwtRefreshExpiresIn'),
+      'millisecond',
+    );
+
+    const expirationFormatted = expiration.format('YYYY-MM-DD HH:mm:ss');
+
     const userDataToUpdate = {
       refreshToken: randomToken.generate(16),
-      refreshTokenExp: dayjs().day(1).format('YYYY/MM/DD'),
+      refreshTokenExp: expirationFormatted,
     };
 
-    await this.usersService.updateUser(id, userDataToUpdate);
+    await this.usersService.update(id, userDataToUpdate);
     return userDataToUpdate.refreshToken;
   }
 
-  async signIn(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOne(username);
-    if (user?.password !== pass) {
-      throw new UnauthorizedException('NotFoundUser');
-    }
+  async signUp(createUserDto: CreateUserDto) {
+    const user = await this.usersService.create(createUserDto);
 
-    const payload = { sub: user.id, username: user.username };
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-    };
+    await this.usersService.assignUserRole(
+      get(user, 'id'),
+      createUserDto.roles,
+    );
   }
+
+  async findRefreshToken(token: string): Promise<User> {
+    return await this.usersService.findRefreshToken(token);
+  }
+
+  async verifyRefreshTokenExpiration(tokenData: User) {
+    if (tokenData) {
+      const currentTime = dayjs();
+      if (currentTime.isBefore(tokenData.refreshTokenExp)) {
+        return this.getRefreshToken(tokenData.id);
+      } else {
+      }
+    }
+    return null;
+  }
+
+  setCookie = (
+    response: Response,
+    name: string,
+    value: any,
+    secure?: boolean,
+    domain?: string,
+  ): void => {
+    response.cookie(name, value, {
+      httpOnly: true,
+      secure,
+      maxAge: this.configService.get<number>('jwtConfig.cookieExpireIn'),
+      domain,
+    });
+  };
+
+  clearCookie = (response: Response, name: string): void => {
+    response.cookie(name, { maxAge: 0 });
+  };
 }

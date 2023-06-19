@@ -3,34 +3,37 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UsersModule } from 'src/features/users/users.module';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from './constants';
-import { GuardService } from './guard/guard.service';
-import { LocalStrategy, JwtVerifyStrategy, RefreshStrategy, JwtStrategy } from "./strategies";
+import { LocalStrategy, RefreshStrategy, JwtStrategy } from './strategies';
 import { PassportModule } from '@nestjs/passport';
-import { LocalGuards } from './guards/local.guards';
-import { JwtGuards } from './guards/jwt.guards';
-
+import { LocalGuards } from './guards/local.guard';
+import { JwtGuards } from './guards/jwt.guard';
+import { ConfigService } from '@nestjs/config';
+import { RefreshGuard } from './guards/refresh.guard';
 
 @Module({
   imports: [
     UsersModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({
+    JwtModule.registerAsync({
+      useFactory: (config: ConfigService) => ({
+        global: true,
+        secret: config.get<string>('jwtConfig.jwtSecretKey'),
+        // secret: config.get<string>('JWT_SECRET'),
+        // signOptions: { expiresIn: config.get('jwtConfig.jwtExpiresIn') },
+      }),
       global: true,
-      secret: 'jwtSecret',
-      signOptions: { expiresIn: '1h' },
+      inject: [ConfigService],
     }),
   ],
   controllers: [AuthController],
   providers: [
     AuthService,
-    // GuardService,
     LocalStrategy,
     JwtStrategy,
-    JwtVerifyStrategy,
     RefreshStrategy,
     LocalGuards,
     JwtGuards,
+    RefreshGuard,
   ],
   exports: [AuthService],
 })

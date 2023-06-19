@@ -1,189 +1,171 @@
-import { Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MoreThanOrEqual, Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
-import * as randomToken from 'rand-token';
 import * as dayjs from 'dayjs';
+import { UserRes } from 'src/features/users/dto/res/user-res.dto';
+import { Role } from '../roles/entities/role.entity';
+import { ERole } from '../roles/enum/role.enum';
 
-export class RegistrationReqModel {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-export class RegistrationRespModel {
-  successStatus: boolean;
-  message: string;
-}
-export class CurrentUser {
-  userId: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-}
 @Injectable()
 export class UsersService {
-  // private readonly users = [
-  //   {
-  //     id: 1,
-  //     username: 'john',
-  //     password: 'changeme',
-  //     firstName: 'John',
-  //     lastName: 'Doe',
-  //     created_at: new Date(),
-  //     updated_at: new Date(),
-  //   },
-  //   {
-  //     id: 2,
-  //     username: 'maria',
-  //     password: 'guess',
-  //     firstName: 'Maria',
-  //     lastName: 'Doe',
-  //     created_at: new Date(),
-  //     updated_at: new Date(),
-  //   },
-  // ];
-
   private async getPasswordHash(password: string): Promise<string> {
-    const hash = await bcrypt.hash(password, 10);
-    return hash;
+    return await bcrypt.hash(password, 10);
   }
 
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
-    private jwtService: JwtService,
+    @InjectRepository(Role)
+    private readonly rolesRepository: Repository<Role>,
   ) {}
 
-  create(createUserDto: CreateUserDto): Promise<User> {
-    const user = new User();
-    user.firstName = createUserDto.firstName;
-    user.lastName = createUserDto.lastName;
+  async findUser(username: string) {
+    return await this.usersRepository.findOne({
+      where: {
+        username,
+      },
+      relations: ['roles'],
+    });
+  }
 
-    return this.usersRepository.save(user);
+  async findRefreshToken(token: string): Promise<User> {
+    const refreshToken = await this.usersRepository.findOne({
+      where: {
+        refreshToken: token,
+      },
+      select: ['id', 'refreshToken', 'refreshTokenExp'],
+    });
+
+    if (!refreshToken) {
+      throw new UnauthorizedException('Token not find');
+    }
+    return refreshToken;
   }
 
   async findAll(): Promise<User[]> {
     return this.usersRepository.find();
   }
 
-  async findOne(username: string): Promise<User | undefined> {
-    // return this.users.find((user) => user.username === username)
-    return;
+  async findById(id): Promise<User> {
+    const user = this.usersRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async create(userData: Partial<User>): Promise<User> {
+    const existingUser = await this.usersRepository.findOneBy({
+      username: userData.username,
+    });
+    if (existingUser) {
+      throw new HttpException(
+        'Username already exists',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const existingUserEmail = await this.usersRepository.findOneBy({
+      email: userData.email,
+    });
+    if (existingUserEmail) {
+      throw new HttpException('Email already exists', HttpStatus.BAD_REQUEST);
+    }
+    userData.password = await this.getPasswordHash(userData.password);
+
+    return this.usersRepository.save({ ...userData });
+  }
+
+  async assignUserRole(userId: number, roleName: any): Promise<User> {
+    const roles = [];
+
+    if (!roleName || roleName.length === 0) {
+      const userRole = await this.rolesRepository.findOne({
+        where: { name: ERole.ROLE_USER },
+      });
+      roles.push(userRole);
+    } else {
+      for (const role of roleName) {
+        let roleEntity;
+        switch (role) {
+          case 'admin':
+            roleEntity = await this.rolesRepository.findOne({
+              where: { name: ERole.ROLE_ADMIN },
+            });
+            break;
+          case 'mod':
+            roleEntity = await this.rolesRepository.findOne({
+              where: { name: ERole.ROLE_MODERATOR },
+            });
+            break;
+          default:
+            roleEntity = await this.rolesRepository.findOne({
+              where: { name: ERole.ROLE_USER },
+            });
+            break;
+        }
+        roles.push(roleEntity);
+      }
+    }
+
+    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new Error(`User with ID '${userId}' not found.`);
+    }
+
+    user.roles = roles;
+
+    await this.usersRepository.save(user);
+
+    return user;
+  }
+
+  async update(id: number, userDataToUpdate: Partial<User>): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: {
+        id,
+      },
+    });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const updatedUser = {
+      ...user,
+      ...userDataToUpdate,
+    };
+    return this.usersRepository.save(updatedUser);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    return this.usersRepository.delete(id);
   }
 
-  private async registrationValidation(
-    regModel: RegistrationReqModel,
-  ): Promise<string> {
-    if (!regModel.email) {
-      return "Email can't be empty";
-    }
-
-    const emailRule =
-      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    if (!emailRule.test(regModel.email.toLowerCase())) {
-      return 'Invalid email';
-    }
-
-    const user = await this.usersRepository.findOneBy({
-      email: regModel.email,
-    });
-    if (user != null && user.email) {
-      return 'Email already exist';
-    }
-
-    if (regModel.password !== regModel.confirmPassword) {
-      return 'Confirm password not matching';
-    }
-    return '';
+  async removeMulti(ids: string[]) {
+    await this.usersRepository
+      .createQueryBuilder()
+      .delete()
+      .where('id IN (:...ids)', { ids })
+      .execute();
   }
 
-  async registerUser(
-    regModel: RegistrationReqModel,
-  ): Promise<RegistrationRespModel> {
-    const result = new RegistrationRespModel();
-
-    const errorMessage = await this.registrationValidation(regModel);
-    if (errorMessage) {
-      result.message = errorMessage;
-      result.successStatus = false;
-
-      return result;
-    }
-
-    const newUser = new User();
-    newUser.firstName = regModel.firstName;
-    newUser.lastName = regModel.lastName;
-    newUser.email = regModel.email;
-    newUser.password = await this.getPasswordHash(regModel.password);
-
-    await this.usersRepository.insert(newUser);
-    result.successStatus = true;
-    result.message = 'success';
-    return result;
-  }
-
-  public async validateUserCredentials(
+  async validRefreshToken(
     username: string,
-    password: string,
-  ): Promise<CurrentUser> {
-    const user = await this.usersRepository.findOneBy({ username: username });
-
-    if (user == null) {
-      return null;
-    }
-
-    const isValidPassword = await bcrypt.compare(password, user.password);
-    if (!isValidPassword) {
-      return null;
-    }
-    const currentUser = new CurrentUser();
-    currentUser.userId = user.id;
-    currentUser.firstName = user.firstName;
-    currentUser.lastName = user.lastName;
-    currentUser.email = user.email;
-
-    return currentUser;
-  }
-
-  public async getJwtToken(user: CurrentUser): Promise<string> {
-    const payload = {
-      ...user,
-    };
-    return this.jwtService.signAsync(payload);
-  }
-
-  public async getRefreshToken(id: number): Promise<string> {
-    const userDataToUpdate = {
-      refreshToken: randomToken.generate(16),
-      refreshTokenExp: dayjs().day(1).format('YYYY/MM/DD'),
-    };
-
-    await this.usersRepository.update(id, userDataToUpdate);
-    return userDataToUpdate.refreshToken;
-  }
-
-  public async validRefreshToken(
-    email: string,
     refreshToken: string,
-  ): Promise<CurrentUser> {
-    const currentDate = dayjs().day(1).format('YYYY/MM/DD');
+  ): Promise<UserRes> {
+    const currentDate = dayjs().toString();
+
     const user = await this.usersRepository.findOne({
       where: {
-        email: email,
+        username: username,
         refreshToken: refreshToken,
         refreshTokenExp: MoreThanOrEqual(currentDate),
       },
@@ -193,47 +175,16 @@ export class UsersService {
       return null;
     }
 
-    const currentUser = new CurrentUser();
-    currentUser.userId = user.id;
-    currentUser.firstName = user.firstName;
-    currentUser.lastName = user.lastName;
-    currentUser.email = user.email;
+    const userResponse = new UserRes();
+    userResponse.id = user.id;
+    userResponse.firstName = user.firstName;
+    userResponse.lastName = user.lastName;
+    userResponse.email = user.email;
 
-    return currentUser;
-  }
-  //===========================================================
-
-  findUser(username: string): Promise<User> {
-    return this.usersRepository.findOne({
-      where: {
-        username,
-      },
-    });
+    return userResponse;
   }
 
-  async updateUser(id: number, userDataToUpdate: Partial<User>): Promise<User> {
-    const user = await this.usersRepository.findOne({
-      where: {
-        id,
-      },
-    });
-
-    if (!user) {
-      // Xử lý trường hợp không tìm thấy người dùng
-      throw new Error('User not found');
-    }
-
-    const updatedUser = {
-      ...user,
-      ...userDataToUpdate,
-    };
-
-    return this.usersRepository.save(updatedUser);
+  async count() {
+    return this.usersRepository.count();
   }
-
-  // async getCurrentUser(): Promise<User> {
-  //   // return {
-  //   //
-  //   // }
-  // }
 }

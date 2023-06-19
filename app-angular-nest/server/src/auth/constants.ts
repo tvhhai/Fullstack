@@ -1,3 +1,4 @@
 export const jwtConstants = {
-  secret: 'nest_app',
+  // secret: 'nest_app',
+  // expiresInToken: 36,
 };
