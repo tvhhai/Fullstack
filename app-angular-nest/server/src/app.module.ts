@@ -21,6 +21,8 @@ import { AuthMiddleware } from './auth/middleware/auth.middleware';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { PasswordInterceptor } from './interceptors/password.interceptor';
 import { httpInterceptorProviders } from './interceptors';
+import { PermissionsModule } from './features/permissions/permissions.module';
+import { FeatureAccessModule } from './features/feature-access/feature-access.module';
 
 const ENV = process.env.NODE_ENV;
 
@@ -49,6 +51,8 @@ config({
       isGlobal: true,
       load: [appConfig, dbConfig, jwtConfig],
     }),
+    PermissionsModule,
+    FeatureAccessModule,
   ],
   controllers: [AppController],
   providers: [

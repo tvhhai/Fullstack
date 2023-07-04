@@ -85,7 +85,6 @@ export class UsersController {
   @Post('delete-multi')
   async removeMulti(@Body() ids: string[]): Promise<DataRes<User[]>> {
     try {
-      console.log('ids', ids);
       await this.usersService.removeMulti(ids);
 
       return {

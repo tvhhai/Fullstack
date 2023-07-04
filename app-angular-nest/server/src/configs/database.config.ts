@@ -7,4 +7,14 @@ export const dbConfig = registerAs('dbConfig', () => ({
   database: process.env.DB_NAME || 'ng_nest_app',
   username: process.env.DB_USERNAME || 'root',
   password: process.env.DB_PASSWORD || '',
+  migrations: [__dirname + '/../db/migrations/*{.ts,.js}'],
+  cli: {
+    migrationsDir: __dirname + '/../db/migrations',
+  },
+  extra: {
+    charset: 'utf8mb4_unicode_ci',
+  },
+  synchronize: false,
+  logging: true, 
+
 }));

@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  HttpStatus,
 } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
+import { Role } from 'src/features/roles/entities/role.entity';
+import { DataRes } from 'src/shared/dto/res/data-res.dto';
 
-@Controller('roles')
+@Controller('api/roles')
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
@@ -21,8 +24,15 @@ export class RolesController {
   }
 
   @Get()
-  findAll() {
-    return this.rolesService.findAll();
+  async findAll(): Promise<DataRes<Role[]>>  {
+    const roles = await this.rolesService.findAll();
+    console.log( roles);
+    
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Success',
+      data: roles,
+    };
   }
 
   @Get(':id')
