@@ -1,1 +1,24 @@
-<p>dialog works!</p>
+<h1 class="mb-0" mat-dialog-title>{{ data.title | translate }}</h1>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-content>
+  <p>{{ data.message }}</p>
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-actions align="end" class="dialog-footer">
+  <app-button
+    [btnType]="ButtonTypes.Flat"
+    [btnColor]="ButtonColor.Basic"
+    (click)="onCancelClick()"
+    [btnText]="labelCancel"
+  ></app-button>
+  <app-button
+    [btnType]="ButtonTypes.Flat"
+    [btnColor]="ButtonColor.Primary"
+    (click)="onConfirmClick()"
+    [btnText]="labelApply"
+  ></app-button>
+</mat-dialog-actions>

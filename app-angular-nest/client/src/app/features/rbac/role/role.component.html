@@ -1,0 +1,26 @@
+<div class="grid-container">
+  <div>
+    <app-ag-grid
+      [gridName]="'role.titlePage'"
+      [columnDefs]="columnDefs"
+      [rowData]="rowData"
+      [selectMultiWithCheckbox]="true"
+      (gridReady)="onGridReady($event)"
+      (clickRefresh)="refresh()"
+    >
+    </app-ag-grid>
+  </div>
+  <!-- <div>
+    <app-ag-grid
+      [gridName]="'user.titlePage'"
+      [columnDefs]="columnDefs"
+      [rowData]="rowData"
+      [selectMultiWithCheckbox]="true"
+      [toolbarLeftAction]="toolbarLeftAction"
+      (selectionChanged)="onSelectionChanged($event)"
+      (gridReady)="onGridReady($event)"
+      (clickRefresh)="refresh()"
+    >
+    </app-ag-grid>
+  </div> -->
+</div>

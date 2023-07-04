@@ -1,4 +1,4 @@
-<div [ngClass]="{'full-screen-backdrop full-screen':isFullScreen}">
+<div [ngClass]="{'full-screen-backdrop full-screen': isFullScreen}">
   <div class="app-ag-grid">
 
     <div class="app-ag-grid-header">
@@ -7,10 +7,11 @@
 
         <div class="mb-3">
           <app-button
+            *ngIf="!suppressFullScreen"
             class="me-2"
             [btnType]="ButtonTypes.IconSquareContained"
             [btnColor]="ButtonColor.Primary"
-            [btnIcon]="'open_in_full'"
+            [btnIcon]="isFullScreen ? 'close_fullscreen' : 'open_in_full'"
             (click)="fullScreen()"
           ></app-button>
           <app-button

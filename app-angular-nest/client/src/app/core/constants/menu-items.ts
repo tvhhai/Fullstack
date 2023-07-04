@@ -63,7 +63,17 @@ export class MenuConstant {
           id: 4,
           name: 'user.title',
           icon: 'manage_accounts',
-          route: 'user',
+          route: 'rbac/user',
+          type: 'link',
+          permissions: {
+            only: ['ROLE_ADMIN', 'ROLE_MODERATOR'],
+          },
+        },
+        {
+          id: 'role',
+          name: 'role.title',
+          icon: 'perm_identity',
+          route: 'rbac/role',
           type: 'link',
           permissions: {
             only: ['ROLE_ADMIN', 'ROLE_MODERATOR'],

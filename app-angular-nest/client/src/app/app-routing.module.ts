@@ -29,9 +29,9 @@ const appRoutes: Routes = [
           import('./features/test/test.module').then((m) => m.TestModule),
       },
       {
-        path: 'user',
+        path: 'rbac',
         loadChildren: () =>
-          import('./features/users/users.module').then((m) => m.UsersModule),
+          import('./features/rbac/rbac.module').then((m) => m.RbacModule),
       },
     ],
   },

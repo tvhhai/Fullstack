@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { AppConstant } from '../../constants/app.constant';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../authentication/services/auth.service';
+import { get } from 'lodash-es';
 
 export enum STATUS {
   UNAUTHORIZED = 401,
@@ -29,8 +30,10 @@ export class ErrorInterceptor implements HttpInterceptor {
     // STATUS.INTERNAL_SERVER_ERROR,
   ];
   private getMessage = (error: HttpErrorResponse) => {
-    if (error.error?.message) {
-      return error.error.message;
+    console.log(error.error);
+    
+    if (get(error, 'message')) {
+      return get(error, 'message');
     }
 
     if (error.error?.msg) {
@@ -67,8 +70,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       this.toast.error(this.getMessage(error));
 
       if (
-        (error.status === STATUS.UNAUTHORIZED &&
-          this.authService.isRefreshTokenExist()) ||
+        error.status === STATUS.UNAUTHORIZED &&
         this.authService.doesHttpOnlyCookieExist('auth_cookie')
       ) {
         this.authService.refreshToken().subscribe({

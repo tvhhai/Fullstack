@@ -18,7 +18,7 @@ import {
 import {AgGridAngular} from 'ag-grid-angular';
 import {AgGridConstant} from '@shared/components/common/ag-grid/ag-grid.component.constant';
 import {isEmptyArray} from '@shared/helpers';
-import {cloneDeep, forEach, isEqual} from 'lodash-es';
+import {cloneDeep } from 'lodash-es';
 import {TranslateService} from '@ngx-translate/core';
 import {
   ButtonColor,
@@ -58,9 +58,7 @@ export class AgGridComponent {
 
   @Input() toolbarLeftAction!: ButtonAction[];
 
-  get selectMultiWithCheckbox(): boolean {
-    return this._selectMultiWithCheckbox;
-  }
+  @Input() suppressFullScreen: boolean = false;
 
   @Input()
   set selectMultiWithCheckbox(value: boolean) {
@@ -70,8 +68,8 @@ export class AgGridComponent {
     }
   }
 
-  get selectSingleWithoutCheckbox(): boolean {
-    return this._selectSingleWithoutCheckbox;
+  get selectMultiWithCheckbox(): boolean {
+    return this._selectMultiWithCheckbox;
   }
 
   @Input()
@@ -82,8 +80,11 @@ export class AgGridComponent {
     }
   }
 
-  @Output() gridReady: EventEmitter<{ api: GridApi; columnApi: ColumnApi }> =
-    new EventEmitter();
+  get selectSingleWithoutCheckbox(): boolean {
+    return this._selectSingleWithoutCheckbox;
+  }
+
+  @Output() gridReady = new EventEmitter<{ api: GridApi; columnApi: ColumnApi }>();
   @Output() selectionChanged = new EventEmitter<any>();
   @Output() clickRefresh = new EventEmitter<void>();
 
@@ -137,10 +138,9 @@ export class AgGridComponent {
     }
   }
 
-  ngOnDestroy(): void {
-  }
+  ngOnDestroy(): void {}
 
-  showRefreshBtn(){
+  showRefreshBtn() {
     this.isShowRefreshBtn = this.clickRefresh.observed;
   }
 

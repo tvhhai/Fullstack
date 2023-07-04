@@ -77,7 +77,7 @@ const PIPES: any[] = [];
 
 @NgModule({
   imports: [...MODULES],
-  exports: [...MODULES, ...COMPONENTS, ...DIRECTIVES, ...PIPES],
+    exports: [...MODULES, ...COMPONENTS, ...DIRECTIVES, ...PIPES, DialogComponent],
   declarations: [...COMPONENTS, ...COMPONENTS_DYNAMIC, ...DIRECTIVES, ...PIPES, DialogComponent],
 })
 export class SharedModule {}

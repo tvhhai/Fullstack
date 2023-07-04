@@ -14,11 +14,13 @@ import { forEach, get } from 'lodash-es';
 import { UserService } from './user-manager.service';
 import { User } from './user-manager.model';
 import { TranslateService } from '@ngx-translate/core';
-import * as dayjs from 'dayjs';
 import { ViewMode } from '../../../models';
 import { EViewMode } from '../../../constants/enum/view-mode.enum';
 import { isEmptyArray, isEmptyObj } from '@shared/helpers';
-import {formatDateTime} from "@shared/helpers/time.helper";
+import { formatDateTime } from '@shared/helpers/time.helper';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '@shared/components/common/dialog/dialog.component';
+import { DataDialog } from '@shared/components/common/dialog/dialog.model';
 
 @Component({
   selector: 'app-user-manager',
@@ -50,8 +52,8 @@ export class UserManagerComponent {
       headerName: this.translateService.instant('user.columns.email'),
     },
     {
-      field: 'created_at',
-      headerName: this.translateService.instant('common.createdAt'),
+      field: 'updated_at',
+      headerName: this.translateService.instant('common.updatedAt'),
       valueFormatter: function (params: ValueFormatterParams) {
         return formatDateTime(params.value);
       },
@@ -70,7 +72,8 @@ export class UserManagerComponent {
 
   constructor(
     private userService: UserService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -95,7 +98,7 @@ export class UserManagerComponent {
   }
 
   refresh() {
-    this.getData()
+    this.getData();
   }
 
   handleAdd = () => {
@@ -120,10 +123,14 @@ export class UserManagerComponent {
   handleDelete = () => {
     if (this.selectedRows.length === 1) {
       const id = get(this.selectedRows[0], 'id');
-      this.delete(id);
+      console.log(this.selectedRows[0]);
+
+      // this.delete(id);
+      this.openDialog(id);
     } else {
       const ids: string[] = this.selectedRows.map((val) => val.id);
-      this.deleteMulti(ids);
+      // this.deleteMulti(ids);
+      this.openDialog(ids);
     }
   };
 
@@ -203,6 +210,29 @@ export class UserManagerComponent {
 
   save() {
     this.getData();
+  }
+
+  openDialog(id: User | string[]) {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: {
+        title: 'common.confirmDelete',
+        message: this.translateService.instant('common.deleteItemMsg', {
+          count: Array.isArray(id) ? id.length : 1,
+          s: Array.isArray(id) ? 's' : '',
+        }),
+        labelApply: 'common.ok'
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        if (Array.isArray(id)) {
+          this.deleteMulti(id);
+        } else {
+          this.delete(id);
+        }
+      }
+    });
   }
 
   delete(id: User) {

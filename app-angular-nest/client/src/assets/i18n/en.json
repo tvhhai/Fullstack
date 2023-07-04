@@ -1,6 +1,8 @@
 {
   "common": {
     "home": "Home",
+    "name": "Name",
+    "description": "Description",
     "username": "Username",
     "email": "Email",
     "password": "Password",
@@ -8,7 +10,12 @@
     "dashboard": "Dashboard",
     "searchAll": "Search All",
     "createdAt": "Created At",
-    "updatedAt": "Updated At"
+    "updatedAt": "Updated At",
+    "cancel": "Cancel",
+    "save": "Save",
+    "ok": "OK",
+    "confirmDelete": "Confirm Delete",
+    "deleteItemMsg": "Are you sure you want to delete {{count}} selected item{{s}}?"
   },
   "agGrid": {
     "agGridNoData": "No items to show"
@@ -46,6 +53,15 @@
       "lastName": "Last Name"
     }
   },
+
+  "role": {
+    "title": "Role",
+    "titlePage": "Role Management",
+    "columns": {
+
+    }
+  },
+
   "setting": {
     "title": "Setting",
     "userSetting": {

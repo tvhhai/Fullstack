@@ -13,7 +13,7 @@ export class ButtonComponent {
   public ButtonTypes = ButtonTypes;
 
   @Input() btnType: ButtonTypes = ButtonTypes.Raised;
-  @Input() btnColor: ButtonColor = ButtonColor.Basic;
+  @Input() btnColor!: ButtonColor;
   @Input() btnText!: string;
   @Input() btnDisabled: boolean = false;
   @Input() ariaLabel!: string;
