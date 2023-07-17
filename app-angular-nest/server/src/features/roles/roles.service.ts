@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateRoleDto } from './dto/create-role.dto';
-import { UpdateRoleDto } from './dto/update-role.dto';
+import { CreateRoleDto } from './dto/req/create-role.dto';
+import { UpdateRoleDto } from './dto/req/update-role.dto';
 import { Role } from './entities/role.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -17,15 +17,32 @@ export class RolesService {
   }
 
   findAll() {
-    return this.rolesRepository.find();;
+    return this.rolesRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} role`;
+  findById(id: number) {
+    const role = this.rolesRepository.findOne({ where: { id } });
+    if (!role) {
+      throw new Error('User not found');
+    }
+    return role;
   }
 
-  update(id: number, updateRoleDto: UpdateRoleDto) {
-    return `This action updates a #${id} role`;
+  async update(id: number, updateRoleDto: UpdateRoleDto) {
+    const role = await this.rolesRepository.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!role) {
+      throw new Error('Role not found');
+    }
+
+    const updatedRole = {
+      ...role,
+      ...updateRoleDto,
+    };
+    return this.rolesRepository.save(updatedRole);
   }
 
   remove(id: number) {

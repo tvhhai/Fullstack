@@ -1,7 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  HttpStatus,
+} from '@nestjs/common';
 import { FeatureAccessService } from './feature-access.service';
-import { CreateFeatureAccessDto } from './dto/create-feature-access.dto';
-import { UpdateFeatureAccessDto } from './dto/update-feature-access.dto';
+import { CreateFeatureAccessDto } from './dto/req/create-feature-access.dto';
+import { UpdateFeatureAccessDto } from './dto/req/update-feature-access.dto';
+import { DataRes } from 'src/shared/dto/res/data-res.dto';
+import { FeatureAccess } from './entities/feature-access.entity';
 
 @Controller('api/featureAccess')
 export class FeatureAccessController {
@@ -13,8 +24,13 @@ export class FeatureAccessController {
   }
 
   @Get()
-  findAll() {
-    return this.featureAccessService.findAll();
+  async findAll(): Promise<DataRes<FeatureAccess[]>> {
+    const featureAccess = await this.featureAccessService.findAll();
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Success',
+      data: featureAccess,
+    };
   }
 
   @Get(':id')
@@ -23,7 +39,10 @@ export class FeatureAccessController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFeatureAccessDto: UpdateFeatureAccessDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateFeatureAccessDto: UpdateFeatureAccessDto,
+  ) {
     return this.featureAccessService.update(+id, updateFeatureAccessDto);
   }
 

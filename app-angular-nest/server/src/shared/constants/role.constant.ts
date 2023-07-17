@@ -4,7 +4,7 @@ import { IPermissions } from '../model/permissions.model';
 export const ROLE_ADMIN: IPermissions[] = [
   {
     feature: 'user',
-    accessList: [EPermission.ADD, EPermission.EDIT, EPermission.DELETE],
+    accessList: [EPermission.READ, EPermission.WRITE],
   },
   {
     feature: 'setting',
@@ -12,20 +12,21 @@ export const ROLE_ADMIN: IPermissions[] = [
   },
 ];
 
-export const ROLE_USER: IPermissions[] = [
+export const ROLE_READ: IPermissions[] = [
   {
     feature: 'user',
-    accessList: [EPermission.ADD],
+    accessList: [EPermission.READ],
   },
   {
     feature: 'setting',
     accessList: [EPermission.READ],
   },
 ];
-export const ROLE_MOD: IPermissions[] = [
+
+export const ROLE_WRITE: IPermissions[] = [
   {
     feature: 'user',
-    accessList: [EPermission.ADD, EPermission.EDIT, EPermission.DELETE],
+    accessList: [EPermission.READ],
   },
   {
     feature: 'setting',

@@ -65,6 +65,7 @@ export class UsersService {
     const existingUser = await this.usersRepository.findOneBy({
       username: userData.username,
     });
+
     if (existingUser) {
       throw new HttpException(
         'Username already exists',
@@ -88,7 +89,7 @@ export class UsersService {
 
     if (!roleName || roleName.length === 0) {
       const userRole = await this.rolesRepository.findOne({
-        where: { name: ERole.ROLE_USER },
+        // where: { name: ERole.ROLE_USER },
       });
       roles.push(userRole);
     } else {
@@ -100,16 +101,16 @@ export class UsersService {
               where: { name: ERole.ROLE_ADMIN },
             });
             break;
-          case 'mod':
-            roleEntity = await this.rolesRepository.findOne({
-              where: { name: ERole.ROLE_MODERATOR },
-            });
-            break;
-          default:
-            roleEntity = await this.rolesRepository.findOne({
-              where: { name: ERole.ROLE_USER },
-            });
-            break;
+          // case 'mod':
+          //   roleEntity = await this.rolesRepository.findOne({
+          //     where: { name: ERole.ROLE_MODERATOR },
+          //   });
+          //   break;
+          // default:
+          //   roleEntity = await this.rolesRepository.findOne({
+          //     where: { name: ERole.ROLE_USER },
+          //   });
+          //   break;
         }
         roles.push(roleEntity);
       }

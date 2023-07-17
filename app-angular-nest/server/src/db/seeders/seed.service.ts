@@ -1,14 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { FeatureAccessService } from 'src/features/feature-access/feature-access.service';
-import { EPermission } from 'src/features/permissions/enum/permission.enum';
 import { ERole } from 'src/features/roles/enum/role.enum';
 import { RolesService } from 'src/features/roles/roles.service';
 import { UsersService } from 'src/features/users/users.service';
-import { PERMISSIONS } from 'src/shared/constants/permisson.constant';
 import {
   ROLE_ADMIN,
-  ROLE_MOD,
-  ROLE_USER,
+  ROLE_READ,
+  ROLE_WRITE,
 } from 'src/shared/constants/role.constant';
 
 @Injectable()
@@ -35,18 +33,21 @@ export class SeedService {
   private async seed() {
     const adminRole = await this.roleService.create({
       name: ERole.ROLE_ADMIN,
+      description: 'Unrestricted Administrators',
       systemDefine: true,
       permissions: ROLE_ADMIN,
     });
-    const userRole = await this.roleService.create({
-      name: ERole.ROLE_USER,
+    const writeRole = await this.roleService.create({
+      name: ERole.ROLE_WRITER,
+      description: 'Can Read and Write',
       systemDefine: true,
-      permissions: ROLE_USER,
+      permissions: ROLE_WRITE,
     });
-    const modRole = await this.roleService.create({
-      name: ERole.ROLE_MODERATOR,
+    const readRole = await this.roleService.create({
+      name: ERole.ROLE_READ,
+      description: 'Read-Only Users',
       systemDefine: true,
-      permissions: ROLE_MOD,
+      permissions: ROLE_READ,
     });
 
     await this.userService.create({
@@ -56,21 +57,25 @@ export class SeedService {
       roles: [adminRole],
     });
     await this.userService.create({
-      username: 'user',
+      username: 'write',
       password: 'switch',
-      email: 'user@gmail.com',
-      roles: [userRole],
+      email: 'write@gmail.com',
+      roles: [writeRole],
     });
     await this.userService.create({
-      username: 'mod',
+      username: 'read',
       password: 'switch',
-      email: 'mod@gmail.com',
-      roles: [modRole],
+      email: 'read@gmail.com',
+      roles: [readRole],
     });
 
     await this.featureAccessService.create({
       feature: 'user',
-      permission: PERMISSIONS,
+      accessList: [],
+    });
+    await this.featureAccessService.create({
+      feature: 'setting',
+      accessList: [],
     });
   }
 }

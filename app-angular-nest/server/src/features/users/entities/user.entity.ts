@@ -1,12 +1,7 @@
 import { Role } from 'src/features/roles/entities/role.entity';
 import { BaseEntity } from 'src/shared/base.entity';
 import { Entity, Column, ManyToMany, JoinTable } from 'typeorm';
-import {
-  classToPlain,
-  Exclude,
-  plainToInstance,
-  Transform,
-} from 'class-transformer';
+import { Exclude, Transform } from 'class-transformer';
 
 @Entity()
 export class User extends BaseEntity {

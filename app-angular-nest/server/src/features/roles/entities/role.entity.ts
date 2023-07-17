@@ -2,11 +2,11 @@ import { BaseEntity } from 'src/shared/base.entity';
 import { Entity, Column, JoinTable, ManyToMany } from 'typeorm';
 import { ERole } from '../enum/role.enum';
 import { IPermissions } from 'src/shared/model/permissions.model';
- 
+
 @Entity()
 export class Role extends BaseEntity {
   @Column()
-  name: ERole;
+  name: string;
 
   @Column()
   description: string;
@@ -14,7 +14,7 @@ export class Role extends BaseEntity {
   @Column()
   systemDefine: boolean;
 
-  @Column('json') 
+  @Column('json')
   permissions: IPermissions[];
 
   constructor(partial: Partial<Role>) {

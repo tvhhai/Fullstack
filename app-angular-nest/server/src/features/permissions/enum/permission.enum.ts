@@ -4,5 +4,5 @@ export enum EPermission {
   ADD = 'add',
   EDIT = 'edit',
   VIEW = 'view',
-  DELETE = 'delete'
+  DELETE = 'delete',
 }

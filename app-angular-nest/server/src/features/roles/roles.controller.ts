@@ -9,8 +9,8 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { RolesService } from './roles.service';
-import { CreateRoleDto } from './dto/create-role.dto';
-import { UpdateRoleDto } from './dto/update-role.dto';
+import { CreateRoleDto } from './dto/req/create-role.dto';
+import { UpdateRoleDto } from './dto/req/update-role.dto';
 import { Role } from 'src/features/roles/entities/role.entity';
 import { DataRes } from 'src/shared/dto/res/data-res.dto';
 
@@ -20,14 +20,14 @@ export class RolesController {
 
   @Post()
   create(@Body() createRoleDto: CreateRoleDto) {
+    console.log(createRoleDto);
+
     return this.rolesService.create(createRoleDto);
   }
 
   @Get()
-  async findAll(): Promise<DataRes<Role[]>>  {
+  async findAll(): Promise<DataRes<Role[]>> {
     const roles = await this.rolesService.findAll();
-    console.log( roles);
-    
     return {
       statusCode: HttpStatus.OK,
       message: 'Success',
@@ -36,13 +36,28 @@ export class RolesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.rolesService.findOne(+id);
+  async findOne(@Param('id') id: number): Promise<DataRes<Role>> {
+    const user = await this.rolesService.findById(id);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Success',
+      data: user,
+    };
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
-    return this.rolesService.update(+id, updateRoleDto);
+  async update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
+    // return this.rolesService.update(+id, updateRoleDto);
+
+    try {
+      const role = await this.rolesService.update(+id, updateRoleDto);
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Success',
+        data: role,
+      };
+    } catch (err) {}
   }
 
   @Delete(':id')
