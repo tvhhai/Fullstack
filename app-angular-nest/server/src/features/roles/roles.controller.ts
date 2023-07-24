@@ -18,13 +18,6 @@ import { DataRes } from 'src/shared/dto/res/data-res.dto';
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
-  @Post()
-  create(@Body() createRoleDto: CreateRoleDto) {
-    console.log(createRoleDto);
-
-    return this.rolesService.create(createRoleDto);
-  }
-
   @Get()
   async findAll(): Promise<DataRes<Role[]>> {
     const roles = await this.rolesService.findAll();
@@ -45,13 +38,17 @@ export class RolesController {
     };
   }
 
+  @Post()
+  create(@Body() createRoleDto: CreateRoleDto) {
+    console.log(createRoleDto);
+
+    return this.rolesService.create(createRoleDto);
+  }
+
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
-    // return this.rolesService.update(+id, updateRoleDto);
-
+  async update(@Param('id') id: number, @Body() updateRoleDto: UpdateRoleDto) {
     try {
-      const role = await this.rolesService.update(+id, updateRoleDto);
-
+      const role = await this.rolesService.update(id, updateRoleDto);
       return {
         statusCode: HttpStatus.OK,
         message: 'Success',
@@ -61,7 +58,28 @@ export class RolesController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.rolesService.remove(+id);
+  async remove(@Param('id') id: number) {
+    try {
+      await this.rolesService.remove(id);
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Success',
+        data: [],
+      };
+    } catch (err) {}
+  }
+
+  @Post('delete-multi')
+  async removeMulti(@Body() ids: string[]): Promise<DataRes<Role[]>> {
+    try {
+      await this.rolesService.removeMulti(ids);
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Success',
+        data: [],
+      };
+    } catch (err) {}
   }
 }

@@ -12,6 +12,7 @@ import * as dayjs from 'dayjs';
 import { UserRes } from 'src/features/users/dto/res/user-res.dto';
 import { Role } from '../roles/entities/role.entity';
 import { ERole } from '../roles/enum/role.enum';
+import { CreateUserDto } from './dto/req/create-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -61,7 +62,7 @@ export class UsersService {
     return user;
   }
 
-  async create(userData: Partial<User>): Promise<User> {
+  async create(userData: Partial<CreateUserDto>): Promise<User> {
     const existingUser = await this.usersRepository.findOneBy({
       username: userData.username,
     });
@@ -84,34 +85,21 @@ export class UsersService {
     return this.usersRepository.save({ ...userData });
   }
 
-  async assignUserRole(userId: number, roleName: any): Promise<User> {
+  async assignUserRole(userId: number, rolesRequest: Role[]): Promise<User> {
     const roles = [];
 
-    if (!roleName || roleName.length === 0) {
+    console.log('rolesRequest', rolesRequest);
+
+    if (!rolesRequest || rolesRequest.length === 0) {
       const userRole = await this.rolesRepository.findOne({
-        // where: { name: ERole.ROLE_USER },
+        where: { name: ERole.ROLE_READ },
       });
       roles.push(userRole);
     } else {
-      for (const role of roleName) {
-        let roleEntity;
-        switch (role) {
-          case 'admin':
-            roleEntity = await this.rolesRepository.findOne({
-              where: { name: ERole.ROLE_ADMIN },
-            });
-            break;
-          // case 'mod':
-          //   roleEntity = await this.rolesRepository.findOne({
-          //     where: { name: ERole.ROLE_MODERATOR },
-          //   });
-          //   break;
-          // default:
-          //   roleEntity = await this.rolesRepository.findOne({
-          //     where: { name: ERole.ROLE_USER },
-          //   });
-          //   break;
-        }
+      for (const role of rolesRequest) {
+        const roleEntity = await this.rolesRepository.findOne({
+          where: { id: role.id },
+        });
         roles.push(roleEntity);
       }
     }
@@ -124,8 +112,10 @@ export class UsersService {
     user.roles = roles;
 
     await this.usersRepository.save(user);
+    console.log('roles', roles);
 
     return user;
+    // return null;
   }
 
   async update(id: number, userDataToUpdate: Partial<User>): Promise<User> {

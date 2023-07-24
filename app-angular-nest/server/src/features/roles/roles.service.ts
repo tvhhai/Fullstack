@@ -12,7 +12,7 @@ export class RolesService {
     private readonly rolesRepository: Repository<Role>,
   ) {}
 
-  create(roleData: Partial<Role>): Promise<Role> {
+  create(roleData: Partial<CreateRoleDto>): Promise<Role> {
     return this.rolesRepository.save(roleData);
   }
 
@@ -46,7 +46,15 @@ export class RolesService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} role`;
+    return this.rolesRepository.delete(id);
+  }
+
+  async removeMulti(ids: string[]) {
+    await this.rolesRepository
+      .createQueryBuilder()
+      .delete()
+      .where('id IN (:...ids)', { ids })
+      .execute();
   }
 
   async count() {

@@ -1,16 +1,19 @@
 import { IsEmail, IsNotEmpty } from 'class-validator';
+import { Role } from '../../../roles/entities/role.entity';
 
 export class CreateUserDto {
-  firstName: string;
-  lastName: string;
+  firstName?: string;
 
-  @IsEmail()
+  lastName?: string;
+
+  // @IsEmail()
   email: string;
 
-  @IsNotEmpty()
+  // @IsNotEmpty()
   username: string;
 
-  @IsNotEmpty()
+  // @IsNotEmpty()
   password: string;
-  roles: [];
+
+  roles: Role[];
 }
