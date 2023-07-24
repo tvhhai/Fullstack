@@ -33,6 +33,7 @@ export class BreadcrumbComponent {
   genBreadcrumb() {
     const routes = this.router.url.slice(1).split('/');
     this.nav = this.menu.getLevel(routes);
+    console.log(this.nav, routes)
 
     if (this.nav.includes('common.dashboard') && this.nav.length === 1) {
       this.nav = ['common.home'];

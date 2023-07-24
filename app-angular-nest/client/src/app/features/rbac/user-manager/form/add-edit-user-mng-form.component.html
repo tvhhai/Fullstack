@@ -3,10 +3,10 @@
     <div class="col-md-6">
       <mat-label>{{ "common.username" | translate }}</mat-label>
       <mat-form-field appearance="outline" class="mb-2 app-input">
-        <input matInput type="text" placeholder="" formControlName="username" />
+        <input matInput type="text" placeholder="" formControlName="username"/>
         <mat-error *ngIf="f['username'].errors">
           <span *ngIf="f['username'].errors?.['required']"
-            >Username is required</span
+          >Username is required</span
           >
           <span *ngIf="f['username'].errors?.['minlength']">
             Username must be at least 3 characters
@@ -20,7 +20,7 @@
     <div class="col-md-6">
       <mat-label>{{ "common.email" | translate }}</mat-label>
       <mat-form-field appearance="outline" class="mb-2 app-input">
-        <input matInput type="text" placeholder="" formControlName="email" />
+        <input matInput type="text" placeholder="" formControlName="email"/>
 
         <mat-error *ngIf="f['email'].errors">
           <span *ngIf="f['email'].errors?.['required']">Email is required</span>
@@ -45,7 +45,7 @@
 
         <mat-error *ngIf="f['password'].errors">
           <span *ngIf="f['password'].errors?.['required']"
-            >Password is required</span
+          >Password is required</span
           >
           <span *ngIf="f['password'].errors?.['minlength']">
             Password must be at least 6 characters
@@ -79,21 +79,36 @@
         </mat-error>
       </mat-form-field>
     </div>
+
+    <div class="col-md-12">
+      <mat-label>{{ "role.title" | translate }}</mat-label>
+      <app-transfer-list
+        *ngIf="roleData.length>0"
+        [inputList]="roleData"
+        [selectedList]="roleDataSelect"
+        (getCurrentList)="getCurrentList($event)"
+      ></app-transfer-list>
+    </div>
+
   </div>
 </form>
+
+
+
 <div class="d-flex justify-content-end align-items-center">
   <app-button
     class="me-2"
     [btnType]="ButtonTypes.Raised"
-    [btnText]="'Cancel'"
+    [btnText]="'common.cancel'"
     (click)="onCancelClick()"
   >
   </app-button>
+<!--  [btnDisabled]="!isValid"-->
+
   <app-button
-    [btnDisabled]="!isValid"
     [btnType]="ButtonTypes.Raised"
     [btnColor]="ButtonColor.Primary"
-    [btnText]="'Save'"
+    [btnText]="'common.save'"
     (click)="onSaveClick()"
   >
   </app-button>

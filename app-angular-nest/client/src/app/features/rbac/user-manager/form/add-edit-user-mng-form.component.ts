@@ -1,4 +1,10 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -11,13 +17,14 @@ import {
   ButtonColor,
   ButtonTypes,
 } from '@shared/components/common/button/button.enum';
-import { ViewMode } from '../../../../models/common.model';
-import { User } from '../user-manager.model';
-import { CommonConstant } from '../../../../constants';
-import { EViewMode } from '../../../../constants/enum/view-mode.enum';
-import { cloneDeep, get, isEqual } from 'lodash-es';
-import { UserService } from '../user-manager.service';
-import { filterObjectByKeys, getObjectKeys, isEmptyObj } from '@shared/helpers';
+import {ViewMode} from '../../../../models';
+import {User} from '../user-manager.model';
+import {CommonConstant} from '../../../../constants';
+import {EViewMode} from '../../../../constants/enum/view-mode.enum';
+import {cloneDeep, get, isEqual} from 'lodash-es';
+import {UserService} from '../user-manager.service';
+import {filterObjectByKeys, getObjectKeys, isEmptyArray, isEmptyObj} from '@shared/helpers';
+import {RoleService} from "../../role/role.service";
 
 @Component({
   selector: 'add-edit-user-mng-form',
@@ -28,8 +35,10 @@ export class AddEditUserMngFormComponent {
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private cdref: ChangeDetectorRef
-  ) {}
+    private cdref: ChangeDetectorRef,
+    private roleService: RoleService,
+  ) {
+  }
 
   protected readonly ButtonColor = ButtonColor;
   protected readonly ButtonTypes = ButtonTypes;
@@ -54,14 +63,38 @@ export class AddEditUserMngFormComponent {
     this.initForm();
     if (this.isEditMode()) {
       this.form.get('username')?.disable();
-      this.setData(this.dataEdit);
+      this.setDataEdit(this.dataEdit);
       this.setBkDataEdit(this.dataEdit);
     }
     this.onFormChange();
+    this.getRole();
   }
+
+  roleData: any[] = [];
+  roleDataSelect: any[] = [];
+
+  getRole() {
+    this.roleService.getData().subscribe({
+      next: (response) => {
+        this.roleData = response.data;
+      },
+      error: (error) => {
+        console.log('Error:', error);
+      },
+    });
+  }
+
+  getCurrentList(data: any) {
+    console.log(data)
+    if (!isEmptyArray(data.selected)) {
+      this.roleDataSelect = data.selected
+    }
+  }
+
   ngAfterContentChecked() {
     this.cdref.detectChanges();
   }
+
   isEditMode(): boolean {
     return this.viewMode === EViewMode.Edit;
   }
@@ -114,7 +147,7 @@ export class AddEditUserMngFormComponent {
     return this.form.controls;
   }
 
-  setData(data: Partial<User>) {
+  setDataEdit(data: Partial<User>) {
     this.form.patchValue({
       username: data.username,
       email: data.email,
@@ -122,27 +155,36 @@ export class AddEditUserMngFormComponent {
   }
 
   onSaveClick() {
-    const userData = this.form.value;
+    const userData = this.parseDataRequest();
 
     if (this.viewMode === EViewMode.Create) {
-      this.createUser(userData);
+      console.log(userData)
+      this.clearForm();
+      // this.createUser(userData);
     } else if (this.viewMode === EViewMode.Edit) {
       const id = get(this.dataEdit, 'id');
       this.updateUser(id as string | number, userData);
     }
   }
 
-  private createUser(userData: any) {
+  parseDataRequest() {
+    const userData = this.form.value;
+    userData.roles = this.roleDataSelect
+    return userData
+  }
+
+  private createUser(userData: User) {
     this.userService.create(userData).subscribe({
       next: () => {
         this.clearForm();
         this.save.emit();
       },
-      error: () => {},
+      error: () => {
+      },
     });
   }
 
-  private updateUser(id: string | number, userData: any) {
+  private updateUser(id: string | number, userData: User) {
     if (
       userData.password === CommonConstant.FAKE_PASSWORD &&
       userData.confirmPassword === CommonConstant.FAKE_PASSWORD
@@ -155,12 +197,14 @@ export class AddEditUserMngFormComponent {
         this.save.emit();
         this.onCancelClick();
       },
-      error: () => {},
+      error: () => {
+      },
     });
   }
 
   clearForm() {
     this.form.reset();
+    this.roleDataSelect = []
   }
 
   checkValid(val: Partial<User>) {

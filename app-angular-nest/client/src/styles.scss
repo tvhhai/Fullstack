@@ -1,47 +1,73 @@
 @use "@angular/material" as mat;
 
 // regular style toast
-@import 'ngx-toastr/toastr';
+@import "ngx-toastr/toastr";
 
 /* Importing Bootstrap SCSS file. */
-@import 'bootstrap/scss/bootstrap';
+@import "bootstrap/scss/bootstrap";
 
-@import 'ag-grid-community/styles/ag-grid.css';
-@import 'ag-grid-community/styles/ag-theme-alpine.css';
+@import "ag-grid-community/styles/ag-grid.css";
+@import "ag-grid-community/styles/ag-theme-alpine.css";
+
 body {
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-    margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  margin: 0;
 }
 
 html,
 body {
-    height: 100%;
-    ul {
-        padding: 0;
-        margin: 0;
-    }
-    a {
-        text-decoration: none;
-    }
-    .dot-icon {
-        width: 8px;
-        height: 8px;
-        border-radius: 100%;
-        background: rgb(206, 203, 227);
-        display: inline-flex;
-        margin-right: 16px;
-    }
-    .grid-container {
-      margin: 18px;
-    }
+  height: 100%;
+
+  ul {
+    padding: 0;
+    margin: 0;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  .dot-icon {
+    width: 8px;
+    height: 8px;
+    border-radius: 100%;
+    background: rgb(206, 203, 227);
+    display: inline-flex;
+    margin-right: 16px;
+  }
+
+  .grid-container {
+    margin: 18px;
+  }
+
   .app-input {
     @include mat.all-component-densities(-3);
     width: 100%;
   }
+
   .full-screen-modal .mat-dialog-container {
     padding: 1em;
     width: 100%;
     height: 100%;
   }
-}
 
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td,
+  th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+
+  td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+}

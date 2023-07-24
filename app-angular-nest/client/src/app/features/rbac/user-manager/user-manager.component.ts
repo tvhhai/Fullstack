@@ -14,7 +14,6 @@ import { forEach, get } from 'lodash-es';
 import { UserService } from './user-manager.service';
 import { User } from './user-manager.model';
 import { TranslateService } from '@ngx-translate/core';
-import { ViewMode } from '../../../models';
 import { EViewMode } from '../../../constants/enum/view-mode.enum';
 import { isEmptyArray, isEmptyObj } from '@shared/helpers';
 import { formatDateTime } from '@shared/helpers/time.helper';
@@ -64,7 +63,7 @@ export class UserManagerComponent {
 
   selectedRows: any[] = [];
 
-  viewMod: ViewMode = EViewMode.View;
+  viewMod: EViewMode = EViewMode.Create;
 
   spDeleteMulti: boolean = true;
 
@@ -123,13 +122,9 @@ export class UserManagerComponent {
   handleDelete = () => {
     if (this.selectedRows.length === 1) {
       const id = get(this.selectedRows[0], 'id');
-      console.log(this.selectedRows[0]);
-
-      // this.delete(id);
       this.openDialog(id);
     } else {
       const ids: string[] = this.selectedRows.map((val) => val.id);
-      // this.deleteMulti(ids);
       this.openDialog(ids);
     }
   };
@@ -220,7 +215,7 @@ export class UserManagerComponent {
           count: Array.isArray(id) ? id.length : 1,
           s: Array.isArray(id) ? 's' : '',
         }),
-        labelApply: 'common.ok'
+        labelApply: 'common.ok',
       },
     });
 

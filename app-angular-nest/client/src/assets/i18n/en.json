@@ -53,15 +53,25 @@
       "lastName": "Last Name"
     }
   },
-
   "role": {
     "title": "Role",
     "titlePage": "Role Management",
+    "titleCreate": "Create Role",
+    "titleEdit": "Edit Role",
+    "accessControl": "Application Access Control",
     "columns": {
-
+      "systemDefine": "System Define",
+      "app": "Application"
+    },
+    "permission": {
+      "read": "Read",
+      "write": "Write",
+      "view": "View",
+      "add": "Add",
+      "edit": "Edit",
+      "delete": "Delete"
     }
   },
-
   "setting": {
     "title": "Setting",
     "userSetting": {

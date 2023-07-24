@@ -1,0 +1,12 @@
+<div class="app-group-btn">
+  <ng-container *ngFor="let item of btnGroupData">
+    <app-button
+      class="group-btn-item"
+      [btnDisabled]="item.disable"
+      [btnType]="item.type"
+      [btnColor]="item.color"
+      [btnIcon]="item.icon"
+      (btnClick)="item.click()"
+    ></app-button>
+  </ng-container>
+</div>

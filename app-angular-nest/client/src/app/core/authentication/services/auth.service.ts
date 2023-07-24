@@ -73,9 +73,7 @@ export class AuthService {
   }
 
   isLoggedIn() {
-    return (
-      this.doesHttpOnlyCookieExist('auth_cookie')
-    );
+    return this.doesHttpOnlyCookieExist('auth_cookie');
   }
 
   isRefreshTokenExist() {
@@ -94,6 +92,7 @@ export class AuthService {
     return of([
       MenuConstant.MENU_ITEMS['dashboard'],
       MenuConstant.MENU_ITEMS['user'],
+      MenuConstant.MENU_ITEMS['setting'],
       MenuConstant.MENU_ITEMS['test'],
     ]);
   }

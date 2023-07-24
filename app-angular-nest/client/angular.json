@@ -18,7 +18,8 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "allowedCommonJsDependencies": [
-              "dayjs"
+              "dayjs",
+              "lodash"
             ],
             "outputPath": "dist/client",
             "index": "src/index.html",

@@ -1,0 +1,17 @@
+$common-radius: 4px;
+
+.app-group-btn {
+  .group-btn-item {
+    .mat-mdc-raised-button {
+      border-radius: 0;
+    }
+
+    &:first-child .mat-mdc-raised-button {
+      border-radius: $common-radius 0 0 $common-radius !important;
+    }
+
+    &:last-child .mat-mdc-raised-button {
+      border-radius: 0 $common-radius $common-radius 0 !important;
+    }
+  }
+}

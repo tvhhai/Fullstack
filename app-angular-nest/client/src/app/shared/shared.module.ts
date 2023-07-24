@@ -33,6 +33,9 @@ import { InputComponent } from './components/common/input/input.component';
 import { ButtonComponent } from './components/common/button/button.component';
 import { PasswordDefaultDirective } from './directives/password-default.directive';
 import { DialogComponent } from './components/common/dialog/dialog.component';
+import { StatusComponent } from './components/common/ag-grid/status/status.component';
+import { TransferListComponent } from './components/common/transfer-list/transfer-list.component';
+import { ButtonGroupComponent } from './components/common/button-group/button-group.component';
 
 const MODULES: any[] = [
   CommonModule,
@@ -65,6 +68,8 @@ const COMPONENTS: any[] = [
   PaginationComponent,
   InputComponent,
   ButtonComponent,
+  DialogComponent,
+  StatusComponent,
 ];
 const COMPONENTS_DYNAMIC: any[] = [];
 const DIRECTIVES: any[] = [
@@ -77,7 +82,7 @@ const PIPES: any[] = [];
 
 @NgModule({
   imports: [...MODULES],
-    exports: [...MODULES, ...COMPONENTS, ...DIRECTIVES, ...PIPES, DialogComponent],
-  declarations: [...COMPONENTS, ...COMPONENTS_DYNAMIC, ...DIRECTIVES, ...PIPES, DialogComponent],
+  exports: [...MODULES, ...COMPONENTS, ...DIRECTIVES, ...PIPES, TransferListComponent],
+  declarations: [...COMPONENTS, ...COMPONENTS_DYNAMIC, ...DIRECTIVES, ...PIPES, TransferListComponent, ButtonGroupComponent],
 })
 export class SharedModule {}

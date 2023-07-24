@@ -1,6 +1,5 @@
-<div [ngClass]="{'full-screen-backdrop full-screen': isFullScreen}">
+<div [ngClass]="{ 'full-screen-backdrop full-screen': isFullScreen }">
   <div class="app-ag-grid">
-
     <div class="app-ag-grid-header">
       <div class="d-flex flex-wrap align-items-center justify-content-between">
         <h1 class="mat-h1">{{ gridName | translate }}</h1>
@@ -72,12 +71,12 @@
         [defaultColDef]="defaultColDef"
         [rowData]="rowData"
         [rowSelection]="
-      selectMultiWithCheckbox
-        ? 'multiple'
-        : selectSingleWithoutCheckbox
-        ? 'single'
-        : undefined
-    "
+          selectMultiWithCheckbox
+            ? 'multiple'
+            : selectSingleWithoutCheckbox
+            ? 'single'
+            : undefined
+        "
         [paginationPageSize]="itemsPerPage"
         [overlayNoRowsTemplate]="overlayNoRowsTemplate"
         (gridReady)="onGridReady($event)"

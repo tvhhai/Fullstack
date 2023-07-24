@@ -1,0 +1,62 @@
+<h2 class="mat-h1 my-0">{{ "role.accessControl" | translate }}</h2>
+<table class="access-control">
+  <thead>
+    <tr>
+      <ng-container *ngFor="let header of accessControlHeader">
+        <th
+          [ngClass]="header.class"
+          [attr.colspan]="header.colspan"
+          [attr.rowspan]="header.rowspan"
+        >
+          <mat-checkbox
+            class="example-margin"
+            *ngIf="header.checkbox"
+            [checked]="header.checkbox.value"
+            (change)="selectCbWritePerms($event)"
+          >
+          </mat-checkbox>
+          {{ header.headerName }}
+        </th>
+      </ng-container>
+    </tr>
+    <tr>
+      <ng-container *ngFor="let header of subHeaders">
+        <th [ngClass]="header.class">
+          <mat-checkbox
+            class="example-margin"
+            *ngIf="header.checkbox"
+            [checked]="header.checkbox.value"
+            [(ngModel)]="header.checkbox.value"
+            (change)="selectAllCbWritePerms(header.checkbox, $event)"
+          >
+          </mat-checkbox>
+          {{ header.headerName }}
+        </th>
+      </ng-container>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let item of permissions" class="access-control-item">
+      <td>
+        <mat-checkbox
+          class="example-margin"
+          [checked]="item.checkbox.value"
+          (change)="selectAllCbApp(item, $event)"
+        >
+        </mat-checkbox>
+        {{ item.feature }}
+      </td>
+      <ng-container *ngFor="let access of item.accessListMapping">
+        <td class="text-center">
+          <mat-checkbox
+            class="example-margin"
+            [checked]="access.value"
+            (change)="onCheckboxChange(item, access, $event)"
+          >
+          </mat-checkbox>
+        </td>
+      </ng-container>
+    </tr>
+  </tbody>
+</table>

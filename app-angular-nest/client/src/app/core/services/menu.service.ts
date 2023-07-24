@@ -76,6 +76,7 @@ export class MenuService {
 
   /** Get the menu level generate breadcrumb. */
   getLevel(routeArr: string[]): string[] {
+    // TODO: refactor
     let tmpArr: any[] = [];
 
     const traverse = (
@@ -118,7 +119,7 @@ export class MenuService {
     this.menu$.value.forEach((item) => {
       traverse(item, [], []);
     });
-
+    console.log(tmpArr)
     return tmpArr;
   }
 }

@@ -8,6 +8,7 @@ export interface User {
   roles?: any[];
   permissions?: any[];
   password?: string;
+  confirmPassword?:string;
 }
 
 export interface UserResponse {

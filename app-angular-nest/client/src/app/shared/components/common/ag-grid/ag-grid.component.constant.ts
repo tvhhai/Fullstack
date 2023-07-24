@@ -26,4 +26,10 @@ export class AgGridConstant {
   public static readonly ITEMS_PER_PAGE_OPTIONS = [
     5, 10, 50, 100, 250, 500, 1000,
   ];
+
+  public static readonly STATUS = {
+    UP: '#2ca02c',
+    WARNING: '#ff7f0e',
+    DOWN: '#d62728',
+  };
 }

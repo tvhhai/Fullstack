@@ -8,6 +8,8 @@ export enum ButtonTypes {
   IconCircle = 'iconMiniFat',
   IconSquareOutline = 'IconSquareOutline',
   IconSquareContained = 'IconSquareContained',
+  GroupIcon='GroupIcon',
+  GroupText='GroupText',
 }
 
 export enum ButtonColor {

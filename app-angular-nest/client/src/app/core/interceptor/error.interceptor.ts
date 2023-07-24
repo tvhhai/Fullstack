@@ -16,6 +16,7 @@ import { AuthService } from '../authentication/services/auth.service';
 import { get } from 'lodash-es';
 
 export enum STATUS {
+  CONNECTION_REFUSED = 0,
   UNAUTHORIZED = 401,
   FORBIDDEN = 403,
   NOT_FOUND = 404,
@@ -30,10 +31,8 @@ export class ErrorInterceptor implements HttpInterceptor {
     // STATUS.INTERNAL_SERVER_ERROR,
   ];
   private getMessage = (error: HttpErrorResponse) => {
-    console.log(error.error);
-    
-    if (get(error, 'message')) {
-      return get(error, 'message');
+    if (get(error, 'error.message')) {
+      return get(error, 'error.message');
     }
 
     if (error.error?.msg) {
@@ -84,7 +83,6 @@ export class ErrorInterceptor implements HttpInterceptor {
             });
           },
         });
-      } else {
       }
     }
 

@@ -15,23 +15,23 @@ import {
   GridReadyEvent,
   SelectionChangedEvent,
 } from 'ag-grid-community';
-import {AgGridAngular} from 'ag-grid-angular';
-import {AgGridConstant} from '@shared/components/common/ag-grid/ag-grid.component.constant';
-import {isEmptyArray} from '@shared/helpers';
-import {cloneDeep } from 'lodash-es';
-import {TranslateService} from '@ngx-translate/core';
+import { AgGridAngular } from 'ag-grid-angular';
+import { AgGridConstant } from '@shared/components/common/ag-grid/ag-grid.component.constant';
+import { isEmptyArray } from '@shared/helpers';
+import { cloneDeep } from 'lodash-es';
+import { TranslateService } from '@ngx-translate/core';
 import {
   ButtonColor,
   ButtonTypes,
 } from '@shared/components/common/button/button.enum';
-import {AgGridService} from '@shared/components/common/ag-grid/ag-grid.service';
-import {SubscriptSizing} from "@angular/material/form-field";
+import { AgGridService } from '@shared/components/common/ag-grid/ag-grid.service';
+import { SubscriptSizing } from '@angular/material/form-field';
 
 interface ButtonAction {
   id: string;
   i18nKey: string;
   onClick: () => void;
-  disable: boolean;
+  disable: () => void;
   icon: string;
   color: ButtonColor;
   // permission: string;
@@ -56,7 +56,7 @@ export class AgGridComponent {
   @Input() defaultColDef!: ColDef;
   @Input() itemsPerPage!: number;
 
-  @Input() toolbarLeftAction!: ButtonAction[];
+  @Input() toolbarLeftAction!: any[];
 
   @Input() suppressFullScreen: boolean = false;
 
@@ -84,7 +84,10 @@ export class AgGridComponent {
     return this._selectSingleWithoutCheckbox;
   }
 
-  @Output() gridReady = new EventEmitter<{ api: GridApi; columnApi: ColumnApi }>();
+  @Output() gridReady = new EventEmitter<{
+    api: GridApi;
+    columnApi: ColumnApi;
+  }>();
   @Output() selectionChanged = new EventEmitter<any>();
   @Output() clickRefresh = new EventEmitter<void>();
 
@@ -118,8 +121,7 @@ export class AgGridComponent {
   constructor(
     private translateService: TranslateService,
     private agGridService: AgGridService
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.defaultColDef = this.defaultColDef || AgGridConstant.DEFAULT_COL_DEFS;
@@ -145,7 +147,7 @@ export class AgGridComponent {
   }
 
   fullScreen() {
-    this.isFullScreen = !this.isFullScreen
+    this.isFullScreen = !this.isFullScreen;
   }
 
   assignRowData(rowData: any[]) {

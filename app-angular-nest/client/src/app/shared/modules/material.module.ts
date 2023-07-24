@@ -11,7 +11,7 @@ import {MatChipsModule} from '@angular/material/chips';
 import {
   MatRippleModule,
   MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
+  MAT_DATE_LOCALE, MAT_RIPPLE_GLOBAL_OPTIONS,
 } from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {
@@ -46,7 +46,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTreeModule} from '@angular/material/tree';
-import { DataDialog } from '@shared/components/common/dialog/dialog.model';
+import {DataDialog} from '@shared/components/common/dialog/dialog.model';
 // import { MatMomentDateModule } from '@angular/material-moment-adapter';
 //
 // import { PaginatorI18nService } from '@shared/services/paginator-i18n.service';
@@ -96,6 +96,16 @@ import { DataDialog } from '@shared/components/common/dialog/dialog.model';
     //   deps: [PaginatorI18nService],
     //   useFactory: (paginatorI18nSrv: PaginatorI18nService) => paginatorI18nSrv.getPaginatorIntl(),
     // },
+    {
+      provide: MAT_RIPPLE_GLOBAL_OPTIONS,
+      useValue: {
+        disabled: true,
+        animation: {
+          enterDuration: 0,
+          exitDuration: 0
+        }
+      }
+    },
     {
       provide: MAT_DIALOG_DEFAULT_OPTIONS,
       useValue: {

@@ -8,7 +8,8 @@
   *ngIf="btnType === ButtonTypes.Raised"
   mat-raised-button
   color="{{ btnColor }}"
-  [disabled]="btnDisabled"
+  [disabled]="isDisabled"
+  (click)="handleClick()"
 >
   {{ btnText | translate }}
 </button>
@@ -18,7 +19,7 @@
   *ngIf="btnType === ButtonTypes.Outline"
   mat-stroked-button
   color="{{ btnColor }}"
-  [disabled]="btnDisabled"
+  [disabled]="isDisabled"
 >
   {{ btnText | translate }}
 </button>
@@ -28,7 +29,7 @@
   *ngIf="btnType === ButtonTypes.Flat"
   mat-flat-button
   color="{{ btnColor }}"
-  [disabled]="btnDisabled"
+  [disabled]="isDisabled"
 >
   {{ btnText | translate }}
 </button>
@@ -39,7 +40,8 @@
   mat-icon-button
   color="{{ btnColor }}"
   [attr.aria-label]="ariaLabel"
-  [disabled]="btnDisabled"
+  [disabled]="isDisabled"
+  (click)="handleClick()"
 >
   <mat-icon>{{ btnIcon }}</mat-icon>
 </button>
@@ -50,7 +52,8 @@
   mat-fab
   color="{{ btnColor }}"
   [attr.aria-label]="ariaLabel"
-  [disabled]="btnDisabled"
+  [disabled]="isDisabled"
+  (click)="handleClick()"
 >
   <mat-icon>{{ btnIcon }}</mat-icon>
 </button>
@@ -61,7 +64,8 @@
   mat-mini-fab
   color="{{ btnColor }}"
   [attr.aria-label]="ariaLabel"
-  [disabled]="btnDisabled"
+  [disabled]="isDisabled"
+  (click)="handleClick()"
 >
   <mat-icon>{{ btnIcon }}</mat-icon>
 </button>
@@ -73,7 +77,8 @@
   mat-stroked-button
   color="{{ btnColor }}"
   [attr.aria-label]="ariaLabel"
-  [disabled]="btnDisabled"
+  [disabled]="isDisabled"
+  (click)="handleClick()"
 >
   <span class="d-flex">
     <mat-icon>{{ btnIcon }}</mat-icon>
@@ -87,7 +92,7 @@
   mat-raised-button
   color="{{ btnColor }}"
   [attr.aria-label]="ariaLabel"
-  [disabled]="btnDisabled"
+  [disabled]="isDisabled"
   (click)="handleClick()"
 >
   <span class="d-flex">

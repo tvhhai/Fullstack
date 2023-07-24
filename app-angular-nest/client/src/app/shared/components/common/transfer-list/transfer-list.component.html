@@ -1,0 +1,64 @@
+<div>
+
+
+  <div class="transfer-list-wrapper">
+    <div class="left-list">
+      <div class="left-action-btn action-btn">
+        <div class="action-buttons">
+          <app-button-group
+            [btnGroupData]="btnGroupDataLeftTransfer"
+          ></app-button-group>
+        </div>
+      </div>
+
+      <mat-selection-list
+        class="transfer-list"
+        (selectionChange)="onLeftSelection($event.source)"
+      >
+        <div *ngFor="let template of avail" class="transfer-list-item">
+          <mat-list-option checkboxPosition="before" [value]="template">
+          <span class="no-wrap">
+            {{ template.name }}
+          </span>
+          </mat-list-option>
+
+          <app-button
+            class="action"
+            [btnType]="ButtonTypes.Icon"
+            [btnColor]="ButtonColor.Primary"
+            [btnIcon]="'add'"
+            (btnClick)="addItem(template)"
+          ></app-button>
+        </div>
+      </mat-selection-list>
+    </div>
+
+    <div class="right-list">
+      <div class="right-action-btn action-btn">
+        <app-button-group [btnGroupData]="btnGroupData"></app-button-group>
+      </div>
+
+      <mat-selection-list
+        multiple
+        class="transfer-list"
+        (selectionChange)="onRightSelection($event.source)"
+      >
+        <div *ngFor="let template of selected" class="transfer-list-item">
+          <mat-list-option checkboxPosition="before" [value]="template">
+          <span class="no-wrap">
+            {{ template.name }}
+          </span>
+          </mat-list-option>
+
+          <app-button
+            class="action"
+            [btnType]="ButtonTypes.Icon"
+            [btnColor]="ButtonColor.Accent"
+            [btnIcon]="'close'"
+            (btnClick)="removeItem(template)"
+          ></app-button>
+        </div>
+      </mat-selection-list>
+    </div>
+  </div>
+</div>

@@ -1,26 +1,59 @@
 <div class="grid-container">
-  <div>
-    <app-ag-grid
-      [gridName]="'role.titlePage'"
-      [columnDefs]="columnDefs"
-      [rowData]="rowData"
-      [selectMultiWithCheckbox]="true"
-      (gridReady)="onGridReady($event)"
-      (clickRefresh)="refresh()"
-    >
-    </app-ag-grid>
-  </div>
-  <!-- <div>
-    <app-ag-grid
-      [gridName]="'user.titlePage'"
-      [columnDefs]="columnDefs"
-      [rowData]="rowData"
-      [selectMultiWithCheckbox]="true"
-      [toolbarLeftAction]="toolbarLeftAction"
-      (selectionChanged)="onSelectionChanged($event)"
-      (gridReady)="onGridReady($event)"
-      (clickRefresh)="refresh()"
-    >
-    </app-ag-grid>
-  </div> -->
+  <ng-container [ngSwitch]="viewMod">
+    <div *ngSwitchCase="EViewMode.View">
+      <app-ag-grid
+        [gridName]="'role.titlePage'"
+        [columnDefs]="columnDefs"
+        [rowData]="rowData"
+        [selectMultiWithCheckbox]="true"
+        [toolbarLeftAction]="toolbarLeftAction"
+        (selectionChanged)="onSelectionChanged($event)"
+        (gridReady)="onGridReady($event)"
+        (clickRefresh)="refresh()"
+      >
+      </app-ag-grid>
+    </div>
+
+    <!-- Add view -->
+    <div *ngSwitchCase="EViewMode.Create">
+      <div class="d-flex align-items-center">
+        <ng-container [ngTemplateOutlet]="backButtonTemplate"></ng-container>
+        <h1 class="mat-h1 my-0">{{ "role.titleCreate" | translate }}</h1>
+      </div>
+
+      <div>
+        <add-edit-role-form
+          (save)="save()"
+          (cancel)="cancel()"
+          [viewMode]="viewMod"
+        >
+        </add-edit-role-form>
+      </div>
+    </div>
+
+    <!-- Edit view -->
+    <div *ngSwitchCase="EViewMode.Edit">
+      <div class="d-flex align-items-center">
+        <ng-container [ngTemplateOutlet]="backButtonTemplate"></ng-container>
+        <h1 class="mat-h1 my-0">{{ "role.titleEdit" | translate }}</h1>
+      </div>
+
+      <div>
+        <add-edit-role-form
+          (save)="save()"
+          (cancel)="cancel()"
+          [viewMode]="viewMod"
+        ></add-edit-role-form>
+      </div>
+    </div>
+  </ng-container>
 </div>
+
+<ng-template #backButtonTemplate>
+  <app-button
+    [btnType]="ButtonTypes.Icon"
+    [btnIcon]="'arrow_back'"
+    (click)="backToView()"
+  >
+  </app-button>
+</ng-template>
