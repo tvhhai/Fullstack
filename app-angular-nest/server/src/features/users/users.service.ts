@@ -55,7 +55,20 @@ export class UsersService {
   }
 
   async findById(id): Promise<User> {
-    const user = this.usersRepository.findOne({ where: { id } });
+    const user = this.usersRepository.findOne({
+      where: { id },
+      relations: ['roles'],
+    });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    return user;
+  }
+
+  async findOnlyUserById(id): Promise<User> {
+    const user = this.usersRepository.findOne({
+      where: { id },
+    });
     if (!user) {
       throw new Error('User not found');
     }
@@ -77,9 +90,11 @@ export class UsersService {
     const existingUserEmail = await this.usersRepository.findOneBy({
       email: userData.email,
     });
+
     if (existingUserEmail) {
       throw new HttpException('Email already exists', HttpStatus.BAD_REQUEST);
     }
+
     userData.password = await this.getPasswordHash(userData.password);
 
     return this.usersRepository.save({ ...userData });

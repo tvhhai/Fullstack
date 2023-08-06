@@ -42,7 +42,6 @@ export class UsersController {
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<DataRes<User[]>> {
     try {
-      console.log('createUserDto', createUserDto);
       const user = await this.usersService.create(createUserDto);
       const data = await this.usersService.assignUserRole(
         get(user, 'id'),
@@ -53,8 +52,6 @@ export class UsersController {
         message: 'Success',
         data: [data],
       };
-
-      // return null;
     } catch (err) {}
   }
 

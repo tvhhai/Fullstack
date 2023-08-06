@@ -10,19 +10,21 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './features/users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD } from '@nestjs/core';
 import { RolesModule } from './features/roles/roles.module';
 import { SeedModule } from './db/seeders/seed.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { appConfig, dbConfig, jwtConfig } from './configs';
 import { config } from 'dotenv';
-import { JwtGuards } from './auth/guards/jwt.guard';
 import { AuthMiddleware } from './auth/middleware/auth.middleware';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { PasswordInterceptor } from './interceptors/password.interceptor';
 import { httpInterceptorProviders } from './interceptors';
 import { PermissionsModule } from './features/permissions/permissions.module';
 import { FeatureAccessModule } from './features/feature-access/feature-access.module';
+import { PersonalExpensesModule } from './features/personal-expenses/personal-expenses.module';
+import { ExpenseCategoryModule } from './features/expense-category/expense-category.module';
+import { WalletModule } from './features/wallet/wallet.module';
 
 const ENV = process.env.NODE_ENV;
 
@@ -53,6 +55,9 @@ config({
     }),
     PermissionsModule,
     FeatureAccessModule,
+    PersonalExpensesModule,
+    ExpenseCategoryModule,
+    WalletModule,
   ],
   controllers: [AppController],
   providers: [

@@ -6,13 +6,13 @@ export class CreateUserDto {
 
   lastName?: string;
 
-  // @IsEmail()
+  @IsEmail()
   email: string;
 
-  // @IsNotEmpty()
+  @IsNotEmpty()
   username: string;
 
-  // @IsNotEmpty()
+  @IsNotEmpty()
   password: string;
 
   roles: Role[];

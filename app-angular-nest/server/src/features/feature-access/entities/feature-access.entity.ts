@@ -1,11 +1,10 @@
 import { BaseEntity } from 'src/shared/base.entity';
-import { Entity, Column, ManyToMany, JoinTable } from 'typeorm';
-import { IPermissions } from 'src/shared/model/permissions.model';
+import { Entity, Column } from 'typeorm';
 import { EPermission } from 'src/features/permissions/enum/permission.enum';
 
 @Entity()
 export class FeatureAccess extends BaseEntity {
-  @Column({ unique: true, nullable: false })
+  @Column({ unique: true, nullable: false, length: 50 })
   feature: string;
 
   @Column('simple-array')

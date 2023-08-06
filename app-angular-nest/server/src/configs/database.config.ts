@@ -15,6 +15,6 @@ export const dbConfig = registerAs('dbConfig', () => ({
     charset: 'utf8mb4_unicode_ci',
   },
   synchronize: false,
-  logging: true, 
+  // logging: true,
 
 }));

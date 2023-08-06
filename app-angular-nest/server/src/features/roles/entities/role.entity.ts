@@ -4,10 +4,10 @@ import { IPermissions } from 'src/shared/model/permissions.model';
 
 @Entity()
 export class Role extends BaseEntity {
-  @Column()
+  @Column({ unique: true, length: 50 })
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   description: string;
 
   @Column()
