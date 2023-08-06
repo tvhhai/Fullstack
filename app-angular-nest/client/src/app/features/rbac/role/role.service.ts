@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, finalize, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { DataRes } from '@core/models/data-response.model';
+import { DataRes } from '@shared/model/data-response.model';
 import { LoaderService } from '@shared/services/loader.service';
 import { Role, RoleRequest, RoleResponse } from './role.model';
 import { FeatureAccessResponse } from '../access-control/access-control.model';

@@ -16,7 +16,7 @@ import {
   ButtonColor,
   ButtonTypes,
 } from '@shared/components/common/button/button.enum';
-import { EViewMode } from 'app/constants/enum/view-mode.enum';
+import { EViewMode } from '@shared/enum/view-mode.enum';
 import { cloneDeep, get, isEqual } from 'lodash';
 
 import { RoleService } from '../role.service';
@@ -60,13 +60,12 @@ export class AddEditRoleComponent implements OnDestroy{
   permissions: FeatureAccess[] = [];
   isValid: boolean = false;
   roleRequestSubscription!: Subscription;
-  id!:number
+  id!:number;
   ngOnInit() {
     this.initForm();
     if (this.isEditMode()) {
       this.roleRequestSubscription = this.roleService.getDataEdit().subscribe({
         next: (roleRequest) => {
-          console.log(roleRequest)
           this.id = get(roleRequest, 'id', NaN)
           this.setFormData(roleRequest);
           this.setBkDataEdit(roleRequest);
@@ -129,12 +128,12 @@ export class AddEditRoleComponent implements OnDestroy{
     return this.form.controls;
   }
 
-  onCancelClick() {}
+  onCancelClick() {
+    this.cancel.emit()
+  }
 
   onSaveClick() {
     const roleData = this.getRoleData();
-    console.log('roleData', roleData);
-
     if (this.viewMode === EViewMode.Create) {
       this.createRole(roleData);
       this.clearData();

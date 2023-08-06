@@ -7,8 +7,8 @@ import {
   Optional,
   Renderer2,
 } from '@angular/core';
-import {FormControl, FormGroup, NgControl, NgModel} from '@angular/forms';
-import { CommonConstant } from '../../constants';
+import { FormGroup, NgControl, NgModel} from '@angular/forms';
+import {CommonConstant} from "@shared/constants";
 
 @Directive({
   selector: '[appPasswordDefaultDirective]',

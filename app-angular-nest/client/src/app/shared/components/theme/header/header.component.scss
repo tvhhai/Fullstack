@@ -2,11 +2,22 @@
   position: sticky;
   top: 0;
   z-index: 2;
+
   .header-toolbar {
     padding: 0 8px;
     background: white;
   }
+
   .example-spacer {
     flex: 1 1 auto;
+  }
+
+  .header-toolbar-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    box-shadow: 0 3px 1px -2px #0003, 0 2px 2px #00000024, 0 1px 5px #0000001f;
+    padding: 22px;
   }
 }

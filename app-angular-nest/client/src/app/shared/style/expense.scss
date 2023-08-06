@@ -1,0 +1,15 @@
+.expense {
+  color: red;
+  font-weight: bold;
+  &::before {
+    content: "-"
+  }
+}
+
+.income {
+  color: green;
+  font-weight: bold;
+  &::before {
+    content: "+"
+  }
+}

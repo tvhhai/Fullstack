@@ -1,0 +1,34 @@
+<div class="grid-container">
+  <ng-container [ngSwitch]="viewMod">
+    <div *ngSwitchCase="'view'">
+      <app-ag-grid
+        [gridName]="'expenses.personal.title'"
+        [columnDefs]="columnDefs"
+        [rowData]="rowData"
+        [selectMultiWithCheckbox]="true"
+        (gridReady)="onGridReady($event)"
+        [toolbarLeftAction]="toolbarLeftAction"
+        (selectionChanged)="onSelectionChanged($event)"
+        (clickRefresh)="refresh()"
+      >
+      </app-ag-grid>
+    </div>
+
+    <!-- Add view -->
+    <div *ngSwitchCase="EViewMode.Create">
+      <app-card-layout
+        [showBackToView]="true"
+        [title]="'expenses.personal.create'"
+        (backToView)="backToView()"
+      >
+        <add-edit-personal-expense
+          (save)="save()"
+          (cancel)="cancel()"
+          [viewMode]="viewMod"
+        >
+        </add-edit-personal-expense>
+      </app-card-layout>
+    </div>
+
+  </ng-container>
+</div>

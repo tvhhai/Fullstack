@@ -9,6 +9,10 @@
 @import "ag-grid-community/styles/ag-grid.css";
 @import "ag-grid-community/styles/ag-theme-alpine.css";
 
+@import "app/shared/style/expense";
+@import "app/shared/style/chart";
+@import "app/features/expenses/expense";
+
 body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
   margin: 0;
@@ -36,8 +40,24 @@ body {
     margin-right: 16px;
   }
 
+  .checked-icon {
+    color: green !important;
+  }
+
   .grid-container {
-    margin: 18px;
+    //margin: 18px;
+  }
+
+  .app-panel {
+    background: white;
+    padding: 24px;
+    border-radius: 8px;
+  }
+
+  .full-screen-backdrop.full-screen {
+    .app-panel {
+      padding: 0;
+    }
   }
 
   .app-input {
@@ -51,23 +71,12 @@ body {
     height: 100%;
   }
 
-  table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
+  .btn-action-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 24px;
   }
 
-  td,
-  th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-  }
-
-  td {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
 
 }

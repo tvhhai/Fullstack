@@ -18,7 +18,7 @@ import { AccessControlService } from './access-control.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-access-control',
+  selector: 'rbac-access-control',
   templateUrl: './access-control.component.html',
   styleUrls: ['./access-control.component.scss'],
 })

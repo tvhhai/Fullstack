@@ -1,6 +1,8 @@
 <div [ngClass]="{ 'full-screen-backdrop full-screen': isFullScreen }">
   <div class="app-ag-grid">
+
     <div class="app-ag-grid-header">
+
       <div class="d-flex flex-wrap align-items-center justify-content-between">
         <h1 class="mat-h1">{{ gridName | translate }}</h1>
 
@@ -12,12 +14,14 @@
             [btnColor]="ButtonColor.Primary"
             [btnIcon]="isFullScreen ? 'close_fullscreen' : 'open_in_full'"
             (click)="fullScreen()"
+            matTooltip="{{'common.fullscreen' | translate}}"
           ></app-button>
           <app-button
             class="me-2"
             [btnType]="ButtonTypes.IconSquareContained"
             [btnColor]="ButtonColor.Primary"
             [btnIcon]="'settings'"
+            matTooltip="{{'common.settings' | translate}}"
           ></app-button>
           <app-button
             *ngIf="showRefreshBtn"
@@ -26,85 +30,96 @@
             [btnColor]="ButtonColor.Primary"
             [btnIcon]="'refresh'"
             (click)="refresh()"
+            matTooltip="{{'common.refresh' | translate}}"
           ></app-button>
-        </div>
-      </div>
-
-      <div class="d-flex flex-wrap align-items-center justify-content-between">
-        <div class="mb-3">
-          <app-button
-            class="me-2"
-            *ngFor="let item of toolbarLeftAction"
-            [btnType]="ButtonTypes.IconSquareOutline"
-            [btnColor]="item.color"
-            [btnIcon]="item.icon"
-            [btnDisabled]="item.disable"
-            (click)="item.disable ? null : item.onClick()"
-          ></app-button>
-        </div>
-        <div class="mb-3">
-          <div class="d-flex justify-content-end">
-            <app-input
-              [(inputModel)]="searchValue"
-              (inputModelChange)="onSearchChange(searchValue)"
-              [inputLabel]="'common.searchAll'"
-              [inputSize]="'small'"
-              [subscriptSizing]="subscriptSizing"
-            ></app-input>
-          </div>
         </div>
       </div>
     </div>
 
-    <div class="app-ag-grid-body">
-      <ag-grid-angular
-        style="width: 100%; height: 500px"
-        class="app-ag-grid-body ag-theme-alpine"
-        [suppressCellFocus]="true"
-        [suppressPaginationPanel]="true"
-        [suppressMenuHide]="true"
-        [suppressDragLeaveHidesColumns]="true"
-        [rowMultiSelectWithClick]="true"
-        [animateRows]="true"
-        [pagination]="true"
-        [columnDefs]="columnDefs"
-        [defaultColDef]="defaultColDef"
-        [rowData]="rowData"
-        [rowSelection]="
+    <div class="app-panel">
+      <div>
+        <ng-content></ng-content>
+      </div>
+      <div class="app-ag-grid-action">
+        <div class="d-flex flex-wrap align-items-center justify-content-between">
+          <div class="mb-3">
+            <app-button
+              class="me-2"
+              *ngFor="let item of toolbarLeftAction"
+              [btnType]="ButtonTypes.IconSquareOutline"
+              [btnColor]="item.color"
+              [btnIcon]="item.icon"
+              [btnDisabled]="item.disable"
+              (btnClick)="item.onClick()"
+              matTooltip="{{item.i18nKey | translate}}"
+            ></app-button>
+          </div>
+          <div class="mb-3">
+            <div class="d-flex justify-content-end">
+              <app-input
+                [(inputModel)]="searchValue"
+                (inputModelChange)="onSearchChange(searchValue)"
+                [inputLabel]="'common.searchAll'"
+                [inputSize]="'small'"
+                [subscriptSizing]="subscriptSizing"
+              ></app-input>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-ag-grid-body">
+        <ag-grid-angular
+          style="width: 100%; height: 500px"
+          class="app-ag-grid-body ag-theme-alpine"
+          [suppressCellFocus]="true"
+          [suppressPaginationPanel]="true"
+          [suppressMenuHide]="true"
+          [suppressDragLeaveHidesColumns]="true"
+          [rowMultiSelectWithClick]="true"
+          [animateRows]="true"
+          [pagination]="true"
+          [columnDefs]="columnDefs"
+          [defaultColDef]="defaultColDef"
+          [rowData]="rowData"
+          [rowSelection]="
           selectMultiWithCheckbox
             ? 'multiple'
             : selectSingleWithoutCheckbox
             ? 'single'
             : undefined
         "
-        [paginationPageSize]="itemsPerPage"
-        [overlayNoRowsTemplate]="overlayNoRowsTemplate"
-        (gridReady)="onGridReady($event)"
-        (paginationChanged)="onPaginationChanged()"
-        (selectionChanged)="onSelectionChanged($event)"
-      ></ag-grid-angular>
+          [paginationPageSize]="itemsPerPage"
+          [overlayNoRowsTemplate]="overlayNoRowsTemplate"
+          (gridReady)="onGridReady($event)"
+          (paginationChanged)="onPaginationChanged()"
+          (selectionChanged)="onSelectionChanged($event)"
+        ></ag-grid-angular>
+      </div>
+
+      <div class="app-ag-grid-paging">
+        <app-pagination
+          [dataPagination]="rowDataPagination"
+          [itemsPerPage]="itemsPerPage"
+          [fromIndex]="fromIndex"
+          [toIndex]="toIndex"
+          [currentPage]="currentPage"
+          [totalPage]="totalPage"
+          [totalRow]="totalRow"
+          [showPageInfo]="true"
+          [displayedRecordRange]="true"
+          (pageChange)="onPageChange($event)"
+        >
+          <app-select
+            [arrVal]="ITEMS_PER_PAGE_OPTIONS"
+            [(modelValue)]="itemsPerPage"
+            (selectionChange)="onItemsPerPageChange($event)"
+          >
+          </app-select>
+        </app-pagination>
+      </div>
+
     </div>
 
-    <div class="app-ag-grid-paging">
-      <app-pagination
-        [dataPagination]="rowDataPagination"
-        [itemsPerPage]="itemsPerPage"
-        [fromIndex]="fromIndex"
-        [toIndex]="toIndex"
-        [currentPage]="currentPage"
-        [totalPage]="totalPage"
-        [totalRow]="totalRow"
-        [showPageInfo]="true"
-        [displayedRecordRange]="true"
-        (pageChange)="onPageChange($event)"
-      >
-        <app-select
-          [arrVal]="ITEMS_PER_PAGE_OPTIONS"
-          [(modelValue)]="itemsPerPage"
-          (selectionChange)="onItemsPerPageChange($event)"
-        >
-        </app-select>
-      </app-pagination>
-    </div>
   </div>
 </div>

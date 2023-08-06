@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { MenuService } from '../../../../core/services/menu.service';
+import { MenuService } from "@core/menu/menu.service";
 
 @Component({
   selector: 'app-sidebar-menu',

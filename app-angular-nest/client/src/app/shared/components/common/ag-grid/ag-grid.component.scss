@@ -2,22 +2,23 @@
   transition: .1s linear;
 
   .app-ag-grid-header {
-    background: white;
+    //background: white;
   }
 
   .app-ag-grid-body {
-    background: white;
+    //background: white;
 
   }
 
   .app-ag-grid-paging {
     border: 1px solid #babfc7;
+    border-top: none;
     padding: 8px 16px;
   }
 
   .app-ag-grid-body {
     .ag-overlay-wrapper {
-      align-items: end;
+      align-items: flex-end;
 
       .custom-overlay-no-rows {
         background: white;

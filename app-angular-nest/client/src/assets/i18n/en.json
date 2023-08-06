@@ -4,7 +4,13 @@
     "name": "Name",
     "description": "Description",
     "username": "Username",
+    "note": "Note",
+    "date": "Date",
+    "startDate": "Start Date",
+    "endDate": "End Date",
     "email": "Email",
+    "type": "Type",
+    "icon": "Icon",
     "password": "Password",
     "confirmPassword": "Confirm Password",
     "dashboard": "Dashboard",
@@ -14,8 +20,22 @@
     "cancel": "Cancel",
     "save": "Save",
     "ok": "OK",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "custom": "Custom",
+    "settings": "Settings",
+    "refresh": "Refresh",
+    "fullscreen": "Full Screen",
+    "report": "Report",
     "confirmDelete": "Confirm Delete",
     "deleteItemMsg": "Are you sure you want to delete {{count}} selected item{{s}}?"
+  },
+  "status": {
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "critical": "Critical"
   },
   "agGrid": {
     "agGridNoData": "No items to show"
@@ -41,6 +61,8 @@
   "user": {
     "title": "User",
     "titlePage": "User Management",
+    "titleCreate": "Add User",
+    "titleEdit": "Edit User",
     "profile": "Profile",
     "editProfile": "Edit Profile",
     "columns": {
@@ -56,7 +78,7 @@
   "role": {
     "title": "Role",
     "titlePage": "Role Management",
-    "titleCreate": "Create Role",
+    "titleCreate": "Add Role",
     "titleEdit": "Edit Role",
     "accessControl": "Application Access Control",
     "columns": {
@@ -80,5 +102,34 @@
     "systemSetting": {
       "title": "System Setting"
     }
+  },
+  "expenses": {
+    "title": "Expense",
+    "titleSidebar": "Expenses",
+    "amount": "Amount",
+    "category": "Expense Category",
+    "debtCategory": {
+      "lend": "Lend",
+      "repayment": "Repayment",
+      "borrow": "Borrow",
+      "debtCollection": "Debt Collection"
+    },
+    "waller": {
+      "nameWallet": "Name Wallet",
+      "createTitle": "Create Wallet",
+      "initBalance": "Initial Balance"
+    },
+    "personal": {
+      "title": "Personal Expenses",
+      "create": "Add Personal Expenses"
+    },
+    "reports": {
+    }
+  },
+  "income": {
+    "title": "Income"
+  },
+  "chart": {
+    "noData": "There is no data to display the chart."
   }
 }

@@ -1,17 +1,20 @@
 <form class="form-field-full" [formGroup]="form">
   <div class="row">
     <div class="col-md-6">
-      <mat-label>{{ "common.name" | translate }}</mat-label>
+      <mat-label class="fw-bold">{{ "common.name" | translate }}</mat-label>
+
       <mat-form-field appearance="outline" class="mb-2 app-input">
         <input matInput type="text" placeholder="" formControlName="name" />
+
         <mat-error *ngIf="f['name'].errors">
           <span *ngIf="f['name'].errors?.['required']">Name is required</span>
         </mat-error>
       </mat-form-field>
+
     </div>
 
     <div class="col-md-6">
-      <mat-label>{{ "common.description" | translate }}</mat-label>
+      <mat-label class="fw-bold">{{ "common.description" | translate }}</mat-label>
       <mat-form-field appearance="outline" class="mb-2 app-input">
         <input
           matInput
@@ -25,10 +28,10 @@
 </form>
 
 <div>
-  <app-access-control></app-access-control>
+  <rbac-access-control></rbac-access-control>
 </div>
 
-<div class="d-flex justify-content-end align-items-center">
+<div class="btn-action-footer">
   <app-button
     class="me-2"
     [btnType]="ButtonTypes.Raised"

@@ -1,3 +1,7 @@
-<div class="status" [style.backgroundColor]="status">
-  <span class="status-title">{{ value }}</span>
-</div>
+<span class="status" [style.backgroundColor]="status.background">
+  <span class="status-title"
+        [style.color]="status.color"
+  >
+    {{ value }}
+  </span>
+</span>

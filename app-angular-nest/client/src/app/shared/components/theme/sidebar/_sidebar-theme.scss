@@ -3,7 +3,7 @@
 @use "@angular/material" as mat;
 
 @import "../style/sidebar-variables";
-@import "../../../../style/variables";
+@import "../../../style/partials/variables";
 
 @mixin sidebar-item {
   .sidebar-menu {

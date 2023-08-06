@@ -1,0 +1,48 @@
+<!--<h1 class="mat-h1">{{ 'expenses.category' | translate }}</h1>-->
+<div class="grid-container">
+  <ng-container [ngSwitch]="viewMod">
+    <div *ngSwitchCase="'view'">
+      <app-ag-grid
+        [gridName]="'expenses.category'"
+        [columnDefs]="columnDefs"
+        [rowData]="rowData"
+        [selectMultiWithCheckbox]="true"
+        (gridReady)="onGridReady($event)"
+        [toolbarLeftAction]="toolbarLeftAction"
+        (selectionChanged)="onSelectionChanged($event)"
+        (clickRefresh)="refresh()"
+      >
+        <div class="expense-category-tab">
+          <ng-container *ngFor="let item of tabAction">
+
+            <div #tabAction
+                 class="expense-category-item"
+                 [ngClass]="item.active ? 'active' : ''"
+                 (click)="item.onClick(item)">
+              {{item.title|translate}}
+
+            </div>
+          </ng-container>
+          <div class="line" [ngStyle]="{'left': leftLineActive, 'width': widthLineActive}"></div>
+        </div>
+      </app-ag-grid>
+    </div>
+
+    <!-- Add view -->
+<!--    <div *ngSwitchCase="EViewMode.Create">-->
+<!--      <app-card-layout-->
+<!--        [showBackToView]="true"-->
+<!--        [title]="'expenses.personal.create'"-->
+<!--        (backToView)="backToView()"-->
+<!--      >-->
+<!--        <add-edit-personal-expense-->
+<!--          (save)="save()"-->
+<!--          (cancel)="cancel()"-->
+<!--          [viewMode]="viewMod"-->
+<!--        >-->
+<!--        </add-edit-personal-expense>-->
+<!--      </app-card-layout>-->
+<!--    </div>-->
+
+  </ng-container>
+</div>

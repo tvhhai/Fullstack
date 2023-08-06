@@ -6,8 +6,8 @@
     (click)="toggle()"
   >
     <mat-icon aria-label="Side nav toggle icon">{{
-      opened ? "menu" : "chevron_left"
-    }}</mat-icon>
+        opened ? "menu":"chevron_left"
+      }}</mat-icon>
   </button>
 
   <!--    <span>App Header</span>-->
@@ -20,5 +20,10 @@
   <app-translate></app-translate>
   <app-user></app-user>
 </mat-toolbar>
+
 <mat-divider></mat-divider>
-<app-breadcrumb></app-breadcrumb>
+
+<div class="header-toolbar-bottom">
+  <app-breadcrumb></app-breadcrumb>
+  <expense-wallet></expense-wallet>
+</div>

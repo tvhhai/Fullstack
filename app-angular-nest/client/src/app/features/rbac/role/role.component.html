@@ -16,44 +16,33 @@
 
     <!-- Add view -->
     <div *ngSwitchCase="EViewMode.Create">
-      <div class="d-flex align-items-center">
-        <ng-container [ngTemplateOutlet]="backButtonTemplate"></ng-container>
-        <h1 class="mat-h1 my-0">{{ "role.titleCreate" | translate }}</h1>
-      </div>
-
-      <div>
+      <app-card-layout
+        [showBackToView]="true"
+        [title]="'role.titleCreate'"
+        (backToView)="backToView()"
+      >
         <add-edit-role-form
           (save)="save()"
           (cancel)="cancel()"
           [viewMode]="viewMod"
         >
         </add-edit-role-form>
-      </div>
+      </app-card-layout>
     </div>
 
     <!-- Edit view -->
     <div *ngSwitchCase="EViewMode.Edit">
-      <div class="d-flex align-items-center">
-        <ng-container [ngTemplateOutlet]="backButtonTemplate"></ng-container>
-        <h1 class="mat-h1 my-0">{{ "role.titleEdit" | translate }}</h1>
-      </div>
-
-      <div>
+      <app-card-layout
+        [showBackToView]="true"
+        [title]="'role.titleEdit'"
+        (backToView)="backToView()"
+      >
         <add-edit-role-form
           (save)="save()"
           (cancel)="cancel()"
           [viewMode]="viewMod"
         ></add-edit-role-form>
-      </div>
+      </app-card-layout>
     </div>
   </ng-container>
 </div>
-
-<ng-template #backButtonTemplate>
-  <app-button
-    [btnType]="ButtonTypes.Icon"
-    [btnIcon]="'arrow_back'"
-    (click)="backToView()"
-  >
-  </app-button>
-</ng-template>

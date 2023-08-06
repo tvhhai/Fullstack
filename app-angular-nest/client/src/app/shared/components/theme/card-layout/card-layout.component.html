@@ -1,0 +1,23 @@
+<div class="card-layout">
+
+  <div class="card-layout-header">
+    <ng-container *ngIf="showBackToView" [ngTemplateOutlet]="backButtonTemplate"></ng-container>
+    <h1 class="mat-h1 my-0">{{ title | translate }}</h1>
+  </div>
+
+  <div class="card-layout-body app-panel">
+    <ng-content></ng-content>
+  </div>
+
+  <div class="card-layout-footer">
+  </div>
+</div>
+
+<ng-template #backButtonTemplate>
+  <app-button
+    [btnType]="ButtonTypes.Icon"
+    [btnIcon]="'arrow_back'"
+    (click)="onBackToView()"
+  >
+  </app-button>
+</ng-template>

@@ -1,50 +1,34 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import {AfterContentChecked, ChangeDetectorRef, Component, EventEmitter, Input, Output,} from '@angular/core';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators,} from '@angular/forms';
 import ConfirmPasswordValidator from '@shared/validation/confirm-password.validator';
-import {
-  ButtonColor,
-  ButtonTypes,
-} from '@shared/components/common/button/button.enum';
-import {ViewMode} from '../../../../models';
+import {ButtonColor, ButtonTypes,} from '@shared/components/common/button/button.enum';
 import {User} from '../user-manager.model';
-import {CommonConstant} from '../../../../constants';
-import {EViewMode} from '../../../../constants/enum/view-mode.enum';
+import {CommonConstant} from '@shared//constants';
+import {EViewMode} from '@shared//enum/view-mode.enum';
 import {cloneDeep, get, isEqual} from 'lodash-es';
 import {UserService} from '../user-manager.service';
 import {filterObjectByKeys, getObjectKeys, isEmptyArray, isEmptyObj} from '@shared/helpers';
 import {RoleService} from "../../role/role.service";
+
 
 @Component({
   selector: 'add-edit-user-mng-form',
   templateUrl: './add-edit-user-mng-form.component.html',
   styleUrls: ['./add-edit-user-mng-form.component.scss'],
 })
-export class AddEditUserMngFormComponent {
+export class AddEditUserMngFormComponent implements AfterContentChecked {
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private cdref: ChangeDetectorRef,
     private roleService: RoleService,
-  ) {
-  }
+    private cdref: ChangeDetectorRef,
+  ) {}
 
   protected readonly ButtonColor = ButtonColor;
   protected readonly ButtonTypes = ButtonTypes;
-  protected readonly EViewMode = EViewMode;
+  protected readonly isEmptyArray = isEmptyArray;
 
-  @Input() viewMode!: ViewMode;
+  @Input() viewMode!: EViewMode;
   @Input() dataEdit: Partial<User> = {};
   @Output() save = new EventEmitter();
   @Output() cancel = new EventEmitter();
@@ -58,59 +42,19 @@ export class AddEditUserMngFormComponent {
 
   dataEditBk: Partial<User> = cloneDeep(this.dataEdit);
   isValid: boolean = false;
+  validForm: boolean = false
+  validRole: boolean = false
+  roleData: any[] = [];
+  roleDataSelect: any[] = [];
+  id!:number;
 
   ngOnInit() {
     this.initForm();
-    if (this.isEditMode()) {
-      this.form.get('username')?.disable();
-      this.setDataEdit(this.dataEdit);
-      this.setBkDataEdit(this.dataEdit);
-    }
-    this.onFormChange();
     this.getRole();
-  }
-
-  roleData: any[] = [];
-  roleDataSelect: any[] = [];
-
-  getRole() {
-    this.roleService.getData().subscribe({
-      next: (response) => {
-        this.roleData = response.data;
-      },
-      error: (error) => {
-        console.log('Error:', error);
-      },
-    });
-  }
-
-  getCurrentList(data: any) {
-    console.log(data)
-    if (!isEmptyArray(data.selected)) {
-      this.roleDataSelect = data.selected
-    }
   }
 
   ngAfterContentChecked() {
     this.cdref.detectChanges();
-  }
-
-  isEditMode(): boolean {
-    return this.viewMode === EViewMode.Edit;
-  }
-
-  onFormChange() {
-    this.form.valueChanges.subscribe((val) => {
-      this.checkValid(val);
-    });
-  }
-
-  setBkDataEdit(dataBk: Partial<User>) {
-    if (!isEmptyObj(dataBk)) {
-      const formValueKeys = getObjectKeys(this.form.value);
-      const filteredDataBk = filterObjectByKeys(dataBk, formValueKeys);
-      this.dataEditBk = cloneDeep(filteredDataBk);
-    }
   }
 
   initForm() {
@@ -143,8 +87,75 @@ export class AddEditUserMngFormComponent {
     );
   }
 
-  get f(): { [key: string]: AbstractControl } {
-    return this.form.controls;
+  getRole() {
+    this.roleService.getData().subscribe({
+      next: (response) => {
+        this.roleData = response.data;
+        this.callFuncInEditMode();
+        this.onFormChange();
+      },
+      error: (error) => {
+        console.log('Error:', error);
+      },
+    });
+  }
+
+  callFuncInEditMode() {
+    if (this.isEditMode()) {
+      this.form.get('username')?.disable();
+
+      this.userService.getDataEdit().subscribe(
+        {
+          next: (data) => {
+            this.id = get(data, 'id', NaN);
+            this.setDataEdit(data);
+            this.setBkDataEdit(data);
+          }
+        })
+    }
+  }
+
+  getCurrentList(data: any) {
+    if (!isEmptyArray(data.selected)) {
+      this.roleDataSelect = data.selected;
+      this.userService.setDataRoleEdit(this.roleDataSelect)
+    }
+  }
+
+  onFormChange() {
+    this.form.valueChanges.subscribe((formValue) => {
+      this.checkValidForm(formValue)
+    });
+
+    this.userService.getDataRoleEdit().subscribe({
+      next: (roleData) => {
+        this.checkValidRole(roleData)
+      }
+    })
+  }
+
+  checkValidForm(formData: Partial<User>) {
+    const dataEditBk = {...this.dataEditBk};
+    delete dataEditBk.roles
+    this.validForm = !this.form.invalid && !isEqual(dataEditBk, formData);
+    this.checkOverallValidity()
+  }
+
+  checkValidRole(roleData: Partial<User>) {
+    this.validRole = !this.form.invalid && !isEqual(this.dataEditBk.roles, roleData);
+    this.checkOverallValidity()
+  }
+
+  checkOverallValidity() {
+    if (this.viewMode === EViewMode.Create) {
+      this.isValid = !this.form.invalid;
+    } else {
+      this.isValid = this.validRole || this.validForm;
+    }
+  }
+
+  isEditMode(): boolean {
+    return this.viewMode === EViewMode.Edit;
   }
 
   setDataEdit(data: Partial<User>) {
@@ -152,18 +163,35 @@ export class AddEditUserMngFormComponent {
       username: data.username,
       email: data.email,
     });
+    this.parseRoleData(data.roles)
+  }
+
+  parseRoleData(roles: string[] | undefined) {
+    this.roleDataSelect = this.roleData.filter(val => roles?.includes(val.name));
+    this.userService.setDataRoleEdit(this.roleDataSelect)
+  }
+
+  setBkDataEdit(dataBk: Partial<User>) {
+    if (!isEmptyObj(dataBk)) {
+      const formValueKeys = getObjectKeys(this.form.value);
+      const filteredDataBk = filterObjectByKeys(dataBk, formValueKeys);
+
+      this.dataEditBk = cloneDeep(filteredDataBk);
+      this.dataEditBk.roles = cloneDeep(this.roleDataSelect)
+    }
+  }
+
+  get f(): { [key: string]: AbstractControl } {
+    return this.form.controls;
   }
 
   onSaveClick() {
     const userData = this.parseDataRequest();
-
     if (this.viewMode === EViewMode.Create) {
-      console.log(userData)
       this.clearForm();
-      // this.createUser(userData);
-    } else if (this.viewMode === EViewMode.Edit) {
-      const id = get(this.dataEdit, 'id');
-      this.updateUser(id as string | number, userData);
+      this.createUser(userData);
+    } else if (this.viewMode === EViewMode.Edit && this.id) {
+      this.updateUser(this.id, userData);
     }
   }
 
@@ -207,15 +235,8 @@ export class AddEditUserMngFormComponent {
     this.roleDataSelect = []
   }
 
-  checkValid(val: Partial<User>) {
-    if (this.viewMode === EViewMode.Create) {
-      this.isValid = !this.form.invalid;
-    } else {
-      this.isValid = !this.form.invalid && !isEqual(this.dataEditBk, val);
-    }
-  }
-
   protected onCancelClick() {
     this.cancel.emit();
   }
+
 }

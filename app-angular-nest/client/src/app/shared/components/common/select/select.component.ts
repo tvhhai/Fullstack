@@ -6,6 +6,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { isEmptyArray } from '@shared/helpers';
+import { formatDate } from "@shared/helpers/time.helper";
 
 interface ObjSelection {
   value: string;
@@ -31,4 +32,7 @@ export class SelectComponent {
   onValueChange(event: any) {
     this.selectionChange.emit(event);
   }
+
+  protected readonly formatDate = formatDate;
+  protected readonly NaN = NaN;
 }

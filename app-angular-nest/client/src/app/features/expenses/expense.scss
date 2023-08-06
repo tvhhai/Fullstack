@@ -1,0 +1,16 @@
+.expense-category {
+  border: 1px solid silver;
+  padding: 8px;
+  margin: 8px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &.active{
+    border: 2px solid rgb(63, 81, 181);
+  }
+}
+
+
+

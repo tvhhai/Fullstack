@@ -12,17 +12,17 @@ export class Test1Component {
   constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) {
   }
   ngOnInit() {
-    this.authService.test().subscribe({
-      next: data => {
-        console.log(data);
+    // this.authService.test().subscribe({
+    //   next: data => {
+    //     console.log(data);
         // this.router.navigate(['/dashboard']);
         // this.isSuccessful = true;
         // this.isSignUpFailed = false;
-      },
-      error: err => {
+      // },
+      // error: err => {
         // this.errorMessage = err.error.message;
         // this.isSignUpFailed = true;
-      }
-    });
+  //     }
+  //   });
   }
 }

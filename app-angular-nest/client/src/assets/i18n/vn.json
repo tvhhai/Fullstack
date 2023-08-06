@@ -37,5 +37,29 @@
     "systemSetting": {
       "title": "Cài Đặt Hệ Thống"
     }
+  },
+  "expenses": {
+    "title": "Chi Tiêu",
+    "titleSidebar": "Expenses",
+    "amount": "Amount",
+    "category": "Expense Category",
+    "debtCategory": {
+      "lend": "Lend",
+      "repayment": "Repayment",
+      "borrow": "Borrow",
+      "debtCollection": "Debt Collection"
+    },
+    "personal": {
+      "title": "Personal Expenses",
+      "create": "Add Personal Expenses"
+    },
+    "reports": {
+    }
+  },
+  "income": {
+    "title": "Thu Nhập"
+  },
+  "chart": {
+    "noData": "There is no data to display the chart."
   }
 }

@@ -14,21 +14,21 @@ import { forEach, get } from 'lodash-es';
 import { UserService } from './user-manager.service';
 import { User } from './user-manager.model';
 import { TranslateService } from '@ngx-translate/core';
-import { EViewMode } from '../../../constants/enum/view-mode.enum';
-import { isEmptyArray, isEmptyObj } from '@shared/helpers';
+import { EViewMode } from '@shared/enum/view-mode.enum';
+import { isEmptyArray } from '@shared/helpers';
 import { formatDateTime } from '@shared/helpers/time.helper';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '@shared/components/common/dialog/dialog.component';
-import { DataDialog } from '@shared/components/common/dialog/dialog.model';
+import { BtnLeftAction } from "@shared/components/common/ag-grid/model/ag-grid.model";
 
 @Component({
-  selector: 'app-user-manager',
+  selector: 'rbac-user-manager',
   templateUrl: './user-manager.component.html',
   styleUrls: ['./user-manager.component.scss'],
 })
 export class UserManagerComponent {
   protected readonly ButtonTypes = ButtonTypes;
-  protected readonly isEmptyObj = isEmptyObj;
+  protected readonly EViewMode = EViewMode;
 
   gridApi!: GridApi;
   columnApi!: ColumnApi;
@@ -63,11 +63,49 @@ export class UserManagerComponent {
 
   selectedRows: any[] = [];
 
-  viewMod: EViewMode = EViewMode.Create;
+  viewMod: EViewMode = EViewMode.View;
 
   spDeleteMulti: boolean = true;
 
   dataEdit: Partial<User> = {};
+
+  btnAction: Record<string, BtnLeftAction> = {
+    add: {
+      id: 'add',
+      i18nKey: 'common.add',
+      onClick: () => this.handleAdd(),
+      disable: () => {
+        return false
+      },
+      icon: 'add',
+      color: ButtonColor.Primary,
+      // permission: Todo
+    },
+    edit: {
+      id: 'edit',
+      i18nKey: 'common.edit',
+      onClick: () => this.handleEdit(),
+      disable: () => this.handleDisable(),
+      icon: 'mode_edit',
+      color: ButtonColor.Accent,
+      // permission: Todo
+    },
+    delete: {
+      id: 'delete',
+      i18nKey: 'common.delete',
+      onClick: () => this.handleDelete(),
+      disable: () => this.handleDisable(this.spDeleteMulti),
+      icon: 'delete',
+      color: ButtonColor.Warn,
+      // permission: Todo
+    },
+  };
+
+  toolbarLeftAction = [
+    this.btnAction['add'],
+    this.btnAction['edit'],
+    this.btnAction['delete'],
+  ];
 
   constructor(
     private userService: UserService,
@@ -100,6 +138,18 @@ export class UserManagerComponent {
     this.getData();
   }
 
+  selectRowsFromData() {
+    if (!isEmptyArray(this.selectedRows)) {
+      this.gridApi.forEachNode((node) => {
+        forEach(this.selectedRows, function (val) {
+          if (val.id === node.data.id) {
+            node.setSelected(true);
+          }
+        });
+      });
+    }
+  }
+
   handleAdd = () => {
     this.viewMod = EViewMode.Create;
   };
@@ -110,12 +160,20 @@ export class UserManagerComponent {
     this.edit(id);
   };
 
-  edit(id: User) {
+  edit(id: number) {
     this.userService.getById(id).subscribe({
       next: (res) => {
-        this.dataEdit = res.data;
+        this.userService.setDataEdit({
+          id: id,
+          username: res.data.username,
+          email: res.data.email,
+          roles: res.data.roles,
+          password: res.data.password,
+          confirmPassword: res.data.confirmPassword,
+        });
       },
-      error: () => {},
+      error: () => {
+      },
     });
   }
 
@@ -129,54 +187,6 @@ export class UserManagerComponent {
     }
   };
 
-  selectRowsFromData() {
-    if (!isEmptyArray(this.selectedRows)) {
-      this.gridApi.forEachNode((node) => {
-        forEach(this.selectedRows, function (val) {
-          if (val.id === node.data.id) {
-            node.setSelected(true);
-          }
-        });
-      });
-    }
-  }
-
-  btnAction = {
-    add: {
-      id: 'add',
-      i18nKey: 'common.add',
-      onClick: this.handleAdd,
-      disable: false,
-      icon: 'add',
-      color: ButtonColor.Primary,
-      // permission: Todo
-    },
-    edit: {
-      id: 'edit',
-      i18nKey: 'common.edit',
-      onClick: this.handleEdit,
-      disable: this.handleDisable(),
-      icon: 'mode_edit',
-      color: ButtonColor.Accent,
-      // permission: Todo
-    },
-    delete: {
-      id: 'delete',
-      i18nKey: 'common.delete',
-      onClick: this.handleDelete,
-      disable: this.handleDisable(this.spDeleteMulti),
-      icon: 'delete',
-      color: ButtonColor.Warn,
-      // permission: Todo
-    },
-  };
-
-  toolbarLeftAction = [
-    this.btnAction.add,
-    this.btnAction.edit,
-    this.btnAction.delete,
-  ];
-
   handleDisable(spDeleteMulti?: boolean): boolean {
     let selected;
     if (
@@ -186,21 +196,12 @@ export class UserManagerComponent {
       selected = this.selectedRows;
     }
     return spDeleteMulti
-      ? !(selected && selected.length > 0)
-      : !(selected && selected.length > 0 && selected.length <= 1);
+      ? !(selected && !isEmptyArray(selected))
+      : !(selected && !isEmptyArray(selected) && selected.length <= 1);
   }
 
   onSelectionChanged(event: SelectionChangedEvent) {
     this.selectedRows = event.api.getSelectedRows();
-
-    forEach(this.toolbarLeftAction, (val) => {
-      if (val.id === 'edit') {
-        val.disable = this.handleDisable();
-      }
-      if (val.id === 'delete') {
-        val.disable = this.handleDisable(this.spDeleteMulti);
-      }
-    });
   }
 
   save() {
@@ -263,4 +264,5 @@ export class UserManagerComponent {
   cancel() {
     this.backToView();
   }
+
 }

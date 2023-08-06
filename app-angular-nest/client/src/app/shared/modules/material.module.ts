@@ -11,7 +11,7 @@ import {MatChipsModule} from '@angular/material/chips';
 import {
   MatRippleModule,
   MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE, MAT_RIPPLE_GLOBAL_OPTIONS,
+  MAT_DATE_LOCALE, MAT_RIPPLE_GLOBAL_OPTIONS, MatNativeDateModule,
 } from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {
@@ -46,7 +46,6 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTreeModule} from '@angular/material/tree';
-import {DataDialog} from '@shared/components/common/dialog/dialog.model';
 // import { MatMomentDateModule } from '@angular/material-moment-adapter';
 //
 // import { PaginatorI18nService } from '@shared/services/paginator-i18n.service';
@@ -64,6 +63,7 @@ import {DataDialog} from '@shared/components/common/dialog/dialog.model';
     MatStepperModule,
     MatDatepickerModule,
     // MatMomentDateModule,
+    MatNativeDateModule,
     MatDialogModule,
     MatDividerModule,
     MatExpansionModule,

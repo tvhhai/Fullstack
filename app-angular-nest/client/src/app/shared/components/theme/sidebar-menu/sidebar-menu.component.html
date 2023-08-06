@@ -9,10 +9,10 @@
 </ng-container>
 
 <ng-template
-  #menuListTpl
-  let-menuList="menuList"
-  let-parentRoute="parentRoute"
-  let-level="level"
+        #menuListTpl
+        let-menuList="menuList"
+        let-parentRoute="parentRoute"
+        let-level="level"
 >
   <ul
     appNavAccordion
@@ -24,7 +24,7 @@
         [ngxPermissionsOnly]="menuItem.permissions?.only"
         [ngxPermissionsExcept]="menuItem.permissions?.except"
       >
-        <div class="" *ngIf="menuItem.sectionType">
+        <div class="" *ngIf="menuItem.type ==='section'">
           <ng-container
             [ngTemplateOutlet]="sectionTpl"
             [ngTemplateOutletContext]="{ item: menuItem }"
@@ -93,9 +93,9 @@
           <ng-container
             [ngTemplateOutlet]="menuListTpl"
             [ngTemplateOutletContext]="{
-              menuList: menuItem.apps ? menuItem.apps : menuItem.child,
+              menuList: menuItem.child,
               parentRoute: parentRoute.concat([menuItem.route]),
-              level: menuItem.apps ? 1 : level + 1
+              level: menuItem.type ==='section' ? 1 : level + 1
             }"
           >
           </ng-container>
@@ -107,7 +107,7 @@
 
 <ng-template #sectionTpl let-item="item">
   <div class="sidebar-section">
-    <b class="text mat-typography">{{ item.sectionName | translate }}</b>
+    <b class="text mat-typography">{{ item.name | translate }}</b>
   </div>
 </ng-template>
 
@@ -115,11 +115,7 @@
   <mat-icon class="menu-icon" *ngIf="level === 1">{{ item.icon }}</mat-icon>
   <div class="dot-icon" *ngIf="level !== 1"></div>
   <span class="menu-name">{{ item.name | translate }}</span>
-
-  <!--    <span class="menu-label bg-{{item.label.color}}" *ngIf="item.label">{{item.label.value}}</span>-->
-  <!--    <span class="menu-badge bg-{{item.badge.color}}" *ngIf="item.badge">{{item.badge.value}}</span>-->
-
   <mat-icon class="menu-caret" *ngIf="item.type !== 'link'">
-    {{ item.type === "sub" ? "chevron_left" : "launch" }}
+    {{ item.type==="sub" ? "chevron_left":"launch" }}
   </mat-icon>
 </ng-template>

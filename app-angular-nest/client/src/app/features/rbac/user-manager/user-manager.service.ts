@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, finalize, Observable } from 'rxjs';
-import { User } from './user-manager.model';
+import { User, UserRequest } from './user-manager.model';
 import { HttpClient } from '@angular/common/http';
-import { DataRes } from '@core/models/data-response.model';
+import { DataRes } from '@shared/model/data-response.model';
 import { LoaderService } from '@shared/services/loader.service';
+import { RoleRequest } from "../role/role.model";
 
 @Injectable({
   providedIn: 'root',
@@ -11,8 +12,35 @@ import { LoaderService } from '@shared/services/loader.service';
 export class UserService {
   constructor(private http: HttpClient, private loaderService: LoaderService) {}
 
-  // private user$: BehaviorSubject<User> = new BehaviorSubject<User>({});
+  private dataEditSubject: BehaviorSubject<UserRequest> =
+    new BehaviorSubject<UserRequest>({});
 
+  private dataRoleEditSubject: BehaviorSubject<any> =
+    new BehaviorSubject<any>({});
+
+  public dataEdit$: Observable<UserRequest> =
+    this.dataEditSubject.asObservable();
+
+  public dataRoleEdit$: Observable<any> =
+    this.dataRoleEditSubject.asObservable();
+
+  getDataEdit(): Observable<UserRequest> {
+    return this.dataEdit$;
+  }
+
+  getDataRoleEdit(): Observable<RoleRequest> {
+    return this.dataRoleEdit$;
+  }
+
+  setDataEdit(userRequest: UserRequest) {
+    this.dataEditSubject.next(userRequest);
+  }
+
+  setDataRoleEdit(roleRequest: string[]) {
+    this.dataRoleEditSubject.next(roleRequest);
+  }
+
+  // API
   getData(): Observable<DataRes<User[]>> {
     this.loaderService.isLoading.next(true);
 
@@ -23,7 +51,7 @@ export class UserService {
     );
   }
 
-  getById(id: User): Observable<DataRes<User>> {
+  getById(id: number): Observable<DataRes<User>> {
     this.loaderService.isLoading.next(true);
 
     return this.http.get<DataRes<User>>('api/users/' + id).pipe(

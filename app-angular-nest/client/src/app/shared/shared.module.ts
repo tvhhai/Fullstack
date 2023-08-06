@@ -36,6 +36,16 @@ import { DialogComponent } from './components/common/dialog/dialog.component';
 import { StatusComponent } from './components/common/ag-grid/status/status.component';
 import { TransferListComponent } from './components/common/transfer-list/transfer-list.component';
 import { ButtonGroupComponent } from './components/common/button-group/button-group.component';
+import { CardLayoutComponent } from './components/theme/card-layout/card-layout.component';
+import { InputValidatorComponent } from './components/common/input-validator/input-validator.component';
+import { CurrencyMaskModule } from "ng2-currency-mask";
+import { NgxChartsModule } from "@swimlane/ngx-charts";
+import { ChartComponent } from './components/common/chart/chart.component';
+import { LineChartComponent } from './components/common/chart/line-chart/line-chart.component';
+import { PieChartComponent } from './components/common/chart/pie-chart/pie-chart.component';
+import { BarChartComponent } from './components/common/chart/bar-chart/bar-chart.component';
+import { WalletComponent } from "../features/expenses/wallet/wallet.component";
+
 
 const MODULES: any[] = [
   CommonModule,
@@ -47,6 +57,8 @@ const MODULES: any[] = [
   TranslateModule,
   AgGridModule,
   NgxPaginationModule,
+  CurrencyMaskModule,
+  NgxChartsModule
 ];
 
 const COMPONENTS: any[] = [
@@ -68,8 +80,17 @@ const COMPONENTS: any[] = [
   PaginationComponent,
   InputComponent,
   ButtonComponent,
+  ButtonGroupComponent,
   DialogComponent,
   StatusComponent,
+  TransferListComponent,
+  CardLayoutComponent,
+  InputValidatorComponent,
+  PieChartComponent,
+  BarChartComponent,
+  ChartComponent,
+  LineChartComponent,
+  WalletComponent
 ];
 const COMPONENTS_DYNAMIC: any[] = [];
 const DIRECTIVES: any[] = [
@@ -82,7 +103,7 @@ const PIPES: any[] = [];
 
 @NgModule({
   imports: [...MODULES],
-  exports: [...MODULES, ...COMPONENTS, ...DIRECTIVES, ...PIPES, TransferListComponent],
-  declarations: [...COMPONENTS, ...COMPONENTS_DYNAMIC, ...DIRECTIVES, ...PIPES, TransferListComponent, ButtonGroupComponent],
+  exports: [...MODULES, ...COMPONENTS, ...DIRECTIVES, ...PIPES, ],
+  declarations: [...COMPONENTS, ...COMPONENTS_DYNAMIC, ...DIRECTIVES, ...PIPES],
 })
 export class SharedModule {}

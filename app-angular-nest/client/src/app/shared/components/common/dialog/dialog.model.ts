@@ -1,6 +1,10 @@
+import { Component, TemplateRef } from "@angular/core";
+
 export interface DataDialog {
-    title: string;
-    message: string;
-    labelCancel: string;
-    labelApply: string;
-  }
+  title: string;
+  message: string;
+  template: TemplateRef<any>;
+  labelCancel: string;
+  labelApply: string;
+  isDisable: () => boolean;
+}

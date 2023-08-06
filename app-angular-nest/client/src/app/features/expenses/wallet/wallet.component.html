@@ -1,0 +1,34 @@
+<mat-menu #menu="matMenu" xPosition="before">
+  <div mat-menu-item
+       (click)="selectTimeRange()"
+       *ngFor="let item of wallets"
+  >
+    <div class="d-flex align-items-center">
+      <div class="my-1">
+        <div matListItemTitle>{{item.title}}</div>
+      </div>
+
+      <mat-icon *ngIf="item.checked" class="ms-2 me-0 checked-icon">check</mat-icon>
+    </div>
+  </div>
+</mat-menu>
+
+<ng-template #dialogTemplate>
+  <form class="form-field-full" [formGroup]="form">
+    <div class="row">
+      <div class="col-md-6">
+        <mat-label class="fw-bold">{{ "expenses.waller.nameWallet" | translate }}</mat-label>
+        <mat-form-field appearance="outline" class="mb-2 app-input">
+          <input matInput type="text" placeholder="" formControlName="nameWallet" />
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-6">
+        <mat-label class="fw-bold">{{ "expenses.waller.initBalance" | translate }}</mat-label>
+        <mat-form-field appearance="outline" class="mb-2 app-input">
+          <input matInput currencyMask type="text" placeholder="" formControlName="amount" maxlength="15" />
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</ng-template>

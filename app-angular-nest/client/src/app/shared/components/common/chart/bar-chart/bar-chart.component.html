@@ -1,0 +1,49 @@
+<ngx-charts-bar-vertical-2d
+  *ngIf="config.chartType === BarChartType.GroupVertical"
+
+  [scheme]="config.colorScheme"
+  [results]="config.data"
+  [gradient]="config.gradient"
+
+  [legend]="config.showLegend"
+  [legendPosition]="config.legendPosition"
+  [legendTitle]="config.legendTitle"
+
+  [xAxis]="config.showXAxis"
+  [yAxis]="config.showYAxis"
+  [showXAxisLabel]="config.showXAxisLabel"
+  [showYAxisLabel]="config.showYAxisLabel"
+  [xAxisLabel]="config.xAxisLabel"
+  [yAxisLabel]="config.yAxisLabel"
+  [showDataLabel]="config.showDataLabel"
+
+  (select)="onSelect($event)"
+  (activate)="onActivate($event)"
+  (deactivate)="onDeactivate($event)">
+</ngx-charts-bar-vertical-2d>
+
+
+<ngx-charts-bar-vertical-stacked
+  *ngIf="config.chartType === BarChartType.StackedVertical"
+
+  [scheme]="config.colorScheme"
+  [results]="config.data"
+  [gradient]="config.gradient"
+
+  [legend]="config.showLegend"
+  [legendPosition]="config.legendPosition"
+  [legendTitle]="config.legendTitle"
+
+  [xAxis]="config.showXAxis"
+  [yAxis]="config.showYAxis"
+  [showXAxisLabel]="config.showXAxisLabel"
+  [showYAxisLabel]="config.showYAxisLabel"
+  [xAxisLabel]="config.xAxisLabel"
+  [yAxisLabel]="config.yAxisLabel"
+  [showDataLabel]="config.showDataLabel"
+
+
+  (select)="onSelect($event)"
+  (activate)="onActivate($event)"
+  (deactivate)="onDeactivate($event)">
+</ngx-charts-bar-vertical-stacked>

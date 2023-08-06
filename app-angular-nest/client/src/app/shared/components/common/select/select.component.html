@@ -16,9 +16,15 @@
     </ng-container>
 
     <ng-container *ngIf="!isListEmpty(arrObjVal)">
-      <mat-option *ngFor="let val of arrObjVal" [value]="val.value">{{
-        val.name
-      }}</mat-option>
+      <mat-option *ngFor="let val of arrObjVal" [value]="val.value">
+<!--        {{-->
+<!--        val.name-->
+<!--      }}-->
+        <span matListItemTitle>{{ val.name}}</span>
+        <span matListItemLine>
+          hioi
+                  </span>
+      </mat-option>
     </ng-container>
   </mat-select>
 </mat-form-field>

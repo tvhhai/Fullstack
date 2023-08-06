@@ -2,7 +2,7 @@ import { Directive } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { NavAccordionItemDirective } from './nav-accordion-item.directive';
-import { MenuService } from '../../../../core/services/menu.service';
+import { MenuService } from "@core/menu/menu.service";
 
 @Directive({
   selector: '[appNavAccordion]',

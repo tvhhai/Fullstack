@@ -1,9 +1,10 @@
 <form class="form-field-full" [formGroup]="form">
   <div class="row">
     <div class="col-md-6">
-      <mat-label>{{ "common.username" | translate }}</mat-label>
+      <mat-label class="fw-bold">{{ "common.username" | translate }}</mat-label>
       <mat-form-field appearance="outline" class="mb-2 app-input">
         <input matInput type="text" placeholder="" formControlName="username"/>
+
         <mat-error *ngIf="f['username'].errors">
           <span *ngIf="f['username'].errors?.['required']"
           >Username is required</span
@@ -15,10 +16,12 @@
             Username must not exceed 20 characters
           </span>
         </mat-error>
+
       </mat-form-field>
     </div>
+
     <div class="col-md-6">
-      <mat-label>{{ "common.email" | translate }}</mat-label>
+      <mat-label class="fw-bold">{{ "common.email" | translate }}</mat-label>
       <mat-form-field appearance="outline" class="mb-2 app-input">
         <input matInput type="text" placeholder="" formControlName="email"/>
 
@@ -32,7 +35,7 @@
     </div>
 
     <div class="col-md-6">
-      <mat-label>{{ "common.password" | translate }}</mat-label>
+      <mat-label class="fw-bold">{{ "common.password" | translate }}</mat-label>
 
       <mat-form-field appearance="outline" class="mb-2 app-input">
         <input
@@ -57,7 +60,7 @@
       </mat-form-field>
     </div>
     <div class="col-md-6">
-      <mat-label>{{ "common.confirmPassword" | translate }}</mat-label>
+      <mat-label class="fw-bold">{{ "common.confirmPassword" | translate }}</mat-label>
 
       <mat-form-field appearance="outline" class="mb-2 app-input">
         <input
@@ -81,9 +84,9 @@
     </div>
 
     <div class="col-md-12">
-      <mat-label>{{ "role.title" | translate }}</mat-label>
+      <mat-label class="fw-bold">{{ "role.title" | translate }}</mat-label>
       <app-transfer-list
-        *ngIf="roleData.length>0"
+        *ngIf="!isEmptyArray(roleData)"
         [inputList]="roleData"
         [selectedList]="roleDataSelect"
         (getCurrentList)="getCurrentList($event)"
@@ -93,23 +96,19 @@
   </div>
 </form>
 
-
-
 <div class="d-flex justify-content-end align-items-center">
   <app-button
     class="me-2"
     [btnType]="ButtonTypes.Raised"
     [btnText]="'common.cancel'"
     (click)="onCancelClick()"
-  >
-  </app-button>
-<!--  [btnDisabled]="!isValid"-->
+  ></app-button>
 
   <app-button
+    [btnDisabled]="!isValid"
     [btnType]="ButtonTypes.Raised"
     [btnColor]="ButtonColor.Primary"
     [btnText]="'common.save'"
     (click)="onSaveClick()"
-  >
-  </app-button>
+  ></app-button>
 </div>

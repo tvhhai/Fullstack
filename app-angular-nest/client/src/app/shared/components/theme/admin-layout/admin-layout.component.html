@@ -4,18 +4,18 @@
   </mat-sidenav>
 
   <mat-sidenav-content class="abc">
+
     <app-header
       class="app-header"
       (clicked)="toggleSideNav()"
       [opened]="opened"
     ></app-header>
-    <!--        <mat-divider></mat-divider>-->
-    <!--        <app-breadcrumb></app-breadcrumb>-->
 
     <div class="app-main-container">
-      <mat-card class="card-container">
+      <div class="card-container">
         <router-outlet></router-outlet>
-      </mat-card>
+      </div>
     </div>
+
   </mat-sidenav-content>
 </mat-sidenav-container>

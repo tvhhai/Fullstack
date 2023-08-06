@@ -1,43 +1,44 @@
-import { Directive, HostBinding, Inject, Input } from '@angular/core';
-import { NavAccordionDirective } from './nav-accordion.directive';
+import { Directive, HostBinding, Inject, Input, OnDestroy } from "@angular/core";
+import { NavAccordionDirective } from "./nav-accordion.directive";
 
 @Directive({
-  selector: '[appNavAccordionItem]',
+    selector: "[appNavAccordionItem]"
 })
-export class NavAccordionItemDirective {
-  protected nav: NavAccordionDirective;
-  protected isExpanded = false;
+export class NavAccordionItemDirective implements OnDestroy {
+    protected nav: NavAccordionDirective;
+    protected isExpanded = false;
 
-  @Input() route = '';
-  @Input() type: 'link' | 'sub' | 'extLink' | 'extTabLink' = 'link';
+    @Input() route = "";
+    @Input() type: "link" | "sub" | "extLink" | "extTabLink" = "link";
 
-  @HostBinding('class.expanded')
-  @Input()
-  get expanded() {
-    return this.isExpanded;
-  }
-  set expanded(value: boolean) {
-    // Only sub menu can be expanded
-    this.isExpanded = this.type === 'sub' && value;
-
-    if (value) {
-      this.nav.closeOtherLinks(this);
+    @HostBinding("class.expanded")
+    @Input()
+    get expanded() {
+        return this.isExpanded;
     }
-  }
 
-  constructor(@Inject(NavAccordionDirective) nav: NavAccordionDirective) {
-    this.nav = nav;
-  }
+    set expanded(value: boolean) {
+        // Only sub menu can be expanded
+        this.isExpanded = this.type==="sub" && value;
 
-  ngOnInit() {
-    this.nav.addLink(this);
-  }
+        if (value) {
+            this.nav.closeOtherLinks(this);
+        }
+    }
 
-  ngOnDestroy() {
-    this.nav.removeLink(this);
-  }
+    constructor(@Inject(NavAccordionDirective) nav: NavAccordionDirective) {
+        this.nav = nav;
+    }
 
-  toggle() {
-    this.expanded = !this.expanded;
-  }
+    ngOnInit() {
+        this.nav.addLink(this);
+    }
+
+    ngOnDestroy() {
+        this.nav.removeLink(this);
+    }
+
+    toggle() {
+        this.expanded = !this.expanded;
+    }
 }

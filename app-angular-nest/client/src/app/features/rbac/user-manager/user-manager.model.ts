@@ -5,10 +5,18 @@ export interface User {
   username?: string;
   email?: string;
   avatar?: string;
-  roles?: any[];
-  permissions?: any[];
+  roles: string[];
   password?: string;
-  confirmPassword?:string;
+  confirmPassword?: string;
+}
+
+export interface UserRequest {
+  id?: number;
+  username?: string;
+  email?: string;
+  roles?: string[];
+  password?: string;
+  confirmPassword?: string;
 }
 
 export interface UserResponse {

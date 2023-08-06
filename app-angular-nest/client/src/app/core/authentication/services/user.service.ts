@@ -1,25 +1,29 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { User } from '../models/auth';
+import { Injectable } from "@angular/core";
+import { BehaviorSubject, Observable } from "rxjs";
+import { User } from "../models/auth";
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: "root"
 })
 export class UserService {
-  constructor() {}
+    constructor() {
+    }
 
-  private user$: BehaviorSubject<User> = new BehaviorSubject<User>({});
+    private currentUserSubject: BehaviorSubject<User> =
+        new BehaviorSubject<User>({});
 
-  getCurrentUser() {
-    // return this.menu$.asObservable();
-  }
+    public currentUser$: Observable<User> =
+        this.currentUserSubject.asObservable();
 
-  get(): Observable<User> {
-    return this.user$.asObservable();
-  }
+    getCurrentUserObj() {
+        return this.currentUserSubject.getValue();
+    }
 
-  set(user: User): Observable<User> {
-    this.user$.next(user);
-    return this.user$.asObservable();
-  }
+    get(): Observable<User> {
+        return this.currentUser$;
+    }
+
+    set(user: User) {
+        this.currentUserSubject.next(user);
+    }
 }

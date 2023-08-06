@@ -10,14 +10,13 @@ export class Test3Component {
   constructor(private http: HttpClient) {
   }
   ngOnInit() {
+      return this.http.get("api/user").subscribe({
+          next: data => {
+              console.log(data);
+          },
+          error: err => {
 
-    return  this.http.get('api/user').subscribe({
-      next: data => {
-        console.log(data);
-      },
-      error: err => {
-
-      }
-    });
+          }
+      });
   }
 }
