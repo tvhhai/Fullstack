@@ -14,14 +14,12 @@
             [btnColor]="ButtonColor.Primary"
             [btnIcon]="isFullScreen ? 'close_fullscreen' : 'open_in_full'"
             (click)="fullScreen()"
-            matTooltip="{{'common.fullscreen' | translate}}"
           ></app-button>
           <app-button
             class="me-2"
             [btnType]="ButtonTypes.IconSquareContained"
             [btnColor]="ButtonColor.Primary"
             [btnIcon]="'settings'"
-            matTooltip="{{'common.settings' | translate}}"
           ></app-button>
           <app-button
             *ngIf="showRefreshBtn"
@@ -30,7 +28,6 @@
             [btnColor]="ButtonColor.Primary"
             [btnIcon]="'refresh'"
             (click)="refresh()"
-            matTooltip="{{'common.refresh' | translate}}"
           ></app-button>
         </div>
       </div>
@@ -51,7 +48,6 @@
               [btnIcon]="item.icon"
               [btnDisabled]="item.disable"
               (btnClick)="item.onClick()"
-              matTooltip="{{item.i18nKey | translate}}"
             ></app-button>
           </div>
           <div class="mb-3">
@@ -70,7 +66,7 @@
 
       <div class="app-ag-grid-body">
         <ag-grid-angular
-          style="width: 100%; height: 500px"
+          style="width: 100%; height: 490px"
           class="app-ag-grid-body ag-theme-alpine"
           [suppressCellFocus]="true"
           [suppressPaginationPanel]="true"

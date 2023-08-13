@@ -5,3 +5,8 @@ export interface SelectionTimeRange {
   startDate: Date | "",
   endDate: Date | ""
 }
+
+export interface ObjSelection {
+  value: string;
+  name: string;
+}

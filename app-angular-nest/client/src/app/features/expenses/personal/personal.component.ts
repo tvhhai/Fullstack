@@ -3,19 +3,22 @@ import {
     ButtonColor,
     ButtonTypes
 } from "@shared/components/common/button/button.enum";
-import { formatCurrency, isEmptyArray } from "@shared/helpers";
+import { isEmptyArray } from "@shared/helpers";
 
 import { ColDef, ColumnApi, GridApi, SelectionChangedEvent, ValueFormatterParams } from "ag-grid-community";
 import { formatDateTime } from "@shared/helpers/time.helper";
 import { EViewMode } from "@shared/enum/view-mode.enum";
 import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
-import { forEach, get } from "lodash-es";
+import { forEach, get } from "lodash";
 import { PersonalExpenseService } from "./personal.service";
 import { DialogComponent } from "@shared/components/common/dialog/dialog.component";
 import { BtnLeftAction } from "@shared/components/common/ag-grid/model/ag-grid.model";
 import { EExpenseCategory } from "../enum/expense-category.enum";
 import { PersonalExpense } from "../model/expense.model";
+import { WalletService } from "../wallet/wallet.service";
+import { HelpersService } from "@shared/helpers/helper.service";
+import { TimeHelpersService } from "@shared/helpers/time.helper.service";
 
 @Component({
     selector: "expense-personal",
@@ -32,7 +35,7 @@ export class PersonalComponent {
     columnDefs: ColDef[] = [
         {
             field: "expenseCategory",
-            headerName: this.translateService.instant("expenses.category"),
+            headerName: this.translateService.instant("expenses.category.title"),
             valueFormatter: (params: ValueFormatterParams) => {
                 return this.formatExpenseCategory(params);
             }
@@ -41,17 +44,17 @@ export class PersonalComponent {
             field: "amount",
             headerName: this.translateService.instant("expenses.amount"),
             valueFormatter: (params: ValueFormatterParams) => {
-                return formatCurrency(params.value, "vi-VN", "VND");
+                return this.helpersService.formatCurrency(params.value);
             },
             cellClass: params => {
-                return params.data.expenseCategory.type===EExpenseCategory.EXPENSE ? EExpenseCategory.EXPENSE:EExpenseCategory.INCOME;
+                return params.data.expenseCategory.type === EExpenseCategory.EXPENSE ? EExpenseCategory.EXPENSE : EExpenseCategory.INCOME;
             }
         },
         {
             field: "date",
             headerName: this.translateService.instant("common.date"),
-            valueFormatter: function(params: ValueFormatterParams) {
-                return formatDateTime(params.value);
+            valueFormatter: (params: ValueFormatterParams) => {
+                return this.timeHelpersService.formatDateTime(params.value);
             }
         },
         {
@@ -61,8 +64,8 @@ export class PersonalComponent {
         {
             field: "updated_at",
             headerName: this.translateService.instant("common.updatedAt"),
-            valueFormatter: function(params: ValueFormatterParams) {
-                return formatDateTime(params.value);
+            valueFormatter: (params: ValueFormatterParams) => {
+                return this.timeHelpersService.formatDateTime(params.value);
             }
         }
     ];
@@ -74,8 +77,6 @@ export class PersonalComponent {
     viewMod: EViewMode = EViewMode.View;
 
     spDeleteMulti: boolean = true;
-
-    dataEdit: Partial<PersonalExpense> = {};
 
     btnAction: Record<string, BtnLeftAction> = {
         add: {
@@ -116,9 +117,12 @@ export class PersonalComponent {
     ];
 
     constructor(
-            private personalExpenseService: PersonalExpenseService,
-            private translateService: TranslateService,
-            public dialog: MatDialog
+        private helpersService: HelpersService,
+        private personalExpenseService: PersonalExpenseService,
+        private walletService: WalletService,
+        private translateService: TranslateService,
+        private timeHelpersService: TimeHelpersService,
+        private dialog: MatDialog
     ) {
     }
 
@@ -149,6 +153,7 @@ export class PersonalComponent {
 
     save() {
         this.getData();
+        this.walletService.fetchExpenses();
     }
 
     cancel() {
@@ -168,16 +173,15 @@ export class PersonalComponent {
     edit(id: number) {
         this.personalExpenseService.getById(id).subscribe({
             next: (res) => {
-                // this.dataEdit = res.data;
-                // console.log(res.data)
-                // this.personalExpenseService.setDataEdit({
-                //   id: id,
-                //   username: res.data.username,
-                //   email: res.data.email,
-                //   roles: res.data.roles,
-                //   password: res.data.password,
-                //   confirmPassword: res.data.confirmPassword,
-                // });
+                const data = res.data;
+                console.log(data);
+                this.personalExpenseService.setDataEdit({
+                    id: id,
+                    amount: data.amount,
+                    date: data.date,
+                    note: data.note,
+                    expenseCategory: data.expenseCategory,
+                });
             },
             error: () => {
             }
@@ -185,7 +189,7 @@ export class PersonalComponent {
     }
 
     handleDelete = () => {
-        if (this.selectedRows.length===1) {
+        if (this.selectedRows.length === 1) {
             const id = get(this.selectedRows[0], "id");
             this.openDialog(id);
         } else {
@@ -197,14 +201,14 @@ export class PersonalComponent {
     handleDisable(spDeleteMulti?: boolean): boolean {
         let selected;
         if (
-                get(this.gridApi, "getSelectedRows") &&
-                !this.gridApi["destroyCalled"]
+            get(this.gridApi, "getSelectedRows") &&
+            !this.gridApi["destroyCalled"]
         ) {
             selected = this.selectedRows;
         }
         return spDeleteMulti
-                ? !(selected && !isEmptyArray(selected))
-                :!(selected && !isEmptyArray(selected) && selected.length <= 1);
+            ? !(selected && !isEmptyArray(selected))
+            : !(selected && !isEmptyArray(selected) && selected.length <= 1);
     }
 
     openDialog(id: number | string[]) {
@@ -212,8 +216,8 @@ export class PersonalComponent {
             data: {
                 title: "common.confirmDelete",
                 message: this.translateService.instant("common.deleteItemMsg", {
-                    count: Array.isArray(id) ? id.length:1,
-                    s: Array.isArray(id) ? "s":""
+                    count: Array.isArray(id) ? id.length : 1,
+                    s: Array.isArray(id) ? "s" : ""
                 }),
                 labelApply: "common.ok"
             }
@@ -265,7 +269,7 @@ export class PersonalComponent {
         if (!isEmptyArray(this.selectedRows)) {
             this.gridApi.forEachNode((node) => {
                 forEach(this.selectedRows, function(val) {
-                    if (val.id===node.data.id) {
+                    if (val.id === node.data.id) {
                         node.setSelected(true);
                     }
                 });

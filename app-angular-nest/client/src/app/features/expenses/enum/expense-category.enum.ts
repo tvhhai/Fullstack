@@ -4,7 +4,7 @@ export enum EExpenseCategory {
 }
 
 export enum EExpenseCategoryLabel {
-  EXPENSE = 'Expense',
-  INCOME = 'Income',
-  DEBTORLOAN = 'Debt/Loan'
+  EXPENSE = 'expenses.title',
+  INCOME = 'expenses.income.title',
+  DEBTORLOAN = 'expenses.debt.title'
 }

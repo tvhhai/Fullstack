@@ -14,8 +14,8 @@ export class DebtConstant {
       type: EExpenseCategory.EXPENSE
     },
     {
-      name: "expenses.debtCategory.lend",
-      titleI18n: "Borrow",
+      name: "Borrow",
+      titleI18n: "expenses.debtCategory.borrow",
       type: EExpenseCategory.INCOME
     },
     {

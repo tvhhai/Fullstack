@@ -39,12 +39,13 @@ import { ButtonGroupComponent } from './components/common/button-group/button-gr
 import { CardLayoutComponent } from './components/theme/card-layout/card-layout.component';
 import { InputValidatorComponent } from './components/common/input-validator/input-validator.component';
 import { CurrencyMaskModule } from "ng2-currency-mask";
-import { NgxChartsModule } from "@swimlane/ngx-charts";
 import { ChartComponent } from './components/common/chart/chart.component';
 import { LineChartComponent } from './components/common/chart/line-chart/line-chart.component';
 import { PieChartComponent } from './components/common/chart/pie-chart/pie-chart.component';
 import { BarChartComponent } from './components/common/chart/bar-chart/bar-chart.component';
 import { WalletComponent } from "../features/expenses/wallet/wallet.component";
+import { NgApexchartsModule } from "ng-apexcharts";
+
 
 
 const MODULES: any[] = [
@@ -58,7 +59,7 @@ const MODULES: any[] = [
   AgGridModule,
   NgxPaginationModule,
   CurrencyMaskModule,
-  NgxChartsModule
+  NgApexchartsModule
 ];
 
 const COMPONENTS: any[] = [

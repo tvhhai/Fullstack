@@ -1,12 +1,12 @@
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
-import { environmentProd } from "@env/environment.prod";
-import { AuthGuard } from "@core/authentication/guards/auth.guard";
+import {NgModule} from "@angular/core";
+import {RouterModule, Routes} from "@angular/router";
+import {environmentProd} from "@env/environment.prod";
+import {AuthGuard} from "@core/authentication/guards/auth.guard";
 
-import { AdminLayoutComponent } from "@shared/components/theme/admin-layout/admin-layout.component";
-import { AuthLayoutComponent } from "@shared/components/theme/auth-layout/auth-layout.component";
-import { SignInComponent } from "@shared/components/theme/auth-layout/sign-in/sign-in.component";
-import { SignUpComponent } from "@shared/components/theme/auth-layout/sign-up/sign-up.component";
+import {AdminLayoutComponent} from "@shared/components/theme/admin-layout/admin-layout.component";
+import {AuthLayoutComponent} from "@shared/components/theme/auth-layout/auth-layout.component";
+import {SignInComponent} from "@shared/components/theme/auth-layout/sign-in/sign-in.component";
+import {SignUpComponent} from "@shared/components/theme/auth-layout/sign-up/sign-up.component";
 
 const appRoutes: Routes = [
     {
@@ -15,27 +15,29 @@ const appRoutes: Routes = [
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         children: [
-            { path: "", redirectTo: "dashboard", pathMatch: "full" },
+            {path: "", redirectTo: "dashboard", pathMatch: "full"},
             {
                 path: "dashboard",
                 loadChildren: () =>
-                        import("././features/dashboard/dashboard.module").then(
-                                (m) => m.DashboardModule
-                        )
-            },
-            {
+                    import("././features/dashboard/dashboard.module").then(
+                        (m) => m.DashboardModule
+                    )
+            }, {
                 path: "testSection/test",
                 loadChildren: () =>
-                        import("./features/test/test.module").then((m) => m.TestModule)
-            },
-            {
+                    import("./features/test/test.module").then((m) => m.TestModule)
+            }, {
                 path: "rbac",
                 loadChildren: () =>
-                        import("./features/rbac/rbac.module").then((m) => m.RbacModule)
+                    import("./features/rbac/rbac.module").then((m) => m.RbacModule)
             }, {
                 path: "expenses",
                 loadChildren: () =>
-                        import("./features/expenses/expenses.module").then((m) => m.ExpensesModule)
+                    import("./features/expenses/expenses.module").then((m) => m.ExpensesModule)
+            }, {
+                path: "preferences",
+                loadChildren: () =>
+                    import("./features/preferences/preference.module").then((m) => m.PreferenceModule)
             }
         ]
     },
@@ -45,14 +47,14 @@ const appRoutes: Routes = [
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         children: [
-            { path: "sign-in", component: SignInComponent },
-            { path: "sign-up", component: SignUpComponent }
+            {path: "sign-in", component: SignInComponent},
+            {path: "sign-up", component: SignUpComponent}
         ]
     },
     {
         path: "",
         loadChildren: () =>
-                import("./features/errors/errors.module").then((m) => m.ErrorsModule)
+            import("./features/errors/errors.module").then((m) => m.ErrorsModule)
     }
 ];
 

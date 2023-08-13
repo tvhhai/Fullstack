@@ -5,13 +5,12 @@
 
   <ng-template #dialogTemplate>
     <mat-tab-group [selectedIndex]="selectedTab.value"
-                   (selectedTabChange)="selectedTabValue($event)"
     >
       <mat-tab *ngFor="let tab of tabs" [label]="tab.label">
         <div *ngFor="let item of tab.items"
              class="expense-category"
              [ngClass]="item.active ? 'active' : ''"
-             (click)="activeTab(item)"
+             (click)="activeItem(item)"
         >
           <mat-icon>{{ item.icon }}</mat-icon>
           <span>{{ item.name }}</span>
@@ -24,7 +23,7 @@
     <div class="row">
 
       <div class="col-md-6">
-        <mat-label class="fw-bold">{{ "expenses.category" | translate }}</mat-label>
+        <mat-label class="fw-bold">{{ "expenses.category.title" | translate }}</mat-label>
         <mat-form-field appearance="outline" class="mb-2 app-input" (click)="selectedCategory()">
           <input matInput type="text" placeholder="" formControlName="expenseCategory" />
         </mat-form-field>
@@ -40,7 +39,7 @@
       <div class="col-md-6">
         <mat-label  class="fw-bold">{{ "common.date" | translate }}</mat-label>
         <mat-form-field appearance="outline" class="mb-2 app-input">
-          <input matInput [matDatepicker]="picker" formControlName="date">
+          <input matInput (focus)="picker.open()" [matDatepicker]="picker" formControlName="date">
           <mat-hint>DD/MM/YYYY</mat-hint>
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>

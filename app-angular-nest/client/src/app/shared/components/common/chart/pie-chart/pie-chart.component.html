@@ -1,21 +1,11 @@
-<ng-container *ngIf="isEmptyArray(config.data)">
-  <div class="chart-no-data">
-    {{'chart.noData' | translate}}
-  </div>
-</ng-container>
-
-<ngx-charts-pie-chart
-  *ngIf="!isEmptyArray(config.data)"
-  [scheme]="config.colorScheme"
-  [results]="config.data"
-  [gradient]="config.gradient"
-  [legend]="config.showLegend"
-  [legendPosition]="config.legendPosition"
-  [legendTitle]="config.legendTitle"
-  [labels]="config.showLabels"
-  [doughnut]="config.doughnut"
-  (select)="onSelect($event)"
-  (activate)="onActivate($event)"
-  (deactivate)="onDeactivate($event)"
->
-</ngx-charts-pie-chart>
+<apx-chart
+        [series]="chartOptions.series"
+        [chart]="chartOptions.chart"
+        [noData]="chartOptions.noData"
+        [labels]="chartOptions.labels"
+        [responsive]="chartOptions.responsive"
+        [dataLabels]="chartOptions.dataLabels"
+        [plotOptions]="chartOptions.plotOptions"
+        [legend]="chartOptions.legend"
+        [tooltip]="chartOptions.tooltip"
+></apx-chart>

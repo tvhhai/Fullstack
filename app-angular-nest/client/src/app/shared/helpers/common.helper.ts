@@ -1,18 +1,20 @@
 // Checks if a value is defined
 export function isDefined(value: any): boolean {
-    return typeof value!=="undefined";
+    return typeof value !== "undefined";
 }
 
 // Formats a number as currency
-export function formatCurrency(amount: number, locale: string = "en-US", currencyCode: string = "USD"): string {
-    // Create a new Intl.NumberFormat object with the specified locale and currency code
-    const formatter = new Intl.NumberFormat(locale, {
-        style: "currency",
-        currency: currencyCode
-    });
-    // Format the amount as currency using the formatter
-    return formatter.format(amount);
-}
+// export function formatCurrency(amount: number): string {
+//     // Create a new Intl.NumberFormat object with the specified locale and currency code
+//     const locale: string = "en-US", currencyCode: string = "USD";
+//
+//     const formatter = new Intl.NumberFormat(locale, {
+//         style: "currency",
+//         currency: currencyCode
+//     });
+//     // Format the amount as currency using the formatter
+//     return formatter.format(amount);
+// }
 
 
 export function getLighterColor(color: string, transparency: number): string {
@@ -41,11 +43,11 @@ export function getLighterColor(color: string, transparency: number): string {
 
         // Tính toán màu mới cho màu nền dựa trên độ trong suốt
         const newRgba = rgbaValue.map((value, index) =>
-                index < 3 ? Math.round((1 - transparency) * value + transparency * 255):value
+            index < 3 ? Math.round((1 - transparency) * value + transparency * 255) : value
         );
 
         // Tạo chuỗi màu RGBA mới
-        return rgbaValue.length===3 ? `rgba(${newRgba.join(",")})`:`rgba(${newRgba.join(",")},${rgbaValue[3]})`;
+        return rgbaValue.length === 3 ? `rgba(${newRgba.join(",")})` : `rgba(${newRgba.join(",")},${rgbaValue[3]})`;
     } else {
         // Trường hợp màu không hợp lệ, trả về màu gốc
         return color;

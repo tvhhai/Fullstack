@@ -7,7 +7,7 @@ import { MenuService } from "../menu/menu.service";
 import { IMenuItem } from "../menu/menu.model";
 import { UserService } from "../authentication/services/user.service";
 import { UserResponse } from "../authentication/models/auth";
-import { get } from "lodash-es";
+import { get } from "lodash";
 
 @Injectable({
     providedIn: "root"

@@ -1,28 +1,40 @@
-import {Color, LegendPosition} from "@swimlane/ngx-charts";
+import {ApexAxisChartSeries, ApexChart, ApexNonAxisChartSeries, ApexResponsive} from "ng-apexcharts";
+import {
+    ApexFill,
+    ApexLegend, ApexNoData,
+    ApexPlotOptions,
+    ApexStroke, ApexTitleSubtitle,
+    ApexTooltip,
+    ApexXAxis,
+    ApexYAxis
+} from "ng-apexcharts/lib/model/apex-types";
 
-export interface ChartConfig {
-  colorScheme: string | Color;
-  results: ChartData[];
-  gradient: boolean;
-  legend: boolean;
-  legendPosition: LegendPosition;
-  labels: boolean;
-  doughnut: boolean;
-}
 
-export interface ColorSchemeCustom {
-  domain: string[]
-}
-
-export interface ChartData {
-  name: string,
-  value: number | string
-}
 
 export interface GroupBarChartData {
-  name: string,
-  series: Record<string, number | string>[]
+    name: string,
+    series: Record<string, number | string>[]
 }
+
+
+export interface ChartOptions {
+    series: ApexAxisChartSeries | ApexNonAxisChartSeries;
+    chart: ApexChart;
+    responsive: ApexResponsive[];
+    labels: any;
+    dataLabels: any;
+    plotOptions: ApexPlotOptions
+    legend: ApexLegend
+    tooltip: ApexTooltip
+    noData: ApexNoData;
+}
+
+
+
+
+
+
+
 
 
 

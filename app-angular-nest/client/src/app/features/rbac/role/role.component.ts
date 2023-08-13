@@ -9,7 +9,6 @@ import {
 import { RoleService } from "./role.service";
 import { TranslateService } from "@ngx-translate/core";
 import { MatDialog } from "@angular/material/dialog";
-import { formatDateTime } from "@shared/helpers/time.helper";
 import { Role } from "./role.model";
 import { EViewMode } from "@shared/enum/view-mode.enum";
 import { forEach, get, size } from "lodash";
@@ -23,6 +22,8 @@ import { StatusComponent } from "@shared/components/common/ag-grid/status/status
 import { AgGridConstant } from "@shared/components/common/ag-grid/constant/ag-grid.constant";
 import { RoleConstant } from "./constants/role.constants";
 import { BtnLeftAction } from "@shared/components/common/ag-grid/model/ag-grid.model";
+import { AppConstant } from "@shared/constants";
+import { TimeHelpersService } from "@shared/helpers/time.helper.service";
 
 @Component({
     selector: "rbac-role",
@@ -50,11 +51,11 @@ export class RoleComponent {
             cellRendererSelector: (params) => {
                 const data = {
                     value: params.value
-                            ? RoleConstant.SYSTEM_DEFINE
-                            :RoleConstant.CUSTOM,
+                        ? RoleConstant.SYSTEM_DEFINE
+                        : RoleConstant.CUSTOM,
                     status: params.value
-                            ? AgGridConstant.COLOR_ACCENT.LOW
-                            :AgGridConstant.COLOR_ACCENT.MEDIUM
+                        ? AppConstant.COLOR_ACCENT.LOW
+                        : AppConstant.COLOR_ACCENT.MEDIUM
                 };
 
                 return {
@@ -66,8 +67,8 @@ export class RoleComponent {
         {
             field: "updated_at",
             headerName: this.translateService.instant("common.updatedAt"),
-            valueFormatter: function(params: ValueFormatterParams) {
-                return formatDateTime(params.value);
+            valueFormatter: (params: ValueFormatterParams) => {
+                return this.timeHelpersService.formatDateTime(params.value);
             }
         }
     ];
@@ -116,9 +117,10 @@ export class RoleComponent {
     ];
 
     constructor(
-            private roleService: RoleService,
-            private translateService: TranslateService,
-            public dialog: MatDialog
+        private roleService: RoleService,
+        private translateService: TranslateService,
+        private timeHelpersService: TimeHelpersService,
+        private dialog: MatDialog
     ) {
     }
 
@@ -151,7 +153,7 @@ export class RoleComponent {
         if (!isEmptyArray(this.selectedRows)) {
             this.gridApi.forEachNode((node) => {
                 forEach(this.selectedRows, function(val) {
-                    if (val.id===node.data.id) {
+                    if (val.id === node.data.id) {
                         node.setSelected(true);
                     }
                 });
@@ -194,7 +196,7 @@ export class RoleComponent {
     }
 
     handleDelete() {
-        if (this.selectedRows.length===1) {
+        if (this.selectedRows.length === 1) {
             const id = get(this.selectedRows[0], "id");
             this.openDialog(id);
         } else {
@@ -206,15 +208,15 @@ export class RoleComponent {
     handleDisable(spDeleteMulti?: boolean): boolean {
         let selected: Role[] = [];
         if (
-                get(this.gridApi, "getSelectedRows") &&
-                !this.gridApi["destroyCalled"]
+            get(this.gridApi, "getSelectedRows") &&
+            !this.gridApi["destroyCalled"]
         ) {
             selected = this.selectedRows;
         }
 
         return spDeleteMulti
-                ? this.isSystemDefined(selected) || size(selected)===0
-                :size(selected)!==1;
+            ? this.isSystemDefined(selected) || size(selected) === 0
+            : size(selected) !== 1;
     }
 
     isSystemDefined(selected: Role[]) {
@@ -239,8 +241,8 @@ export class RoleComponent {
             data: {
                 title: "common.confirmDelete",
                 message: this.translateService.instant("common.deleteItemMsg", {
-                    count: Array.isArray(id) ? id.length:1,
-                    s: Array.isArray(id) ? "s":""
+                    count: Array.isArray(id) ? id.length : 1,
+                    s: Array.isArray(id) ? "s" : ""
                 }),
                 labelApply: "common.ok"
             }

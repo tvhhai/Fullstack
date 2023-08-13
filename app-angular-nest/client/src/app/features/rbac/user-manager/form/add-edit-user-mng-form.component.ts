@@ -5,7 +5,7 @@ import {ButtonColor, ButtonTypes,} from '@shared/components/common/button/button
 import {User} from '../user-manager.model';
 import {CommonConstant} from '@shared//constants';
 import {EViewMode} from '@shared//enum/view-mode.enum';
-import {cloneDeep, get, isEqual} from 'lodash-es';
+import {cloneDeep, get, isEqual} from 'lodash';
 import {UserService} from '../user-manager.service';
 import {filterObjectByKeys, getObjectKeys, isEmptyArray, isEmptyObj} from '@shared/helpers';
 import {RoleService} from "../../role/role.service";
@@ -29,7 +29,6 @@ export class AddEditUserMngFormComponent implements AfterContentChecked {
   protected readonly isEmptyArray = isEmptyArray;
 
   @Input() viewMode!: EViewMode;
-  @Input() dataEdit: Partial<User> = {};
   @Output() save = new EventEmitter();
   @Output() cancel = new EventEmitter();
 
@@ -40,7 +39,7 @@ export class AddEditUserMngFormComponent implements AfterContentChecked {
     confirmPassword: new FormControl(''),
   });
 
-  dataEditBk: Partial<User> = cloneDeep(this.dataEdit);
+  dataEditBk!: Partial<User>;
   isValid: boolean = false;
   validForm: boolean = false
   validRole: boolean = false

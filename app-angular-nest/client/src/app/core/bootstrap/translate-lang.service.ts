@@ -1,34 +1,21 @@
-import { Injectable, Injector } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
+import { PreferenceService } from "../../features/preferences/preference.service";
+import { PreSettingService } from "@core/bootstrap/presetting.service";
 
 @Injectable({
     providedIn: "root"
 })
 export class TranslateLangService {
     constructor(
-        private injector: Injector,
-        private translate: TranslateService
-    ) // private settings: SettingsService
-    {
+        private translate: TranslateService,
+    ) {
     }
 
     load() {
-        return new Promise<void>((resolve) => {
-            // const locationInitialized = this.injector.get(LOCATION_INITIALIZED, Promise.resolve());
-            // locationInitialized.then(() => {
-            //   const browserLang = navigator.language;
-            //   const defaultLang = browserLang.match(/en|vn/) ? browserLang : 'en';
-            //
-            //   // this.settings.setLanguage(defaultLang);
-            //   this.translate.setDefaultLang(defaultLang);
-            //   this.translate.use(defaultLang).subscribe(
-            //       () => console.log(`Successfully initialized '${defaultLang}' language.'`),
-            //       () => console.error(`Problem with '${defaultLang}' language initialization.'`),
-            //       () => resolve()
-            //   );
-            // });
 
-            const defaultLang: string = localStorage.getItem("lang") || "en";
+        return new Promise<void>((resolve) => {
+            const defaultLang: string = "en";
 
             this.translate.setDefaultLang(defaultLang);
 
@@ -36,9 +23,7 @@ export class TranslateLangService {
                 next: () =>
                     console.log(`Successfully initialized '${defaultLang}' language.'`),
                 error: () =>
-                    console.error(
-                        `Problem with '${defaultLang}' language initialization.'`
-                    ),
+                    console.error(`Problem with '${defaultLang}' language initialization.'`),
                 complete: () => resolve()
             });
         });

@@ -1,75 +1,101 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { LoaderService } from "@shared/services/loader.service";
-import { finalize, Observable } from "rxjs";
-import { DataRes } from "@shared/model/data-response.model";
-import { PersonalExpense } from "../model/expense.model";
+import {Injectable} from "@angular/core";
+import {HttpClient} from "@angular/common/http";
+import {LoaderService} from "@shared/services/loader.service";
+import {BehaviorSubject, finalize, Observable} from "rxjs";
+import {DataRes} from "@shared/model/data-response.model";
+import {PersonalExpense} from "../model/expense.model";
+import {EExpenseCategory} from "../enum/expense-category.enum";
 
 
 @Injectable({
-    providedIn: "root"
+  providedIn: "root"
 })
 export class PersonalExpenseService {
-    constructor(private http: HttpClient, private loaderService: LoaderService) {
-    }
+  constructor(private http: HttpClient, private loaderService: LoaderService) {
+  }
 
-    getData(): Observable<DataRes<PersonalExpense[]>> {
-        this.loaderService.isLoading.next(true);
+  private dataEditSubject: BehaviorSubject<PersonalExpense> =
+    new BehaviorSubject<PersonalExpense>({
+      id: NaN,
+      amount: 0,
+      date: new Date().toDateString(),
+      note: "",
+      expenseCategory: {
+        id: NaN,
+        icon: 'string',
+        name: 'string',
+        type: EExpenseCategory.EXPENSE,
+      }
+    });
 
-        return this.http.get<DataRes<PersonalExpense[]>>("api/personal-expenses").pipe(
-                finalize(() => {
-                    this.loaderService.isLoading.next(false);
-                })
-        );
-    }
+  public dataEdit$: Observable<PersonalExpense> =
+    this.dataEditSubject.asObservable();
 
-    getById(id: number): Observable<DataRes<PersonalExpense>> {
-        this.loaderService.isLoading.next(true);
+  getDataEdit(): Observable<PersonalExpense> {
+    return this.dataEdit$;
+  }
 
-        return this.http.get<DataRes<PersonalExpense>>("api/personal-expenses/" + id).pipe(
-                finalize(() => {
-                    this.loaderService.isLoading.next(false);
-                })
-        );
-    }
+  setDataEdit(roleRequest: PersonalExpense) {
+    this.dataEditSubject.next(roleRequest);
+  }
 
-    create(data: PersonalExpense): Observable<DataRes<PersonalExpense[]>> {
-        this.loaderService.isLoading.next(true);
+  getData(): Observable<DataRes<PersonalExpense[]>> {
+    this.loaderService.isLoading.next(true);
 
-        return this.http.post<DataRes<PersonalExpense[]>>("api/personal-expenses", data).pipe(
-                finalize(() => {
-                    this.loaderService.isLoading.next(false);
-                })
-        );
-    }
+    return this.http.get<DataRes<PersonalExpense[]>>("api/personal-expenses").pipe(
+      finalize(() => {
+        this.loaderService.isLoading.next(false);
+      })
+    );
+  }
 
-    update(id: string | number, data: PersonalExpense): Observable<DataRes<PersonalExpense[]>> {
-        this.loaderService.isLoading.next(true);
+  getById(id: number): Observable<DataRes<PersonalExpense>> {
+    this.loaderService.isLoading.next(true);
 
-        return this.http.patch<DataRes<PersonalExpense[]>>("api/personal-expenses/" + id, data).pipe(
-                finalize(() => {
-                    this.loaderService.isLoading.next(false);
-                })
-        );
-    }
+    return this.http.get<DataRes<PersonalExpense>>("api/personal-expenses/" + id).pipe(
+      finalize(() => {
+        this.loaderService.isLoading.next(false);
+      })
+    );
+  }
 
-    delete(id: number): Observable<DataRes<PersonalExpense[]>> {
-        this.loaderService.isLoading.next(true);
+  create(data: PersonalExpense): Observable<DataRes<PersonalExpense[]>> {
+    this.loaderService.isLoading.next(true);
 
-        return this.http.delete<DataRes<PersonalExpense[]>>("api/personal-expenses/" + id).pipe(
-                finalize(() => {
-                    this.loaderService.isLoading.next(false);
-                })
-        );
-    }
+    return this.http.post<DataRes<PersonalExpense[]>>("api/personal-expenses", data).pipe(
+      finalize(() => {
+        this.loaderService.isLoading.next(false);
+      })
+    );
+  }
 
-    deleteMulti(ids: string[]): Observable<DataRes<PersonalExpense[]>> {
-        this.loaderService.isLoading.next(true);
+  update(id: string | number, data: PersonalExpense): Observable<DataRes<PersonalExpense[]>> {
+    this.loaderService.isLoading.next(true);
 
-        return this.http.post<DataRes<PersonalExpense[]>>("api/personal-expenses/delete-multi", ids).pipe(
-                finalize(() => {
-                    this.loaderService.isLoading.next(false);
-                })
-        );
-    }
+    return this.http.patch<DataRes<PersonalExpense[]>>("api/personal-expenses/" + id, data).pipe(
+      finalize(() => {
+        this.loaderService.isLoading.next(false);
+      })
+    );
+  }
+
+  delete(id: number): Observable<DataRes<PersonalExpense[]>> {
+    this.loaderService.isLoading.next(true);
+
+    return this.http.delete<DataRes<PersonalExpense[]>>("api/personal-expenses/" + id).pipe(
+      finalize(() => {
+        this.loaderService.isLoading.next(false);
+      })
+    );
+  }
+
+  deleteMulti(ids: string[]): Observable<DataRes<PersonalExpense[]>> {
+    this.loaderService.isLoading.next(true);
+
+    return this.http.post<DataRes<PersonalExpense[]>>("api/personal-expenses/delete-multi", ids).pipe(
+      finalize(() => {
+        this.loaderService.isLoading.next(false);
+      })
+    );
+  }
 }

@@ -25,6 +25,9 @@ import { FeatureAccessModule } from './features/feature-access/feature-access.mo
 import { PersonalExpensesModule } from './features/personal-expenses/personal-expenses.module';
 import { ExpenseCategoryModule } from './features/expense-category/expense-category.module';
 import { WalletModule } from './features/wallet/wallet.module';
+import { ActionLogModule } from './features/action-log/action-log.module';
+import { SettingModule } from './features/setting/setting.module';
+import { PreferencesModule } from './features/preferences/preferences.module';
 
 const ENV = process.env.NODE_ENV;
 
@@ -58,6 +61,9 @@ config({
     PersonalExpensesModule,
     ExpenseCategoryModule,
     WalletModule,
+    ActionLogModule,
+    SettingModule,
+    PreferencesModule,
   ],
   controllers: [AppController],
   providers: [

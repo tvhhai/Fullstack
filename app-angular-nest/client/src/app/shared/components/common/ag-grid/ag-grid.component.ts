@@ -18,7 +18,7 @@ import {
 import { AgGridAngular } from "ag-grid-angular";
 import { AgGridConstant } from "@shared/components/common/ag-grid/constant/ag-grid.constant";
 import { isEmptyArray } from "@shared/helpers";
-import { cloneDeep } from "lodash-es";
+import { cloneDeep } from "lodash";
 import { TranslateService } from "@ngx-translate/core";
 import {
     ButtonColor,

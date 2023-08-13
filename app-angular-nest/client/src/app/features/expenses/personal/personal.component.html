@@ -1,4 +1,4 @@
-<div class="grid-container">
+<div>
   <ng-container [ngSwitch]="viewMod">
     <div *ngSwitchCase="'view'">
       <app-ag-grid
@@ -21,14 +21,28 @@
         [title]="'expenses.personal.create'"
         (backToView)="backToView()"
       >
-        <add-edit-personal-expense
-          (save)="save()"
-          (cancel)="cancel()"
-          [viewMode]="viewMod"
-        >
-        </add-edit-personal-expense>
+        <ng-container *ngTemplateOutlet="expenseEditor"></ng-container>
+      </app-card-layout>
+    </div>
+
+    <!-- Edit view -->
+    <div *ngSwitchCase="EViewMode.Edit">
+      <app-card-layout
+        [showBackToView]="true"
+        [title]="'expenses.personal.edit'"
+        (backToView)="backToView()"
+      >
+        <ng-container *ngTemplateOutlet="expenseEditor"></ng-container>
       </app-card-layout>
     </div>
 
   </ng-container>
 </div>
+
+<ng-template #expenseEditor>
+  <add-edit-personal-expense
+    (save)="save()"
+    (cancel)="cancel()"
+    [viewMode]="viewMod"
+  ></add-edit-personal-expense>
+</ng-template>

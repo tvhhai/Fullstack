@@ -1,138 +1,151 @@
-<div class="grid-container">
-  <div class="d-flex align-items-center mb-3">
-    <h1 class="mat-h1 my-0">
-      {{ 'common.report' | translate }}
-    </h1>
+<div>
+    <div class="d-flex align-items-center mb-3">
+        <h1 class="mat-h1 my-0">
+            {{ 'common.report' | translate }}
+        </h1>
 
-    <span class="mat-h4 ms-3 my-0" [matMenuTriggerFor]="menu">
-     ({{timeRangesSelected.timeRange}}
-      {{timeRangesSelected.timeRangeDetail}})
+        <span class="mat-h4 ms-3 my-0" role="button" [matMenuTriggerFor]="menu">
+     ({{timeRangesSelected.timeRange}}:
+            {{timeRangesSelected.timeRangeDetail}})
     </span>
-  </div>
-
-  <div class="row mb-4">
-    <div class="col-md-12">
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title-group>
-            <mat-card-title>
-              {{'expenses.title' | translate}}
-              &
-              {{'income.title' | translate}}
-            </mat-card-title>
-
-            <!--            <app-button-->
-            <!--              [btnType]="ButtonTypes.Icon"-->
-            <!--              [btnIcon]="'more_vert'"-->
-            <!--              [matMenuTriggerFor]="menu"-->
-            <!--              aria-label="Toggle menu"-->
-            <!--            ></app-button>-->
-
-          </mat-card-title-group>
-        </mat-card-header>
-
-        <mat-card-content class="report-card-content">
-          <app-bar-chart
-            class="app-chart"
-            [config]="groupBarVerChartIncomeConfig">
-          </app-bar-chart>
-        </mat-card-content>
-
-      </mat-card>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6">
-      <mat-card class="">
-        <mat-card-header>
-          <mat-card-title-group>
-            <mat-card-title>
-              {{'income.title' | translate}}
-            </mat-card-title>
-
-            <!--            <app-button-->
-            <!--              [btnType]="ButtonTypes.Icon"-->
-            <!--              [btnIcon]="'more_vert'"-->
-            <!--              [matMenuTriggerFor]="menu"-->
-            <!--              aria-label="Toggle menu"-->
-            <!--            ></app-button>-->
-
-          </mat-card-title-group>
-        </mat-card-header>
-
-        <mat-card-content class="report-card-content">
-          <app-pie-chart
-            class="app-chart"
-            [config]="pieChartIncomeConfig">
-          </app-pie-chart>
-        </mat-card-content>
-
-      </mat-card>
     </div>
 
-    <div class="col-md-6">
-      <mat-card class="">
-        <mat-card-header>
-          <mat-card-title-group>
-            <mat-card-title>
-              {{'expenses.title' | translate}}
-            </mat-card-title>
-
-            <!--            <app-button-->
-            <!--              [btnType]="ButtonTypes.Icon"-->
-            <!--              [btnIcon]="'more_vert'"-->
-            <!--              [matMenuTriggerFor]="menu"-->
-            <!--              aria-label="Toggle menu"-->
-            <!--            ></app-button>-->
-          </mat-card-title-group>
-        </mat-card-header>
-
-        <mat-card-content class="report-card-content">
-          <app-pie-chart
-            class="app-chart"
-            [config]="pieChartExpenseConfig">
-          </app-pie-chart>
-        </mat-card-content>
-
-      </mat-card>
+    <div class="row mb-4">
+        <ng-container *ngFor="let item of cartWidget">
+            <div class="col-md-3">
+                <mat-card [ngStyle]="{'background': 'white'}">
+                    <mat-card-content>
+                        <div class="mat-h2 my-0 text-center" [ngStyle]="{'color': item.color}">{{item.value}}</div>
+                        <div class="text-center" [ngStyle]="{'color': item.color}">{{item.title | translate}}</div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </ng-container>
     </div>
-  </div>
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title-group>
+                        <mat-card-title>
+                            {{'expenses.title' | translate}}
+                            &
+                            {{'expenses.income.title' | translate}}
+                        </mat-card-title>
+
+                        <!--            <app-button-->
+                        <!--              [btnType]="ButtonTypes.Icon"-->
+                        <!--              [btnIcon]="'more_vert'"-->
+                        <!--              [matMenuTriggerFor]="menu"-->
+                        <!--              aria-label="Toggle menu"-->
+                        <!--            ></app-button>-->
+
+                    </mat-card-title-group>
+                </mat-card-header>
+
+                <mat-card-content class="report-card-content">
+                    <app-bar-chart
+                            class="app-chart"
+                            [chartOptions]="groupBarVerChartIncomeConfig">
+                    </app-bar-chart>
+                </mat-card-content>
+
+            </mat-card>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <mat-card class="">
+                <mat-card-header>
+                    <mat-card-title-group>
+                        <mat-card-title>
+                            {{'expenses.income.title' | translate}}
+                        </mat-card-title>
+
+                        <!--            <app-button-->
+                        <!--              [btnType]="ButtonTypes.Icon"-->
+                        <!--              [btnIcon]="'more_vert'"-->
+                        <!--              [matMenuTriggerFor]="menu"-->
+                        <!--              aria-label="Toggle menu"-->
+                        <!--            ></app-button>-->
+
+                    </mat-card-title-group>
+                </mat-card-header>
+
+                <mat-card-content class="report-card-content">
+                    <app-pie-chart
+                            class="app-chart"
+                            [chartOptions]="pieChartIncomeConfig">
+                    </app-pie-chart>
+                </mat-card-content>
+
+            </mat-card>
+        </div>
+
+        <div class="col-md-6">
+            <mat-card class="">
+                <mat-card-header>
+                    <mat-card-title-group>
+                        <mat-card-title>
+                            {{'expenses.title' | translate}}
+                        </mat-card-title>
+
+                        <!--            <app-button-->
+                        <!--              [btnType]="ButtonTypes.Icon"-->
+                        <!--              [btnIcon]="'more_vert'"-->
+                        <!--              [matMenuTriggerFor]="menu"-->
+                        <!--              aria-label="Toggle menu"-->
+                        <!--            ></app-button>-->
+                    </mat-card-title-group>
+                </mat-card-header>
+
+                <mat-card-content class="report-card-content pie">
+                    <app-pie-chart
+                            class="app-chart"
+                            [chartOptions]="pieChartExpenseConfig">
+                    </app-pie-chart>
+                </mat-card-content>
+
+            </mat-card>
+        </div>
+    </div>
 </div>
 
 <mat-menu #menu="matMenu" xPosition="before">
-  <div mat-menu-item
-       (click)="selectTimeRange(item)"
-       *ngFor="let item of timeRangesData"
-  >
-    <div class="d-flex align-items-center">
-      <div class="my-1">
-        <div matListItemTitle>{{item.title}}</div>
-        <span matListItemLine>
-                    {{item.startDate ? formatDate(NaN, item.startDate.toDateString()):''}}
-          - {{item.endDate ? formatDate(NaN, item.endDate.toDateString()):''}}
+    <div mat-menu-item
+         (click)="selectTimeRange(item)"
+         *ngFor="let item of timeRangesData"
+    >
+        <div class="d-flex align-items-center">
+            <div class="my-1">
+                <div matListItemTitle>{{item.title}}</div>
+                <span matListItemLine>
+                        {{item.startDate ? timeHelpersService.formatDate(NaN, item.startDate.toDateString()) : ''}}
+                    - {{item.endDate ? timeHelpersService.formatDate(NaN, item.endDate.toDateString()) : ''}}
                   </span>
-      </div>
+            </div>
 
-      <mat-icon *ngIf="item.checked" class="ms-2 me-0 checked-icon">check</mat-icon>
+            <mat-icon *ngIf="item.checked" class="ms-2 me-0 checked-icon">check</mat-icon>
+        </div>
     </div>
-  </div>
 </mat-menu>
 
 <ng-template #dialogTemplate>
-  <div class="row">
-    <div class="col-md-12" [formGroup]="form">
-      <mat-label class="fw-bold">Enter a date range</mat-label>
-      <mat-form-field appearance="outline" class="mb-2 app-input">
-        <mat-date-range-input [rangePicker]="picker">
-          <input matStartDate formControlName="startDate" placeholder="Start date">
-          <input matEndDate formControlName="endDate" placeholder="End date">
-        </mat-date-range-input>
+    <div class="row">
+        <div class="col-md-12" [formGroup]="form">
+            <mat-label class="fw-bold">Enter a date range</mat-label>
+            <mat-form-field appearance="outline" class="mb-2 app-input">
+                <mat-date-range-input [rangePicker]="picker">
+                    <input matStartDate formControlName="startDate" placeholder="Start date">
+                    <input matEndDate formControlName="endDate" placeholder="End date">
+                </mat-date-range-input>
 
-        <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-date-range-picker #picker></mat-date-range-picker>
-      </mat-form-field>
+                <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+        </div>
     </div>
-  </div>
 
 </ng-template>

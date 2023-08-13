@@ -1,65 +1,153 @@
 {
   "common": {
     "home": "Trang chủ",
-    "username": "Tên Tài Khoản",
+    "name": "Tên",
+    "description": "Mô tả",
+    "username": "Tên người dùng",
+    "note": "Ghi chú",
+    "date": "Ngày",
+    "startDate": "Ngày bắt đầu",
+    "endDate": "Ngày kết thúc",
     "email": "Email",
-    "password": "Mât Khẩu",
+    "type": "Loại",
+    "icon": "Biểu tượng",
+    "password": "Mật khẩu",
     "confirmPassword": "Xác nhận mật khẩu",
-    "dashboard": "Bảng Điều Khiển"
+    "dashboard": "Bảng điều khiển",
+    "searchAll": "Tìm kiếm tất cả",
+    "createdAt": "Ngày tạo",
+    "updatedAt": "Ngày cập nhật",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "ok": "OK",
+    "add": "Thêm",
+    "edit": "Sửa",
+    "delete": "Xóa",
+    "custom": "Tùy chỉnh",
+    "settings": "Cài đặt",
+    "refresh": "Làm mới",
+    "fullscreen": "Toàn màn hình",
+    "report": "Báo cáo",
+    "confirmDelete": "Xác nhận Xóa",
+    "deleteItemMsg": "Bạn có chắc muốn xóa {{count}} mục đã chọn?"
   },
-
+  "status": {
+    "low": "Thấp",
+    "medium": "Trung bình",
+    "high": "Cao",
+    "critical": "Khiếp đảm"
+  },
+  "agGrid": {
+    "agGridNoData": "Không có dữ liệu để hiển thị"
+  },
+  "pagination": {
+    "pageInform1": "Hiển thị <b>{{fromIndex}}</b> - <b>{{toIndex}}</b> của <b>{{totalRow}}</b> bản ghi",
+    "pageInform2": "Trang <b>{{currentPage}}</b> của <b>{{totalPage}}</b>"
+  },
   "auth": {
     "sign-in": {
-      "title": "Đăng Nhập",
-      "rememberMe": "Lưu đăng nhập cho lần sau",
+      "title": "Đăng nhập",
+      "rememberMe": "Nhớ tôi",
       "haveNoAccount": "Chưa có tài khoản?",
-      "createOneAccount": "Nhấn vào đây để tạo"
+      "createOneAccount": "Nhấn vào đây để tạo tài khoản"
     },
     "sign-up": {
-      "title": "Đăng Kí",
-      "haveAnAccount": "Bạn đã đăng ký trước đó?",
+      "title": "Đăng ký",
+      "haveAnAccount": "Đã có tài khoản?",
       "agreeTermOfService": "Tôi đã đọc và đồng ý với các điều khoản dịch vụ"
     },
     "logout": "Đăng xuất"
   },
-
   "user": {
-    "title": "User",
+    "title": "Người dùng",
+    "titlePage": "Quản lý Người dùng",
+    "titleCreate": "Thêm Người dùng",
+    "titleEdit": "Sửa Người dùng",
     "profile": "Hồ sơ",
-    "editProfile": "Chỉnh sửa hồ sơ"
+    "editProfile": "Chỉnh sửa Hồ sơ",
+    "columns": {
+      "id": "ID",
+      "username": "Tên người dùng",
+      "email": "Email",
+      "role": "Vai trò",
+      "status": "Trạng thái",
+      "firstName": "Tên",
+      "lastName": "Họ"
+    }
   },
-
-  "setting": {
-    "title": "Cài Đặt",
+  "role": {
+    "title": "Vai trò",
+    "titlePage": "Quản lý Vai trò",
+    "titleCreate": "Thêm Vai trò",
+    "titleEdit": "Sửa Vai trò",
+    "accessControl": "Kiểm soát Truy cập Ứng dụng",
+    "columns": {
+      "systemDefine": "Định nghĩa Hệ thống",
+      "app": "Ứng dụng"
+    },
+    "permission": {
+      "read": "Đọc",
+      "write": "Ghi",
+      "view": "Xem",
+      "add": "Thêm",
+      "edit": "Sửa",
+      "delete": "Xóa"
+    }
+  },
+  "preferences": {
+    "title": "Tùy chọn",
     "userSetting": {
-      "title": "Cài Đặt Người Dùng"
+      "title": "Cài đặt Người dùng",
+      "languages": {
+        "title": "Ngôn ngữ",
+        "english": "English",
+        "vietnamese": "Vietnamese"
+      },
+      "currency": "Đơn vị Tiền tệ",
+      "dateFormat": "Định dạng Ngày",
+      "timeFormat": "Định dạng Thời gian",
+      "themeOptions": "Tùy chọn Giao diện",
+      "themeColor": "Màu Giao diện"
     },
     "systemSetting": {
-      "title": "Cài Đặt Hệ Thống"
+      "title": "Cài đặt Hệ thống"
     }
   },
   "expenses": {
-    "title": "Chi Tiêu",
-    "titleSidebar": "Expenses",
-    "amount": "Amount",
-    "category": "Expense Category",
-    "debtCategory": {
-      "lend": "Lend",
-      "repayment": "Repayment",
-      "borrow": "Borrow",
-      "debtCollection": "Debt Collection"
+    "transactions": "Giao dịch",
+    "title": "Chi phí",
+    "titleSidebar": "Chi phí",
+    "amount": "Số tiền",
+    "category": {
+      "title": "Danh mục Chi phí",
+      "addTitle": "Thêm Danh mục Chi phí"
+    },
+    "income": {
+      "title": "Thu nhập"
+    },
+    "debt": {
+      "title": "Nợ/Cho vay",
+      "category": {
+        "lend": "Cho vay",
+        "repayment": "Thanh toán",
+        "borrow": "Vay",
+        "debtCollection": "Thu nợ"
+      }
+    },
+    "waller": {
+      "nameWallet": "Tên Ví",
+      "createTitle": "Tạo Ví",
+      "initBalance": "Số dư ban đầu"
     },
     "personal": {
-      "title": "Personal Expenses",
-      "create": "Add Personal Expenses"
+      "title": "Chi phí Cá nhân",
+      "create": "Thêm Chi phí Cá nhân",
+      "edit": "Sửa Chi phí Cá nhân"
     },
     "reports": {
     }
   },
-  "income": {
-    "title": "Thu Nhập"
-  },
   "chart": {
-    "noData": "There is no data to display the chart."
+    "noData": "Không có dữ liệu để hiển thị biểu đồ."
   }
 }

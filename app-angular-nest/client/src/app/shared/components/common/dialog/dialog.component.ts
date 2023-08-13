@@ -1,7 +1,7 @@
-import { Component, Inject } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { ButtonColor, ButtonTypes } from "../button/button.enum";
-import { DataDialog } from "./dialog.model";
+import {Component, Inject} from "@angular/core";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {ButtonColor, ButtonTypes} from "../button/button.enum";
+import {DataDialog} from "./dialog.model";
 
 @Component({
   selector: "app-dialog",
@@ -17,8 +17,8 @@ export class DialogComponent {
   disabled!: any;
 
   constructor(
-          @Inject(MAT_DIALOG_DATA) public data: DataDialog,
-          public dialogRef: MatDialogRef<DialogComponent>
+    @Inject(MAT_DIALOG_DATA) public data: DataDialog,
+    public dialogRef: MatDialogRef<DialogComponent>
   ) {
   }
 

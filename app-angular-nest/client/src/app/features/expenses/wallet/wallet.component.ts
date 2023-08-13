@@ -1,11 +1,12 @@
 import { Component, TemplateRef, ViewChild } from "@angular/core";
 import { WalletService } from "./wallet.service";
-import { IWaller } from "./model/waller.model";
-import { formatCurrency, isEmptyArray } from "@shared/helpers";
-import { formatDate } from "@shared/helpers/time.helper";
+import {  isEmptyArray } from "@shared/helpers";
 import { DialogComponent } from "@shared/components/common/dialog/dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { ButtonTypes } from "@shared/components/common/button/button.enum";
+import { IWallet } from "./model/waller.model";
+import { HelpersService } from "@shared/helpers/helper.service";
 
 @Component({
     selector: "expense-wallet",
@@ -13,14 +14,17 @@ import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms"
     styleUrls: ["./wallet.component.scss"]
 })
 export class WalletComponent {
-    constructor(private walletService: WalletService,
-                public dialog: MatDialog,
-                private formBuilder: FormBuilder) {
+    constructor(
+        private walletService: WalletService,
+        public dialog: MatDialog,
+        private formBuilder: FormBuilder,
+        private helpersService: HelpersService,) {
     }
 
     @ViewChild("dialogTemplate") dialogTemplate!: TemplateRef<any>;
 
-    wallets: any[] = [];
+    wallets: IWallet[] = [];
+    walletSelected!: IWallet | undefined;
 
     form: FormGroup = new FormGroup({
         nameWallet: new FormControl(""),
@@ -33,17 +37,20 @@ export class WalletComponent {
     }
 
     getData() {
-        this.walletService.getData().subscribe({
-            next: (response) => {
-                this.wallets = this.parseDataResponse(response.data);
-                // this.wallet = formatCurrency(this.wallet, "vi-VN", "VND")
-
-                if (isEmptyArray(this.wallets)) {
-                    this.openDialog();
+        this.walletService.getDataWallet().subscribe(
+            {
+                next: (data) => {
+                    if (!isEmptyArray(data)) {
+                        this.wallets = this.parseDataResponse(data);
+                        if (isEmptyArray(this.wallets)) {
+                            this.openDialog();
+                        } else {
+                            this.walletSelected = this.wallets.find(val => val.active);
+                        }
+                    }
                 }
-                console.log(this.wallets);
             }
-        });
+        );
     }
 
     initForm() {
@@ -58,7 +65,7 @@ export class WalletComponent {
     openDialog() {
         const dialogRef = this.dialog.open(DialogComponent, {
             data: {
-                title: "expenses.category",
+                title: "expenses.waller.createTitle",
                 template: this.dialogTemplate,
                 labelApply: "common.ok",
                 isDisable: () => {
@@ -69,23 +76,28 @@ export class WalletComponent {
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                // this.form.patchValue({
-                //     expenseCategory: this.selectedExpensesCategory.name
-                // });
+                const data = this.form.value;
+                data.active = true;
+                console.log(data);
+                this.walletService.create(data).subscribe({
+                    next: () => {
+
+                    }
+                });
             }
         });
     }
 
     parseDataResponse(data: any[]) {
-
         data.forEach(val => {
-            val.wallet = val.amount;
+            val.amount = this.helpersService.formatCurrency(val.amount);
         });
         return data;
     }
 
-
-    selectTimeRange() {
-
+    selectWallet() {
+        this.walletSelected = this.wallets.find(val => val.active);
     }
+
+    protected readonly ButtonTypes = ButtonTypes;
 }

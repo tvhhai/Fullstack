@@ -94,8 +94,8 @@ export class AuthService {
             MenuConstant.MENU_ITEMS["dashboard"],
             MenuConstant.MENU_ITEMS["expenses"],
             MenuConstant.MENU_ITEMS['user'],
-            MenuConstant.MENU_ITEMS['setting'],
-            MenuConstant.MENU_ITEMS["test"]
+            MenuConstant.MENU_ITEMS['preferences'],
+            // MenuConstant.MENU_ITEMS["test"]
         ]);
     }
 

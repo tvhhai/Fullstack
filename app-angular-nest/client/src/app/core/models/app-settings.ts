@@ -1,23 +1,25 @@
+import { EDateFormat, ETimeFormat } from "@shared/enum/dayjs-format";
+
 export interface AppSettings {
-  navPos: 'side' | 'top';
-  dir: 'ltr' | 'rtl';
-  theme: 'light' | 'dark' | 'auto';
-  showHeader: boolean;
-  headerPos: 'fixed' | 'static' | 'above';
-  showUserPanel: boolean;
-  sidenavOpened: boolean;
-  sidenavCollapsed: boolean;
-  language: string;
+    language: LanguageType;
+    currency: string;
+    dateFormat: EDateFormat;
+    timeFormat: ETimeFormat;
+    themeOptions: ThemeOptions;
+    themeColor: string;
+
+    [key: string]: string | object;
 }
 
-export const defaults: AppSettings = {
-  navPos: 'side',
-  dir: 'ltr',
-  theme: 'auto',
-  showHeader: true,
-  headerPos: 'fixed',
-  showUserPanel: true,
-  sidenavOpened: true,
-  sidenavCollapsed: false,
-  language: 'en-US',
-};
+export interface Currency {
+    locale: "en-US" | "vi-VN";
+    currencyCode: "USD" | "VND";
+}
+
+export type ThemeOptions = "light" | "dark";
+
+export type LanguageType = "en" | "vn";
+
+
+
+

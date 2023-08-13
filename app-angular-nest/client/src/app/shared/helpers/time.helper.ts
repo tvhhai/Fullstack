@@ -2,7 +2,6 @@ import * as dayjs from "dayjs";
 import * as timezone from "dayjs/plugin/timezone";
 import * as utc from "dayjs/plugin/utc";
 import { EDateFormat, EDuration, ETimeFormat } from "@shared/enum/dayjs-format";
-import { getObjectKeys } from "@shared/helpers/obj.helper";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -56,17 +55,17 @@ export function formatDateTime(
  * @param dateFormat - The date format to use.
  * @returns The formatted date.
  */
-export function formatDate(
-        milliseconds?: number,
-        dateStr?: string,
-        dateFormat: EDateFormat = EDateFormat.DEFAULT
-) {
-    const value = milliseconds || dateStr;
-    if (isValidInput(value, dateFormat, null)) {
-        return "";
-    }
-    return dayjs(value).format(dateFormat);
-}
+// export function formatDate(
+//         milliseconds?: number,
+//         dateStr?: string,
+//         dateFormat: EDateFormat = EDateFormat.DEFAULT
+// ) {
+//     const value = milliseconds || dateStr;
+//     if (isValidInput(value, dateFormat, null)) {
+//         return "";
+//     }
+//     return dayjs(value).format(dateFormat);
+// }
 
 /**
  * Formats the time.

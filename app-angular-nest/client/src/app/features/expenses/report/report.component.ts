@@ -1,59 +1,72 @@
 import { Component, TemplateRef, ViewChild } from "@angular/core";
-import { PersonalExpenseService } from "../personal/personal.service";
 import { EExpenseCategory } from "../enum/expense-category.enum";
-import { ChartData, GroupBarChartData } from "@shared/components/common/chart/model/chart.model";
-import { PieChartConfig } from "@shared/components/common/chart/pie-chart/model/pie-chart.model";
 import { PieChartConstant } from "@shared/components/common/chart/pie-chart/constant/pie-chart.constant";
 import { BarChartConstant } from "@shared/components/common/chart/bar-chart/constant/bar-chart.constant";
-import { BarChartConfig, BarChartType } from "@shared/components/common/chart/bar-chart/model/bar-chart.model";
-import { CommonConstant } from "@shared/constants";
+import { AppConstant, CommonConstant } from "@shared/constants";
 import { get, size } from "lodash";
 import {
-    formatDate,
     getDaysAfter,
     getDaysAgo,
-    sortObjectByKeyIsDate
+    sortObjectByKeyIsDate,
 } from "@shared/helpers/time.helper";
 import { ReportExpenseService } from "./report.service";
 import { DialogComponent } from "@shared/components/common/dialog/dialog.component";
 import { MatDialog } from "@angular/material/dialog";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import {
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    Validators,
+} from "@angular/forms";
 import { SelectionTimeRange } from "@shared/model";
 import { ButtonTypes } from "@shared/components/common/button/button.enum";
-import { getFirstDataObj, getLastDataObj } from "@shared/helpers";
+import { getFirstDataObj, getLastDataObj, isEmptyArray } from "@shared/helpers";
 import { PersonalExpense } from "../model/expense.model";
+import { PieChartOptions } from "@shared/components/common/chart/pie-chart/model/pie-chart.model";
+import { BarChartOptions } from "@shared/components/common/chart/bar-chart/model/bar-chart.model";
+import { CartWidgetItem, parsePieChartData } from "./model/report.model";
+import { HelpersService } from "@shared/helpers/helper.service";
+import { TimeHelpersService } from "@shared/helpers/time.helper.service";
 
 @Component({
     selector: "expense-report",
     templateUrl: "./report.component.html",
-    styleUrls: ["./report.component.scss"]
+    styleUrls: ["./report.component.scss"],
 })
 export class ReportComponent {
-    protected readonly formatDate = formatDate;
+    protected readonly isEmptyArray = isEmptyArray;
     protected readonly NaN = NaN;
     protected readonly ButtonTypes = ButtonTypes;
 
     @ViewChild("dialogTemplate") dialogTemplate!: TemplateRef<any>;
 
-    pieChartExpenseConfig: PieChartConfig = { ...PieChartConstant.DATA_CONFIG_DEFAULT };
-    pieChartIncomeConfig: PieChartConfig = { ...PieChartConstant.DATA_CONFIG_DEFAULT };
-    groupBarVerChartIncomeConfig: BarChartConfig = { ...BarChartConstant.DATA_CONFIG_DEFAULT };
+    pieChartExpenseConfig: PieChartOptions = {
+        ...PieChartConstant.DATA_CONFIG_PIE_CHART_DEFAULT,
+    };
+    pieChartIncomeConfig: PieChartOptions = {
+        ...PieChartConstant.DATA_CONFIG_PIE_CHART_DEFAULT,
+    };
+    groupBarVerChartIncomeConfig: BarChartOptions = {
+        ...BarChartConstant.DATA_CONFIG_BAR_CHART_DEFAULT,
+    };
+
     timeRangesData = [...CommonConstant.SELECTION_TIME_RANGE];
     form: FormGroup = new FormGroup({
         startDate: new FormControl(""),
-        endDate: new FormControl("")
+        endDate: new FormControl(""),
     });
-
     timeRangesSelected = {
         timeRange: "",
-        timeRangeDetail: ""
+        timeRangeDetail: "",
     };
+    cartWidget: CartWidgetItem[] = [];
 
     constructor(
-            private personalExpenseService: PersonalExpenseService,
-            private reportExpenseService: ReportExpenseService,
-            public dialog: MatDialog,
-            private formBuilder: FormBuilder
+        private reportExpenseService: ReportExpenseService,
+        public timeHelpersService: TimeHelpersService,
+        private dialog: MatDialog,
+        private helpersService: HelpersService,
+        private formBuilder: FormBuilder
     ) {
     }
 
@@ -61,59 +74,177 @@ export class ReportComponent {
         this.updateTimeRangesTitle();
         this.getDataReport();
         this.initForm();
-        this.groupBarVerChartIncomeConfig.chartType = BarChartType.StackedVertical;
-        this.pieChartExpenseConfig.colorScheme = "horizon";
-        this.pieChartIncomeConfig.colorScheme = "forest";
+        this.pieChartConfig();
+        this.barChartConfig();
     }
 
     updateTimeRangesTitle() {
-        const selectedTimeRange: SelectionTimeRange | undefined = this.getSelectedTimeRange();
+        const selectedTimeRange: SelectionTimeRange | undefined =
+            this.getSelectedTimeRange();
         if (selectedTimeRange) {
             this.timeRangesSelected = {
                 timeRange: selectedTimeRange.title,
-                timeRangeDetail: (selectedTimeRange.startDate ? formatDate(NaN, selectedTimeRange.startDate.toDateString()):"") + " - " + (selectedTimeRange.endDate ? formatDate(NaN, selectedTimeRange.endDate.toDateString()):"")
+                timeRangeDetail:
+                    (selectedTimeRange.startDate
+                        ? this.timeHelpersService.formatDate(
+                            NaN,
+                            selectedTimeRange.startDate.toDateString()
+                        )
+                        : "") +
+                    " - " +
+                    (selectedTimeRange.endDate
+                        ? this.timeHelpersService.formatDate(
+                            NaN,
+                            selectedTimeRange.endDate.toDateString()
+                        )
+                        : ""),
             };
         }
         return this.timeRangesSelected;
     }
 
-    getSelectedTimeRange() {
-        return this.timeRangesData.find(val => val.checked);
-    }
-
-    initForm() {
-        this.form = this.formBuilder.group(
-                {
-                    startDate: ["", [Validators.required]],
-                    endDate: ["", [Validators.required]]
-                }
-        );
-    }
-
     getDataReport() {
-        const selectedTimeRange: SelectionTimeRange | undefined = this.getSelectedTimeRange();
+        const selectedTimeRange: SelectionTimeRange | undefined =
+            this.getSelectedTimeRange();
 
-        const timeRangeRequest: { startDate: Date | "", endDate: Date | "" } = {
+        const timeRangeRequest: {
+            startDate: Date | "";
+            endDate: Date | "";
+        } = {
             startDate: get(selectedTimeRange, "startDate", ""),
-            endDate: get(selectedTimeRange, "endDate", "")
+            endDate: get(selectedTimeRange, "endDate", ""),
         };
 
         this.reportExpenseService.getData(timeRangeRequest).subscribe({
             next: (response) => {
-                this.pieChartExpenseConfig.data = this.parseData(response.data, EExpenseCategory.EXPENSE);
-                this.pieChartIncomeConfig.data = this.parseData(response.data, EExpenseCategory.INCOME);
-                this.groupBarVerChartIncomeConfig.data = this.parseDataBarchart(response.data);
+                this.updateData(response.data);
             },
             error: (error) => {
                 console.log("Error:", error);
-            }
+            },
         });
     }
 
-    groupDataByDate(data: PersonalExpense[]): { [key: string]: PersonalExpense[] } {
-        let groupedData: { [key: string]: PersonalExpense[] } = {};
+    initForm() {
+        this.form = this.formBuilder.group({
+            startDate: ["", [Validators.required]],
+            endDate: ["", [Validators.required]],
+        });
+    }
 
-        data.forEach(item => {
+    pieChartConfig() {
+        this.pieChartExpenseConfig.plotOptions =
+            this.pieChartIncomeConfig.plotOptions = {
+                pie: {
+                    donut: {
+                        size: "75%",
+                        labels: {
+                            show: true,
+                            name: {},
+                            value: {
+                                formatter(val: string): string {
+                                    return val.toLocaleString();
+                                },
+                            },
+                        },
+                    },
+                },
+            };
+        this.pieChartExpenseConfig.tooltip = this.pieChartIncomeConfig.tooltip = {
+            y: {
+                formatter(val: number, opts?: any): string {
+                    return val.toLocaleString();
+                },
+            },
+        };
+        this.pieChartExpenseConfig.chart = this.pieChartIncomeConfig.chart = {
+            height: 300,
+            type: "donut",
+        };
+    }
+
+    barChartConfig() {
+        this.groupBarVerChartIncomeConfig.plotOptions = {
+            bar: {
+                horizontal: false,
+            },
+        };
+        this.groupBarVerChartIncomeConfig.chart = {
+            height: 300,
+            stacked: true,
+            type: "bar",
+        };
+        this.groupBarVerChartIncomeConfig.yaxis = {
+            labels: {
+                formatter(val: number, opts?: any): string | string[] {
+                    return val.toLocaleString();
+                },
+            },
+        };
+    }
+
+    getSelectedTimeRange() {
+        return this.timeRangesData.find((val) => val.checked);
+    }
+
+    updateData(data: PersonalExpense[]) {
+        const dataExpense = this.parseData(data, EExpenseCategory.EXPENSE);
+        this.pieChartExpenseConfig.series = dataExpense.series;
+        this.pieChartExpenseConfig.labels = dataExpense.labels;
+
+        const dataIncome = this.parseData(data, EExpenseCategory.INCOME);
+        this.pieChartIncomeConfig.series = dataIncome.series;
+        this.pieChartIncomeConfig.labels = dataIncome.labels;
+
+        const barchart = this.parseDataBarchart(data);
+        this.groupBarVerChartIncomeConfig.series = barchart.series;
+        this.groupBarVerChartIncomeConfig.xaxis = {
+            categories: barchart.labels,
+        };
+
+        this.analyst(dataExpense, dataIncome, data);
+    }
+
+    analyst(
+        dataExpense: parsePieChartData,
+        dataIncome: parsePieChartData,
+        allData: PersonalExpense[]
+    ) {
+        const totalExpense: number = dataExpense.total;
+        const totalIncome: number = dataIncome.total;
+
+        this.cartWidget = [
+            {
+                value: this.helpersService.formatCurrency(totalIncome),
+                title: "expenses.income.title",
+                color: AppConstant.COLOR_ACCENT.HIGH.color,
+            },
+            {
+                value: this.helpersService.formatCurrency(totalExpense),
+                title: "expenses.title",
+                color: AppConstant.COLOR_ACCENT.LOW.color,
+            },
+            {
+                value: "0",
+                title: "Balance",
+                color: AppConstant.COLOR_ACCENT.MEDIUM.color,
+            },
+            {
+                value: allData.length,
+                title: "expenses.transactions",
+                color: AppConstant.COLOR_ACCENT.CRITICAL.color,
+            },
+        ];
+    }
+
+    groupDataByDate(data: PersonalExpense[]): {
+        [key: string]: PersonalExpense[];
+    } {
+        let groupedData: {
+            [key: string]: PersonalExpense[];
+        } = {};
+
+        data.forEach((item) => {
             const date = new Date(item.date).toDateString();
             if (groupedData[date]) {
                 groupedData[date].push(item);
@@ -126,43 +257,73 @@ export class ReportComponent {
     }
 
     calculateTotalExpense(expenses: PersonalExpense[]): number {
-        return expenses.reduce((sum: number, val: PersonalExpense) => sum + val.amount, 0);
+        return expenses.reduce(
+            (sum: number, val: PersonalExpense) => sum + val.amount,
+            0
+        );
     }
 
     calculateTotalIncome(incomes: PersonalExpense[]): number {
-        return incomes.reduce((sum: number, val: PersonalExpense) => sum + val.amount, 0);
+        return incomes.reduce(
+            (sum: number, val: PersonalExpense) => sum + val.amount,
+            0
+        );
     }
 
-    parseDataBarchart(data: PersonalExpense[]): GroupBarChartData[] {
+    parseDataBarchart(data: PersonalExpense[]): parsePieChartData {
         let groupedData = this.groupDataByDate(data);
 
         if (size(groupedData) <= 5) {
             groupedData = this.assignEmptyChartData(groupedData);
         }
 
-        return Object.keys(groupedData).map(date => {
-            const expenses = groupedData[date].filter((val: PersonalExpense) => val.expenseCategory.type===EExpenseCategory.EXPENSE);
-            const incomes = groupedData[date].filter((val: PersonalExpense) => val.expenseCategory.type===EExpenseCategory.INCOME);
+        let incomeSeries: number[] = [];
+        let expenseSeries: number[] = [];
+        let labels: string[] = [];
+
+        Object.keys(groupedData).map((date) => {
+            const expenses = groupedData[date].filter(
+                (val: PersonalExpense) =>
+                    val.expenseCategory.type === EExpenseCategory.EXPENSE
+            );
+            const incomes = groupedData[date].filter(
+                (val: PersonalExpense) =>
+                    val.expenseCategory.type === EExpenseCategory.INCOME
+            );
 
             const totalExpense = this.calculateTotalExpense(expenses);
             const totalIncome = this.calculateTotalIncome(incomes);
 
-            return {
-                name: date,
-                series: [
-                    { name: "Expense", value: -totalExpense },
-                    { name: "Income", value: totalIncome }
-                ]
-            };
+            expenseSeries.push(totalExpense);
+            incomeSeries.push(totalIncome);
+            labels.push(date);
         });
+
+        return {
+            series: [
+                {
+                    name: "Expense",
+                    data: expenseSeries,
+                },
+                {
+                    name: "Income",
+                    data: incomeSeries,
+                },
+            ],
+            labels: labels,
+        };
     }
 
-
-    parseData(data: PersonalExpense[], type: EExpenseCategory): ChartData[] {
-        const result: { [name: string]: number } = {};
+    parseData(
+        data: PersonalExpense[],
+        type: EExpenseCategory
+    ): parsePieChartData {
+        const result: {
+            [name: string]: number;
+        } = {};
 
         for (const val of data) {
-            if (val.expenseCategory?.type===type) {
+            if (val.expenseCategory?.type === type) {
                 const itemName = val.expenseCategory.name;
                 const itemValue = val.amount;
 
@@ -174,25 +335,29 @@ export class ReportComponent {
             }
         }
 
-        return Object.keys(result).map(name => ({
-            name: name,
-            value: result[name]
-        }));
+        const series = Object.keys(result).map((name) => result[name]);
+        const labels = Object.keys(result).map((name) => name);
+        const total = Object.values(result).reduce(
+            (accumulator, currentValue) => accumulator + currentValue,
+            0
+        );
+
+        return { series, labels, total };
     }
 
     assignEmptyChartData(data: { [key: string]: PersonalExpense[] }) {
-        const dayAgo = 5;
+        const dayAgo = 2;
         const firstDateData: string = get(getFirstDataObj(data), "[0].date", "");
         const lastDateData: string = get(getLastDataObj(data), "[0].date", "");
         const dataDaysAgo = getDaysAgo(firstDateData, dayAgo);
         const dataDaysAfter = getDaysAfter(lastDateData, dayAgo);
 
-        dataDaysAgo.forEach(item => {
+        dataDaysAgo.forEach((item) => {
             const date = new Date(item).toDateString();
             data = { [date]: [], ...data };
         });
 
-        dataDaysAfter.forEach(item => {
+        dataDaysAfter.forEach((item) => {
             const date = new Date(item).toDateString();
             data = { ...data, [date]: [] };
         });
@@ -206,23 +371,24 @@ export class ReportComponent {
             val.checked = false;
         });
 
-        if (item.value==="custom") {
+        if (item.value === "custom") {
             this.openDialog(item);
         } else {
             item.checked = true;
 
-            const timeRangeRequest: { startDate: Date | "", endDate: Date | "" } = {
+            const timeRangeRequest: {
+                startDate: Date | "";
+                endDate: Date | "";
+            } = {
                 startDate: get(item, "startDate"),
-                endDate: get(item, "endDate")
+                endDate: get(item, "endDate"),
             };
 
             this.reportExpenseService.getData(timeRangeRequest).subscribe({
                 next: (response) => {
-                    this.pieChartExpenseConfig.data = this.parseData(response.data, EExpenseCategory.EXPENSE);
-                    this.pieChartIncomeConfig.data = this.parseData(response.data, EExpenseCategory.INCOME);
-                    this.groupBarVerChartIncomeConfig.data = this.parseDataBarchart(response.data);
+                    this.updateData(response.data);
                     this.updateTimeRangesTitle();
-                }
+                },
             });
         }
     }
@@ -235,27 +401,28 @@ export class ReportComponent {
                 labelApply: "common.ok",
                 isDisable: () => {
                     return this.form.invalid;
-                }
-            }
+                },
+            },
         });
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                const timeRangeRequest: { startDate: Date | "", endDate: Date | "" } = this.form.value;
+                const timeRangeRequest: {
+                    startDate: Date | "";
+                    endDate: Date | "";
+                } = this.form.value;
 
                 this.reportExpenseService.getData(timeRangeRequest).subscribe({
                     next: (response) => {
-                        this.pieChartExpenseConfig.data = this.parseData(response.data, EExpenseCategory.EXPENSE);
-                        this.pieChartIncomeConfig.data = this.parseData(response.data, EExpenseCategory.INCOME);
-                        this.groupBarVerChartIncomeConfig.data = this.parseDataBarchart(response.data);
+                        this.updateData(response.data);
+
                         item.checked = true;
                         item.startDate = this.form.value["startDate"];
                         item.endDate = this.form.value["endDate"];
                         this.updateTimeRangesTitle();
-                    }
+                    },
                 });
             }
         });
     }
-
 }

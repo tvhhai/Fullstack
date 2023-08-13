@@ -94,25 +94,45 @@
       "delete": "Delete"
     }
   },
-  "setting": {
-    "title": "Setting",
+  "preferences": {
+    "title": "Preferences",
     "userSetting": {
-      "title": "User Setting"
+      "title": "User Setting",
+      "languages": {
+        "title": "Language",
+        "english": "English",
+        "vietnamese": "Vietnamese"
+      },
+      "currency": "Base Currency",
+      "dateFormat": "Date Format",
+      "timeFormat": "Time Format",
+      "themeOptions": "Theme Options",
+      "themeColor": "Theme Color"
     },
     "systemSetting": {
       "title": "System Setting"
     }
   },
   "expenses": {
+    "transactions": "Transactions",
     "title": "Expense",
     "titleSidebar": "Expenses",
     "amount": "Amount",
-    "category": "Expense Category",
-    "debtCategory": {
-      "lend": "Lend",
-      "repayment": "Repayment",
-      "borrow": "Borrow",
-      "debtCollection": "Debt Collection"
+    "category": {
+      "title": "Expense Category",
+      "addTitle": "Add Expense Category"
+    },
+    "income": {
+      "title": "Income"
+    },
+    "debt": {
+      "title": "Debt/Loan",
+      "category": {
+        "lend": "Lend",
+        "repayment": "Repayment",
+        "borrow": "Borrow",
+        "debtCollection": "Debt Collection"
+      }
     },
     "waller": {
       "nameWallet": "Name Wallet",
@@ -121,13 +141,11 @@
     },
     "personal": {
       "title": "Personal Expenses",
-      "create": "Add Personal Expenses"
+      "create": "Add Personal Expenses",
+      "edit": "Edit Personal Expenses"
     },
     "reports": {
     }
-  },
-  "income": {
-    "title": "Income"
   },
   "chart": {
     "noData": "There is no data to display the chart."

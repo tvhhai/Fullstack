@@ -3,7 +3,7 @@ import { MatSelectionList } from "@angular/material/list";
 import { ButtonColor, ButtonTypes } from "../button/button.enum";
 import { ButtonGroup } from "@shared/components/common/button-group/button-group.model";
 import { differenceWith, filter, includes, remove } from "lodash";
-import { isEqual } from "lodash-es";
+import { isEqual } from "lodash";
 import { isEmptyArray } from "@shared/helpers";
 
 @Component({

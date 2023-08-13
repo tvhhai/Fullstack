@@ -1,9 +1,8 @@
-<!--<h1 class="mat-h1">{{ 'expenses.category' | translate }}</h1>-->
-<div class="grid-container">
+<div>
   <ng-container [ngSwitch]="viewMod">
     <div *ngSwitchCase="'view'">
       <app-ag-grid
-        [gridName]="'expenses.category'"
+        [gridName]="'expenses.category.title'"
         [columnDefs]="columnDefs"
         [rowData]="rowData"
         [selectMultiWithCheckbox]="true"
@@ -29,20 +28,52 @@
     </div>
 
     <!-- Add view -->
-<!--    <div *ngSwitchCase="EViewMode.Create">-->
-<!--      <app-card-layout-->
-<!--        [showBackToView]="true"-->
-<!--        [title]="'expenses.personal.create'"-->
-<!--        (backToView)="backToView()"-->
-<!--      >-->
-<!--        <add-edit-personal-expense-->
-<!--          (save)="save()"-->
-<!--          (cancel)="cancel()"-->
-<!--          [viewMode]="viewMod"-->
-<!--        >-->
-<!--        </add-edit-personal-expense>-->
-<!--      </app-card-layout>-->
-<!--    </div>-->
+    <!--    <div *ngSwitchCase="EViewMode.Create">-->
+    <!--      <app-card-layout-->
+    <!--        [showBackToView]="true"-->
+    <!--        [title]="'expenses.personal.create'"-->
+    <!--        (backToView)="backToView()"-->
+    <!--      >-->
+    <!--        <add-edit-personal-expense-->
+    <!--          (save)="save()"-->
+    <!--          (cancel)="cancel()"-->
+    <!--          [viewMode]="viewMod"-->
+    <!--        >-->
+    <!--        </add-edit-personal-expense>-->
+    <!--      </app-card-layout>-->
+    <!--    </div>-->
 
   </ng-container>
 </div>
+
+<ng-template #dialogTemplate>
+  <form class="form-field-full" [formGroup]="form">
+    <div class="row">
+      <div class="col-md-12">
+
+        <mat-radio-group aria-label="Select an option" class="row" formControlName="type">
+          <ng-container *ngFor="let option of radioType">
+            <div class="col-md-6">
+              <mat-radio-button [value]="option.value">{{option.title | translate}}</mat-radio-button>
+            </div>
+          </ng-container>
+        </mat-radio-group>
+      </div>
+
+      <div class="col-md-6">
+        <mat-label class="fw-bold">{{ "common.name" | translate }}</mat-label>
+        <mat-form-field appearance="outline" class="mb-2 app-input">
+          <input matInput type="text" placeholder="" formControlName="name" maxlength="15"/>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-6">
+        <mat-label class="fw-bold">{{ "common.icon" | translate }}</mat-label>
+        <mat-form-field appearance="outline" class="mb-2 app-input">
+          <input matInput type="text" placeholder="" formControlName="icon"/>
+        </mat-form-field>
+      </div>
+
+    </div>
+  </form>
+</ng-template>

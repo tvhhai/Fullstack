@@ -1,4 +1,4 @@
-import { IMenuItem } from "./menu.model";
+import {IMenuItem} from "./menu.model";
 
 export class MenuConstant {
     public static readonly MENU_ITEMS: {
@@ -88,38 +88,29 @@ export class MenuConstant {
             ]
         },
 
-        setting: {
-            id: "setting",
-            name: "setting.title",
-            // sectionType: true,
-            route: "setting",
+        preferences: {
+            id: "preferences",
+            name: "preferences.title",
+            route: "preferences",
             type: "section",
             child: [
                 {
-                    id: 4,
-                    name: "setting.title",
-                    icon: "settings",
-                    route: "setting",
-                    type: "sub",
-                    permissions: {
-                        only: ["ROLE_ADMIN", "ROLE_MODERATOR"]
-                    },
-                    child: [
-                        {
-                            id: 9,
-                            name: "setting.userSetting.title",
-                            route: "userSetting",
-                            type: "link"
-                        },
-                        {
-                            id: 10,
-                            name: "setting.systemSetting.title",
-                            route: "systemSetting",
-                            type: "link"
-                        }
-                    ]
+                    id: 9,
+                    name: "preferences.userSetting.title",
+                    route: "user-setting",
+                    type: "link",
+                    icon: "settings"
+                },
+                {
+                    id: 10,
+                    name: "preferences.systemSetting.title",
+                    route: "system-setting",
+                    type: "link",
+                    icon: "settings_applications"
                 }
             ]
+
+
         },
 
         expenses: {
@@ -138,7 +129,7 @@ export class MenuConstant {
                 },
                 {
                     id: 4,
-                    name: "expenses.category",
+                    name: "expenses.category.title",
                     icon: "grid_view",
                     route: "category",
                     type: "link"

@@ -13,7 +13,7 @@ import { Router } from "@angular/router";
 import { AppConstant } from "@shared/constants/app.constant";
 import { ToastrService } from "ngx-toastr";
 import { AuthService } from "../authentication/services/auth.service";
-import { get } from "lodash-es";
+import { get } from "lodash";
 
 export enum STATUS_CODE {
     CONNECTION_REFUSED = 0,
