@@ -18,13 +18,14 @@ import { PersonalExpense } from './entities/personal-expense.entity';
 import { ExpenseCategoryService } from '../expense-category/expense-category.service';
 import { JwtGuards } from '../../auth/guards/jwt.guard';
 import { UsersService } from '../users/users.service';
+import { WalletService } from '../wallet/wallet.service';
 
 @Controller('api/personal-expenses')
 export class PersonalExpensesController {
   constructor(
     private readonly personalExpensesService: PersonalExpensesService,
     private readonly expenseCategoryService: ExpenseCategoryService,
-    private readonly usersService: UsersService,
+    private readonly usersService: UsersService, // private readonly walletService: WalletService,
   ) {}
 
   @Post()
@@ -32,15 +33,23 @@ export class PersonalExpensesController {
     @Body() createPersonalExpenseDto: CreatePersonalExpenseDto,
   ): Promise<DataRes<PersonalExpense[]>> {
     try {
+      // const wallet = await this.walletService.findOneById(
+      //   createPersonalExpenseDto.wallet,
+      // );
+      //
+      // console.log(wallet);
+
       const personalExpense = await this.personalExpensesService.create(
         createPersonalExpenseDto,
       );
+      //
+      // return {
+      //   statusCode: HttpStatus.OK,
+      //   message: 'Success',
+      //   data: [personalExpense],
+      // };
 
-      return {
-        statusCode: HttpStatus.OK,
-        message: 'Success',
-        data: [personalExpense],
-      };
+      return null;
     } catch (err) {}
   }
 
@@ -79,16 +88,33 @@ export class PersonalExpensesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.personalExpensesService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const personalExpenses = await this.personalExpensesService.findOne(+id);
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Success',
+      data: personalExpenses,
+    };
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
+  async update(
+    @Param('id') id: number,
     @Body() updatePersonalExpenseDto: UpdatePersonalExpenseDto,
   ) {
-    return this.personalExpensesService.update(+id, updatePersonalExpenseDto);
+    try {
+      const data = await this.personalExpensesService.update(
+        id,
+        updatePersonalExpenseDto,
+      );
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Success',
+        data: data,
+      };
+    } catch (err) {}
   }
 
   @Delete(':id')

@@ -12,15 +12,19 @@ export class ExpenseCategoryService {
     private readonly expenseCategoryRepository: Repository<ExpenseCategory>,
   ) {}
   create(createExpenseCategoryDto: CreateExpenseCategoryDto) {
-    return 'This action adds a new expenseCategory';
+    return this.expenseCategoryRepository.save(createExpenseCategoryDto);
   }
 
   async findAll(): Promise<ExpenseCategory[]> {
     return this.expenseCategoryRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} expenseCategory`;
+  async findOne(id: number) {
+    return await this.expenseCategoryRepository.findOne({
+      where: {
+        id,
+      },
+    });
   }
 
   async findByName(a: string) {

@@ -25,9 +25,14 @@ export class WalletController {
     private readonly usersService: UsersService,
   ) {}
 
+  @UseGuards(JwtGuards)
   @Post()
-  async create(@Body() walletDto: CreateWalletDto): Promise<DataRes<Wallet>> {
+  async create(
+    @Req() req,
+    @Body() walletDto: CreateWalletDto,
+  ): Promise<DataRes<Wallet>> {
     try {
+      walletDto.user = req.user;
       const wallet = await this.walletService.create(walletDto);
 
       return {
@@ -43,19 +48,19 @@ export class WalletController {
   async findAll(@Req() req) {
     try {
       const user = await this.usersService.findOnlyUserById(req.user.id);
-      const personalExpenses = await this.walletService.findAll(user);
+      const wallet = await this.walletService.findAll(user);
 
       return {
         statusCode: HttpStatus.OK,
         message: 'Success',
-        data: personalExpenses,
+        data: wallet,
       };
     } catch (err) {}
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.walletService.findOne(+id);
+    // return this.walletService.findOne(+id);
   }
 
   @Patch(':id')

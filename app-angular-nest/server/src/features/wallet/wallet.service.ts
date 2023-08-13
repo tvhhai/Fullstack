@@ -13,24 +13,37 @@ export class WalletService {
     private readonly walletRepository: Repository<Wallet>,
   ) {}
 
-  create(walletDto: CreateWalletDto): Promise<Wallet> {
+  create(walletDto: Partial<CreateWalletDto>): Promise<Wallet> {
     return this.walletRepository.save(walletDto);
   }
 
   findAll(user: User) {
     return this.walletRepository.find({
-      where:{
+      where: {
         user: { id: user.id },
-      }
+      },
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} wallet`;
+  findOneById(id: number) {
+    return this.walletRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
   }
 
-  update(id: number, updateWalletDto: UpdateWalletDto) {
-    return `This action updates a #${id} wallet`;
+  async update(id: number, walletDto: UpdateWalletDto) {
+    const wallet = await this.walletRepository.findOne({
+      where: { id },
+    });
+
+    const updatedUser = {
+      ...wallet,
+      ...walletDto,
+    };
+
+    return this.walletRepository.save(updatedUser);
   }
 
   remove(id: number) {

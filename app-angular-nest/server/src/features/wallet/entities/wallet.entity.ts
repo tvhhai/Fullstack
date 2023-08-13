@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../../shared/base.entity';
 import { User } from '../../users/entities/user.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Wallet extends BaseEntity {
@@ -8,10 +9,14 @@ export class Wallet extends BaseEntity {
   user: User;
 
   @Column()
-  nameWallet: boolean;
+  nameWallet: string;
 
   @Column()
   amount: number;
+
+  @Column({ update: false })
+  @Exclude()
+  balance: number;
 
   @Column()
   active: boolean;

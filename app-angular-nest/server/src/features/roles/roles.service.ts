@@ -30,10 +30,9 @@ export class RolesService {
 
   async update(id: number, updateRoleDto: UpdateRoleDto) {
     const role = await this.rolesRepository.findOne({
-      where: {
-        id,
-      },
+      where: { id },
     });
+
     if (!role) {
       throw new Error('Role not found');
     }

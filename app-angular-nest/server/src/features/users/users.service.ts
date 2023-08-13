@@ -54,7 +54,7 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
-  async findById(id): Promise<User> {
+  async findById(id: number): Promise<User> {
     const user = this.usersRepository.findOne({
       where: { id },
       relations: ['roles'],
@@ -65,7 +65,7 @@ export class UsersService {
     return user;
   }
 
-  async findOnlyUserById(id): Promise<User> {
+  async findOnlyUserById(id: number): Promise<User> {
     const user = this.usersRepository.findOne({
       where: { id },
     });
@@ -135,9 +135,7 @@ export class UsersService {
 
   async update(id: number, userDataToUpdate: Partial<User>): Promise<User> {
     const user = await this.usersRepository.findOne({
-      where: {
-        id,
-      },
+      where: { id },
     });
 
     if (!user) {

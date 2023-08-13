@@ -21,23 +21,33 @@ export class ExpenseCategoryController {
   ) {}
 
   @Post()
-  create(@Body() createExpenseCategoryDto: CreateExpenseCategoryDto) {
-    return this.expenseCategoryService.create(createExpenseCategoryDto);
+  async create(@Body() data: CreateExpenseCategoryDto) {
+    const expenseCategory = await this.expenseCategoryService.create(data);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Success',
+      data: expenseCategory,
+    };
   }
 
   @Get()
   async findAll(): Promise<DataRes<ExpenseCategory[]>> {
-    const expenseCategorys = await this.expenseCategoryService.findAll();
+    const expenseCategory = await this.expenseCategoryService.findAll();
     return {
       statusCode: HttpStatus.OK,
       message: 'Success',
-      data: expenseCategorys,
+      data: expenseCategory,
     };
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.expenseCategoryService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const expenseCategory = await this.expenseCategoryService.findOne(+id);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Success',
+      data: expenseCategory,
+    };
   }
 
   @Patch(':id')

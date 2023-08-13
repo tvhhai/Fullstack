@@ -30,7 +30,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  async findById(@Param('id') id: string): Promise<DataRes<User>> {
+  async findById(@Param('id') id: number): Promise<DataRes<User>> {
     const user = await this.usersService.findById(id);
     return {
       statusCode: HttpStatus.OK,

@@ -2,9 +2,11 @@ import { Role } from 'src/features/roles/entities/role.entity';
 import { BaseEntity } from 'src/shared/base.entity';
 import { Entity, Column, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 import { Exclude, Transform } from 'class-transformer';
-import { ExpenseCategory } from '../../expense-category/entities/expense-category.entity';
 import { PersonalExpense } from '../../personal-expenses/entities/personal-expense.entity';
 import { Wallet } from '../../wallet/entities/wallet.entity';
+import { ActionLog } from '../../action-log/entities/action-log.entity';
+import { Setting } from '../../setting/entities/setting.entity';
+import { Preference } from "../../preferences/entities/preference.entity";
 
 @Entity()
 export class User extends BaseEntity {
@@ -12,7 +14,7 @@ export class User extends BaseEntity {
   username: string;
 
   @Column()
-    // @Exclude()
+  // @Exclude()
   password: string;
 
   @Column({ length: 50 })
@@ -34,7 +36,7 @@ export class User extends BaseEntity {
 
   @ManyToMany(() => Role)
   @JoinTable({ name: 'user_role' })
-  @Transform(({ value }) => value.map((role) => role.name), {
+  @Transform(({ value }) => value.map((role: Role) => role.name), {
     toPlainOnly: true,
   })
   roles: Role[];
@@ -44,6 +46,12 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Wallet, (val) => val.user)
   wallets: Wallet[];
+
+  @OneToMany(() => ActionLog, (val) => val.user)
+  actionLogs: ActionLog[];
+
+  @OneToMany(() => Preference, (val) => val.user)
+  preferences: Preference[];
 
   constructor(partial: Partial<User>) {
     super();

@@ -11,11 +11,12 @@ export class CreatePersonalExpenseDto {
 
   note: string;
 
-  // @IsNotEmpty()
-  // expenseCategoryRequest: string;
   @IsNotEmpty()
   expenseCategory: ExpenseCategory;
 
   @IsNotEmpty()
   user: User;
+
+  @IsNotEmpty()
+  wallet: number;
 }
