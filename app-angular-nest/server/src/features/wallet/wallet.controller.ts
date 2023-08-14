@@ -30,7 +30,7 @@ export class WalletController {
   async create(
     @Req() req,
     @Body() walletDto: CreateWalletDto,
-  ): Promise<DataRes<Wallet>> {
+  ): Promise<DataRes<Wallet[]>> {
     try {
       walletDto.user = req.user;
       const wallet = await this.walletService.create(walletDto);
@@ -38,7 +38,7 @@ export class WalletController {
       return {
         statusCode: HttpStatus.OK,
         message: 'Success',
-        data: wallet,
+        data: [wallet],
       };
     } catch (err) {}
   }

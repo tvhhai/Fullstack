@@ -1,11 +1,5 @@
-import {
-  ClassSerializerInterceptor,
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-} from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './features/users/users.module';
@@ -18,7 +12,6 @@ import { appConfig, dbConfig, jwtConfig } from './configs';
 import { config } from 'dotenv';
 import { AuthMiddleware } from './auth/middleware/auth.middleware';
 import { AuthGuard } from './auth/guards/auth.guard';
-import { PasswordInterceptor } from './interceptors/password.interceptor';
 import { httpInterceptorProviders } from './interceptors';
 import { PermissionsModule } from './features/permissions/permissions.module';
 import { FeatureAccessModule } from './features/feature-access/feature-access.module';
@@ -26,7 +19,6 @@ import { PersonalExpensesModule } from './features/personal-expenses/personal-ex
 import { ExpenseCategoryModule } from './features/expense-category/expense-category.module';
 import { WalletModule } from './features/wallet/wallet.module';
 import { ActionLogModule } from './features/action-log/action-log.module';
-import { SettingModule } from './features/setting/setting.module';
 import { PreferencesModule } from './features/preferences/preferences.module';
 
 const ENV = process.env.NODE_ENV;
@@ -62,7 +54,6 @@ config({
     ExpenseCategoryModule,
     WalletModule,
     ActionLogModule,
-    SettingModule,
     PreferencesModule,
   ],
   controllers: [AppController],

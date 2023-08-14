@@ -14,7 +14,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
     const user = await this.auth.validateUserCredentials(username, password);
 
     if (!user) {
-      throw new UnauthorizedException('NotFoundUser');
+      throw new UnauthorizedException('Not Found User');
     }
     return user;
   }

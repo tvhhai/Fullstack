@@ -96,6 +96,9 @@ export class UsersService {
     }
 
     userData.password = await this.getPasswordHash(userData.password);
+    userData.systemDefine = userData.systemDefine
+      ? userData.systemDefine
+      : false;
 
     return this.usersRepository.save({ ...userData });
   }

@@ -54,18 +54,21 @@ export class SeedService {
       username: 'admin',
       password: 'switch',
       email: 'admin@gmail.com',
+      systemDefine: true,
       roles: [adminRole],
     });
     await this.userService.create({
       username: 'write',
       password: 'switch',
       email: 'write@gmail.com',
+      systemDefine: true,
       roles: [writeRole],
     });
     await this.userService.create({
       username: 'read',
       password: 'switch',
       email: 'read@gmail.com',
+      systemDefine: true,
       roles: [readRole],
     });
 

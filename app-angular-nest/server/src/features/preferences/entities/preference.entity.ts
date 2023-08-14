@@ -8,7 +8,7 @@ export class Preference extends BaseEntity {
   @Column({ length: 50 })
   settingKey: string;
 
-  @Column({ type: 'json' })
+  @Column('json')
   settingValue: string;
 
   @ManyToOne(() => User, (user) => user.preferences)

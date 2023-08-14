@@ -5,8 +5,7 @@ import { Exclude, Transform } from 'class-transformer';
 import { PersonalExpense } from '../../personal-expenses/entities/personal-expense.entity';
 import { Wallet } from '../../wallet/entities/wallet.entity';
 import { ActionLog } from '../../action-log/entities/action-log.entity';
-import { Setting } from '../../setting/entities/setting.entity';
-import { Preference } from "../../preferences/entities/preference.entity";
+import { Preference } from '../../preferences/entities/preference.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -14,7 +13,6 @@ export class User extends BaseEntity {
   username: string;
 
   @Column()
-  // @Exclude()
   password: string;
 
   @Column({ length: 50 })
@@ -25,6 +23,9 @@ export class User extends BaseEntity {
 
   @Column({ length: 50 })
   email: string;
+
+  @Column()
+  systemDefine: boolean;
 
   @Column({ nullable: true, length: 50 })
   @Exclude()

@@ -16,4 +16,6 @@ export class CreateUserDto {
   password: string;
 
   roles: Role[];
+
+  systemDefine: boolean;
 }
