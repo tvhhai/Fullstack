@@ -25,12 +25,9 @@ import { appInitializerProviders } from "@core/initializer";
 import { LoaderService } from "@shared/services/loader.service";
 import { FeaturesModule } from "./features/features.module";
 import { AppRoutingModule } from "./app-routing.module";
-import { CURRENCY_MASK_CONFIG, CurrencyMaskConfig } from "ng2-currency-mask";
-import { MatPasswordStrengthModule } from "@angular-material-extensions/password-strength";
+import { CURRENCY_MASK_CONFIG } from "ng2-currency-mask";
 import { CustomCurrencyMaskConfig } from "@shared/configs/currency-mask.config";
-import { PasswordStrengthMeterModule } from "angular-password-strength-meter";
-import zxcvbnCommonPackage from '@zxcvbn-ts/language-common'
-import zxcvbnEnPackage from '@zxcvbn-ts/language-en'
+
 // Required for AOT compilation
 export function TranslateHttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
@@ -52,8 +49,6 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
         FeaturesModule,
         ToastrModule.forRoot(),
         NgxPermissionsModule.forRoot(),
-        MatPasswordStrengthModule.forRoot(),
-        PasswordStrengthMeterModule.forRoot(),
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

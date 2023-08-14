@@ -23,8 +23,7 @@
 
                 <mat-form-field appearance="outline" class="mb-2">
                     <mat-label>{{ "common.password" | translate }}</mat-label>
-                    <mat-pass-toggle-visibility #toggle matSuffix></mat-pass-toggle-visibility>
-                    <input matInput [type]="toggle.type" placeholder="" formControlName="password"/>
+                    <input matInput placeholder="" formControlName="password"/>
 
                     <mat-error *ngIf="f['password'].errors">
                         <span *ngIf="f['password'].errors?.['required']">Password is required</span>
@@ -34,8 +33,6 @@
                         </span>
                     </mat-error>
                 </mat-form-field>
-                <!--                <mat-password-strength *ngIf="password.value" #passwordComponent [password]="password.value"></mat-password-strength>-->
-
 
                 <!--                <mat-checkbox class="mb-2" formControlName="rememberMe">{{'auth.sign-in.rememberMe' | translate}}-->
                 <!--                </mat-checkbox>-->
