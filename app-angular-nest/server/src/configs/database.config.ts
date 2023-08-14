@@ -16,5 +16,4 @@ export const dbConfig = registerAs('dbConfig', () => ({
   },
   synchronize: false,
   // logging: true,
-
 }));
