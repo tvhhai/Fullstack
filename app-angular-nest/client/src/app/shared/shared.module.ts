@@ -8,10 +8,15 @@ import { MaterialModule } from './modules/material.module';
 import { RouterModule } from '@angular/router';
 import { AgGridModule } from 'ag-grid-angular';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { NgApexchartsModule } from "ng-apexcharts";
+import { MatPasswordStrengthModule } from "@angular-material-extensions/password-strength";
+import { CurrencyMaskModule } from "ng2-currency-mask";
+
 
 import { NavAccordionDirective } from './components/theme/sidebar-menu/nav-accordion.directive';
 import { NavAccordionItemDirective } from './components/theme/sidebar-menu/nav-accordion-item.directive';
 import { NavAccordionToggleDirective } from './components/theme/sidebar-menu/nav-accordion-toggle.directive';
+import { PasswordDefaultDirective } from './directives/password-default.directive';
 
 import { SettingComponent } from './components/setting/setting.component';
 import { SidebarMenuComponent } from './components/theme/sidebar-menu/sidebar-menu.component';
@@ -31,20 +36,20 @@ import { SelectComponent } from './components/common/select/select.component';
 import { PaginationComponent } from './components/common/pagination/pagination.component';
 import { InputComponent } from './components/common/input/input.component';
 import { ButtonComponent } from './components/common/button/button.component';
-import { PasswordDefaultDirective } from './directives/password-default.directive';
 import { DialogComponent } from './components/common/dialog/dialog.component';
 import { StatusComponent } from './components/common/ag-grid/status/status.component';
 import { TransferListComponent } from './components/common/transfer-list/transfer-list.component';
 import { ButtonGroupComponent } from './components/common/button-group/button-group.component';
 import { CardLayoutComponent } from './components/theme/card-layout/card-layout.component';
 import { InputValidatorComponent } from './components/common/input-validator/input-validator.component';
-import { CurrencyMaskModule } from "ng2-currency-mask";
 import { ChartComponent } from './components/common/chart/chart.component';
 import { LineChartComponent } from './components/common/chart/line-chart/line-chart.component';
 import { PieChartComponent } from './components/common/chart/pie-chart/pie-chart.component';
 import { BarChartComponent } from './components/common/chart/bar-chart/bar-chart.component';
 import { WalletComponent } from "../features/expenses/wallet/wallet.component";
-import { NgApexchartsModule } from "ng-apexcharts";
+
+import { CurrencyPipe } from './pipe/currency.pipe';
+import { PasswordStrengthMeterModule } from "angular-password-strength-meter";
 
 
 
@@ -59,7 +64,7 @@ const MODULES: any[] = [
   AgGridModule,
   NgxPaginationModule,
   CurrencyMaskModule,
-  NgApexchartsModule
+  NgApexchartsModule,MatPasswordStrengthModule
 ];
 
 const COMPONENTS: any[] = [
@@ -100,10 +105,12 @@ const DIRECTIVES: any[] = [
   NavAccordionToggleDirective,
   PasswordDefaultDirective,
 ];
-const PIPES: any[] = [];
+const PIPES: any[] = [
+  CurrencyPipe
+];
 
 @NgModule({
-  imports: [...MODULES],
+  imports: [...MODULES, PasswordStrengthMeterModule],
   exports: [...MODULES, ...COMPONENTS, ...DIRECTIVES, ...PIPES, ],
   declarations: [...COMPONENTS, ...COMPONENTS_DYNAMIC, ...DIRECTIVES, ...PIPES],
 })

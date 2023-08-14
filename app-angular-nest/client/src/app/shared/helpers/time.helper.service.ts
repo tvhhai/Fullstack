@@ -17,7 +17,6 @@ export class TimeHelpersService {
 
     constructor(private preSettingService: PreSettingService,) {
         this.settings = this.preSettingService.getSettings();
-        console.log(this.settings.dateFormat);
     }
 
     /**
@@ -72,10 +71,9 @@ export class TimeHelpersService {
     formatDate(
         milliseconds?: number,
         dateStr?: string,
-        dateFormat: EDateFormat = this.settings?.dateFormat || EDateFormat.DEFAULT
+        dateFormat: EDateFormat = this.settings.dateFormat || EDateFormat.DEFAULT
     ) {
         const value = milliseconds || dateStr;
-        console.log('dateFormat', dateFormat);
         if (this.isValidInput(value, dateFormat, null)) {
             return "";
         }

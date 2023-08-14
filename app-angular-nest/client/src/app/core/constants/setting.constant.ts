@@ -10,7 +10,7 @@ export class SettingConstant {
 
     public static readonly DEFAULT_SETTINGS: AppSettings = {
         language: "en",
-        currency: JSON.stringify(this.CURRENCY_DATA["USD"]),
+        currency: this.CURRENCY_DATA["USD"],
         dateFormat: EDateFormat.DEFAULT,
         timeFormat: ETimeFormat.DEFAULT,
         themeOptions: "light",

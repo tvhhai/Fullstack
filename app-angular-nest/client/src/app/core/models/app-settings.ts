@@ -2,7 +2,7 @@ import { EDateFormat, ETimeFormat } from "@shared/enum/dayjs-format";
 
 export interface AppSettings {
     language: LanguageType;
-    currency: string;
+    currency: Currency | string;
     dateFormat: EDateFormat;
     timeFormat: ETimeFormat;
     themeOptions: ThemeOptions;

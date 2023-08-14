@@ -7,6 +7,7 @@ import { Router } from "@angular/router";
 import { LoaderService } from "@shared/services/loader.service";
 import { MenuConstant } from "../../menu/menu-items";
 import { UserResponse } from "../models/auth";
+import { SettingConstant } from "@core/constants/auth.constant";
 
 @Injectable({
     providedIn: "root"
@@ -66,7 +67,7 @@ export class AuthService {
         let expires = "expires=" + d.toUTCString();
 
         document.cookie = cookieName + "=new_value;path=/;" + expires;
-        return document.cookie.indexOf(cookieName + "=")== -1;
+        return document.cookie.indexOf(cookieName + "=") == -1;
     }
 
     refreshToken() {
@@ -74,7 +75,7 @@ export class AuthService {
     }
 
     isLoggedIn() {
-        return this.doesHttpOnlyCookieExist("auth_cookie");
+        return this.doesHttpOnlyCookieExist(SettingConstant.COOKIE_NAME);
     }
 
     isRefreshTokenExist() {
@@ -85,7 +86,7 @@ export class AuthService {
         return this.http.get<UserResponse>("api/current-user");
     }
 
-    menu() {
+    getConditionalMenu() {
         return iif(() => this.isLoggedIn(), this.getMenu(), of([]));
     }
 

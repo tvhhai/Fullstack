@@ -13,7 +13,6 @@ export class AdminLayoutComponent implements AfterViewInit {
     @ViewChild(MatSidenav)
     sidenav!: MatSidenav;
     opened!: boolean;
-
     settings = this.preSettingService.getDataPreSetting();
 
     constructor(
@@ -28,7 +27,6 @@ export class AdminLayoutComponent implements AfterViewInit {
             }
         });
     }
-
 
     ngOnInit() {
     }

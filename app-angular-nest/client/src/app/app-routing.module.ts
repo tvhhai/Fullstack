@@ -1,6 +1,6 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
-import {environmentProd} from "@env/environment.prod";
+import {environment} from "@env/environment.prod";
 import {AuthGuard} from "@core/authentication/guards/auth.guard";
 
 import {AdminLayoutComponent} from "@shared/components/theme/admin-layout/admin-layout.component";
@@ -62,7 +62,7 @@ const appRoutes: Routes = [
     imports: [
         RouterModule.forRoot(appRoutes, {
             enableTracing: false, // <-- debugging purposes only
-            useHash: environmentProd.useHash
+            useHash: environment.useHash
             // preloadingStrategy: SelectivePreloadingStrategyService,
         })
     ],

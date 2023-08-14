@@ -1,74 +1,54 @@
 <div class="d-flex w-100 h-100">
-  <mat-card class="sign-in m-auto">
-    <mat-card-header class="mb-4">
-      <mat-card-title>{{ "auth.sign-in.title" | translate }}!</mat-card-title>
-    </mat-card-header>
+    <mat-card class="sign-in m-auto">
+        <mat-card-header class="mb-4">
+            <mat-card-title>{{ "auth.sign-in.title" | translate }}!</mat-card-title>
+        </mat-card-header>
 
-    <mat-card-content>
-      <form class="form-field-full" [formGroup]="form" (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="outline" class="mb-2">
-          <mat-label>{{ "common.username" | translate }}</mat-label>
-          <input
-            matInput
-            type="text"
-            placeholder=""
-            formControlName="username"
-          />
+        <mat-card-content>
+            <form class="form-field-full" [formGroup]="form" (ngSubmit)="onSubmit()">
+                <mat-form-field appearance="outline" class="mb-2">
+                    <mat-label>{{ "common.username" | translate }}</mat-label>
+                    <input matInput type="text" placeholder="" formControlName="username"/>
 
-          <mat-error *ngIf="f['username'].errors">
-            <span *ngIf="f['username'].errors?.['required']"
-              >Username is required</span
-            >
-            <span *ngIf="f['username'].errors?.['minlength']">
-              Username must be at least 3 characters
-            </span>
-            <span *ngIf="f['username'].errors?.['maxlength']">
-              Username must not exceed 20 characters
-            </span>
-          </mat-error>
-        </mat-form-field>
+                    <mat-error *ngIf="f['username'].errors">
+                        <span *ngIf="f['username'].errors?.['required']">Username is required</span>
+                        <span *ngIf="f['username'].errors?.['minlength']">
+                            Username must be at least 3 characters
+                        </span>
+                        <span *ngIf="f['username'].errors?.['maxlength']">
+                            Username must not exceed 20 characters
+                        </span>
+                    </mat-error>
+                </mat-form-field>
 
-        <mat-form-field appearance="outline" class="mb-2">
-          <mat-label>{{ "common.password" | translate }}</mat-label>
-          <input
-            matInput
-            type="password"
-            placeholder=""
-            formControlName="password"
-          />
+                <mat-form-field appearance="outline" class="mb-2">
+                    <mat-label>{{ "common.password" | translate }}</mat-label>
+                    <mat-pass-toggle-visibility #toggle matSuffix></mat-pass-toggle-visibility>
+                    <input matInput [type]="toggle.type" placeholder="" formControlName="password"/>
 
-          <mat-error *ngIf="f['password'].errors">
-            <span *ngIf="f['password'].errors?.['required']"
-              >Password is required</span
-            >
-            <span *ngIf="f['password'].errors?.['minlength']">
-              Password must be at least 6 characters
-            </span>
-            <span *ngIf="f['password'].errors?.['maxlength']">
-              Password must not exceed 40 characters
-            </span>
-          </mat-error>
-        </mat-form-field>
+                    <mat-error *ngIf="f['password'].errors">
+                        <span *ngIf="f['password'].errors?.['required']">Password is required</span>
+                        <span *ngIf="f['password'].errors?.['minlength']">Password must be at least 6 characters
+                        </span>
+                        <span *ngIf="f['password'].errors?.['maxlength']">Password must not exceed 40 characters
+                        </span>
+                    </mat-error>
+                </mat-form-field>
+                <!--                <mat-password-strength *ngIf="password.value" #passwordComponent [password]="password.value"></mat-password-strength>-->
 
-        <!--                <mat-checkbox class="mb-2" formControlName="rememberMe">{{'auth.sign-in.rememberMe' | translate}}-->
-        <!--                </mat-checkbox>-->
 
-        <button
-          class="w-100 mb-2"
-          mat-raised-button
-          color="primary"
-          [disabled]="this.form.invalid"
-        >
-          {{ "auth.sign-in.title" | translate }}
-        </button>
+                <!--                <mat-checkbox class="mb-2" formControlName="rememberMe">{{'auth.sign-in.rememberMe' | translate}}-->
+                <!--                </mat-checkbox>-->
 
-        <div>
-          {{ "auth.sign-in.haveNoAccount" | translate }}
-          <a routerLink="/auth/sign-up">{{
-            "auth.sign-in.createOneAccount" | translate
-          }}</a>
-        </div>
-      </form>
-    </mat-card-content>
-  </mat-card>
+                <button class="w-100 mt-3 mb-2" mat-raised-button color="primary" [disabled]="this.form.invalid">
+                    {{ "auth.sign-in.title" | translate }}
+                </button>
+
+                <div>
+                    {{ "auth.sign-in.haveNoAccount" | translate }}
+                    <a routerLink="/auth/sign-up">{{ "auth.sign-in.createOneAccount" | translate }}</a>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
 </div>

@@ -17,6 +17,8 @@ export class WalletService {
 
     public wallet$: Observable<IWallet[]> = this.walletSubject.asObservable();
 
+    private readonly walletApi: string = 'api/wallet';
+
     getDataWallet(): Observable<IWallet[]> {
         return this.wallet$;
     }
@@ -28,18 +30,17 @@ export class WalletService {
     fetchExpenses() {
         this.loaderService.isLoading.next(true);
 
-        this.http.get<DataRes<IWallet[]>>("api/wallet")
+        this.http.get<DataRes<IWallet[]>>(this.walletApi)
             .subscribe((res) => {
                 this.setDataWallet(res.data);
                 this.loaderService.isLoading.next(false);
-
             });
     }
 
     create(data: IWallet): Observable<DataRes<IWallet[]>> {
         this.loaderService.isLoading.next(true);
 
-        return this.http.post<DataRes<IWallet[]>>("api/wallet", data).pipe(
+        return this.http.post<DataRes<IWallet[]>>(this.walletApi, data).pipe(
             finalize(() => {
                 this.loaderService.isLoading.next(false);
             })

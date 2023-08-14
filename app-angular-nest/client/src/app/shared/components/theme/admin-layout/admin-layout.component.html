@@ -1,21 +1,21 @@
 <mat-sidenav-container class="sidebar-container">
-  <mat-sidenav class="app-sidebar">
-    <app-sidebar></app-sidebar>
-  </mat-sidenav>
+    <mat-sidenav class="app-sidebar">
+        <app-sidebar></app-sidebar>
+    </mat-sidenav>
 
-  <mat-sidenav-content class="abc">
+    <mat-sidenav-content class="abc">
 
-    <app-header
-      class="app-header"
-      (clicked)="toggleSideNav()"
-      [opened]="opened"
-    ></app-header>
+        <app-header
+                class="app-header"
+                (clicked)="toggleSideNav()"
+                [opened]="opened"
+        ></app-header>
 
-    <div class="app-main-container">
-      <div class="card-container">
-        <router-outlet></router-outlet>
-      </div>
-    </div>
+        <div class="app-main-container">
+            <div class="card-container">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
 
-  </mat-sidenav-content>
+    </mat-sidenav-content>
 </mat-sidenav-container>

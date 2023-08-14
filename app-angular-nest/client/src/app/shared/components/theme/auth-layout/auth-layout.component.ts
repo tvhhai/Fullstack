@@ -18,21 +18,21 @@ import { Component, ViewEncapsulation } from '@angular/core';
         padding: 16px;
         background-color: #212121;
         background-image: linear-gradient(
-            45deg,
-            rgba(255, 255, 255, 0.05) 25%,
-            transparent 25%,
-            transparent 75%,
-            rgba(255, 255, 255, 0.05) 75%,
-            rgba(255, 255, 255, 0.05)
-          ),
-          linear-gradient(
-            -45deg,
-            rgba(255, 255, 255, 0.05) 25%,
-            transparent 25%,
-            transparent 75%,
-            rgba(255, 255, 255, 0.05) 75%,
-            rgba(255, 255, 255, 0.05)
-          );
+                45deg,
+                rgba(255, 255, 255, 0.05) 25%,
+                transparent 25%,
+                transparent 75%,
+                rgba(255, 255, 255, 0.05) 75%,
+                rgba(255, 255, 255, 0.05)
+        ),
+        linear-gradient(
+                -45deg,
+                rgba(255, 255, 255, 0.05) 25%,
+                transparent 25%,
+                transparent 75%,
+                rgba(255, 255, 255, 0.05) 75%,
+                rgba(255, 255, 255, 0.05)
+        );
         background-size: 60px 60px;
       }
     `,

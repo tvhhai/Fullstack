@@ -5,22 +5,21 @@ import {
     HttpEvent,
     HttpInterceptor,
     HttpErrorResponse,
-    HttpClient
 } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
-import { Router } from "@angular/router";
 import { AppConstant } from "@shared/constants/app.constant";
 import { ToastrService } from "ngx-toastr";
 import { AuthService } from "../authentication/services/auth.service";
 import { get } from "lodash";
+import { SettingConstant } from "@core/constants/auth.constant";
 
 export enum STATUS_CODE {
-    CONNECTION_REFUSED = 0,
+    // CONNECTION_REFUSED = 0,
     UNAUTHORIZED = 401,
-    FORBIDDEN = 403,
-    NOT_FOUND = 404,
-    INTERNAL_SERVER_ERROR = 500,
+    // FORBIDDEN = 403,
+    // NOT_FOUND = 404,
+    // INTERNAL_SERVER_ERROR = 500,
 }
 
 @Injectable()
@@ -38,17 +37,12 @@ export class ErrorInterceptor implements HttpInterceptor {
     };
 
     constructor(
-        private router: Router,
-        private http: HttpClient,
         private toast: ToastrService,
         private authService: AuthService
     ) {
     }
 
-    intercept(
-        request: HttpRequest<unknown>,
-        next: HttpHandler
-    ): Observable<HttpEvent<unknown>> {
+    intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
         return next
             .handle(request)
             .pipe(catchError((error: HttpErrorResponse) => this.handleError(error)));
@@ -57,8 +51,8 @@ export class ErrorInterceptor implements HttpInterceptor {
     private handleError(error: HttpErrorResponse) {
         this.toast.error(this.getMessage(error));
 
-        if (error.status===STATUS_CODE.UNAUTHORIZED &&
-            this.authService.doesHttpOnlyCookieExist("auth_cookie")) {
+        if (error.status === STATUS_CODE.UNAUTHORIZED &&
+            this.authService.doesHttpOnlyCookieExist(SettingConstant.COOKIE_NAME)) {
             this.authService.refreshToken().subscribe({
                 next: () => {
                     window.location.reload();

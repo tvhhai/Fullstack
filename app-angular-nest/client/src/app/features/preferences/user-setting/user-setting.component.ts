@@ -4,7 +4,6 @@ import { PreferenceService } from "../preference.service";
 import { PreSettingService } from "@core/bootstrap/presetting.service";
 import { TranslateService } from "@ngx-translate/core";
 import { MatSelectChange } from "@angular/material/select";
-import { EDateFormat, ETimeFormat } from "@shared/enum/dayjs-format";
 import { AppSettings } from "@core/models/app-settings";
 import { SettingConstant } from "@core/constants/setting.constant";
 

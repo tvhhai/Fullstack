@@ -1,9 +1,0 @@
-@use "@angular/material" as mat;
-@import "../../../style/partials/variables";
-
-
-.app-input-container {
-  &.app-input-small {
-    @include mat.all-component-densities(minimum);
-  }
-}

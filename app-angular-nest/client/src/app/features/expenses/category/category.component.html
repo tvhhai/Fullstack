@@ -1,79 +1,77 @@
 <div>
-  <ng-container [ngSwitch]="viewMod">
-    <div *ngSwitchCase="'view'">
-      <app-ag-grid
-        [gridName]="'expenses.category.title'"
-        [columnDefs]="columnDefs"
-        [rowData]="rowData"
-        [selectMultiWithCheckbox]="true"
-        (gridReady)="onGridReady($event)"
-        [toolbarLeftAction]="toolbarLeftAction"
-        (selectionChanged)="onSelectionChanged($event)"
-        (clickRefresh)="refresh()"
-      >
-        <div class="expense-category-tab">
-          <ng-container *ngFor="let item of tabAction">
+    <ng-container [ngSwitch]="viewMod">
+        <div *ngSwitchCase="'view'">
+            <app-ag-grid
+                    [gridName]="'expenses.category.title'"
+                    [columnDefs]="columnDefs"
+                    [rowData]="rowData"
+                    [selectMultiWithCheckbox]="true"
+                    (gridReady)="onGridReady($event)"
+                    [toolbarLeftAction]="toolbarLeftAction"
+                    (selectionChanged)="onSelectionChanged($event)"
+                    (clickRefresh)="refresh()"
+            >
+                <div class="expense-category-tab">
+                    <ng-container *ngFor="let item of tabAction">
 
-            <div #tabAction
-                 class="expense-category-item"
-                 [ngClass]="item.active ? 'active' : ''"
-                 (click)="item.onClick(item)">
-              {{item.title|translate}}
+                        <div #tabAction
+                             class="expense-category-item"
+                             [ngClass]="item.active ? 'active' : ''"
+                             (click)="item.onClick(item)">
+                            {{item.title|translate}}
 
-            </div>
-          </ng-container>
-          <div class="line" [ngStyle]="{'left': leftLineActive, 'width': widthLineActive}"></div>
+                        </div>
+                    </ng-container>
+                    <div class="line" [ngStyle]="{'left': leftLineActive, 'width': widthLineActive}"></div>
+                </div>
+            </app-ag-grid>
         </div>
-      </app-ag-grid>
-    </div>
 
-    <!-- Add view -->
-    <!--    <div *ngSwitchCase="EViewMode.Create">-->
-    <!--      <app-card-layout-->
-    <!--        [showBackToView]="true"-->
-    <!--        [title]="'expenses.personal.create'"-->
-    <!--        (backToView)="backToView()"-->
-    <!--      >-->
-    <!--        <add-edit-personal-expense-->
-    <!--          (save)="save()"-->
-    <!--          (cancel)="cancel()"-->
-    <!--          [viewMode]="viewMod"-->
-    <!--        >-->
-    <!--        </add-edit-personal-expense>-->
-    <!--      </app-card-layout>-->
-    <!--    </div>-->
+        <!-- Add view -->
+        <!--    <div *ngSwitchCase="EViewMode.Create">-->
+        <!--      <app-card-layout-->
+        <!--        [showBackToView]="true"-->
+        <!--        [title]="'expenses.personal.create'"-->
+        <!--        (backToView)="backToView()"-->
+        <!--      >-->
+        <!--        <add-edit-personal-expense-->
+        <!--          (save)="save()"-->
+        <!--          (cancel)="cancel()"-->
+        <!--          [viewMode]="viewMod"-->
+        <!--        >-->
+        <!--        </add-edit-personal-expense>-->
+        <!--      </app-card-layout>-->
+        <!--    </div>-->
 
-  </ng-container>
+    </ng-container>
 </div>
 
 <ng-template #dialogTemplate>
-  <form class="form-field-full" [formGroup]="form">
-    <div class="row">
-      <div class="col-md-12">
-
-        <mat-radio-group aria-label="Select an option" class="row" formControlName="type">
-          <ng-container *ngFor="let option of radioType">
-            <div class="col-md-6">
-              <mat-radio-button [value]="option.value">{{option.title | translate}}</mat-radio-button>
+    <form class="form-field-full" [formGroup]="form">
+        <div class="row">
+            <div class="col-md-12">
+                <mat-radio-group aria-label="Select an option" class="row" formControlName="type">
+                    <ng-container *ngFor="let option of radioType">
+                        <div class="col-md-6 mb-3">
+                            <mat-radio-button [value]="option.value">{{option.title | translate}}</mat-radio-button>
+                        </div>
+                    </ng-container>
+                </mat-radio-group>
             </div>
-          </ng-container>
-        </mat-radio-group>
-      </div>
 
-      <div class="col-md-6">
-        <mat-label class="fw-bold">{{ "common.name" | translate }}</mat-label>
-        <mat-form-field appearance="outline" class="mb-2 app-input">
-          <input matInput type="text" placeholder="" formControlName="name" maxlength="15"/>
-        </mat-form-field>
-      </div>
+            <div class="d-">
+                <mat-label class="fw-bold">{{ "common.name" | translate }}</mat-label>
+                <mat-form-field appearance="outline" class="mb-2 app-input">
+                    <input matInput type="text" placeholder="" formControlName="name" maxlength="15"/>
+                </mat-form-field>
+            </div>
 
-      <div class="col-md-6">
-        <mat-label class="fw-bold">{{ "common.icon" | translate }}</mat-label>
-        <mat-form-field appearance="outline" class="mb-2 app-input">
-          <input matInput type="text" placeholder="" formControlName="icon"/>
-        </mat-form-field>
-      </div>
-
-    </div>
-  </form>
+            <div class="col-md-12">
+                <mat-label class="fw-bold">{{ "common.icon" | translate }}</mat-label>
+                <mat-form-field appearance="outline" class="mb-2 app-input">
+                    <input matInput type="text" placeholder="" formControlName="icon"/>
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
 </ng-template>

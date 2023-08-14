@@ -6,6 +6,11 @@ import { PreSettingService } from "@core/bootstrap/presetting.service";
 export const appInitializerProviders = [
     {
         provide: APP_INITIALIZER,
+        useFactory: StartupServiceFactory,
+        deps: [StartupService],
+        multi: true
+    }, {
+        provide: APP_INITIALIZER,
         useFactory: PreSettingServiceFactory,
         deps: [PreSettingService],
         multi: true
@@ -14,12 +19,7 @@ export const appInitializerProviders = [
         useFactory: TranslateLangServiceFactory,
         deps: [TranslateLangService],
         multi: true
-    }, {
-        provide: APP_INITIALIZER,
-        useFactory: StartupServiceFactory,
-        deps: [StartupService],
-        multi: true
-    },
+    }
 ];
 
 function TranslateLangServiceFactory(translateLangService: TranslateLangService) {

@@ -14,12 +14,12 @@ import { get } from "lodash";
 })
 export class StartupService {
     constructor(
-            private authService: AuthService,
-            private permissionsService: NgxPermissionsService,
-            private rolesService: NgxRolesService,
-            private loaderService: LoaderService,
-            private menuService: MenuService,
-            private userService: UserService
+        private authService: AuthService,
+        private permissionsService: NgxPermissionsService,
+        private rolesService: NgxRolesService,
+        private loaderService: LoaderService,
+        private menuService: MenuService,
+        private userService: UserService
     ) {
     }
 
@@ -30,25 +30,23 @@ export class StartupService {
 
             if (this.authService.isLoggedIn()) {
                 this.authService
-                        .getCurrentUser()
-                        .pipe(
-                                tap((userResponse: UserResponse) =>
-                                        this.userService.set(userResponse.data)
-                                ),
-                                tap((user) => this.setPermissions(user)),
-                                switchMap(() => this.authService.menu()),
-                                tap((menu) => this.setMenu(menu))
-                        )
-                        .subscribe({
-                            next: () => {
-                                this.loaderService.isLoading.next(false);
-                                resolve();
-                            },
-                            error: () => {
-                                this.loaderService.isLoading.next(false);
-                                resolve();
-                            }
-                        });
+                    .getCurrentUser()
+                    .pipe(
+                        tap((res: UserResponse) => this.userService.set(res.data)),
+                        tap((res: UserResponse) => this.setPermissions(res.data)),
+                        switchMap(() => this.authService.getConditionalMenu()),
+                        tap((menu) => this.setMenu(menu))
+                    )
+                    .subscribe({
+                        next: () => {
+                            this.loaderService.isLoading.next(false);
+                            resolve();
+                        },
+                        error: () => {
+                            this.loaderService.isLoading.next(false);
+                            resolve();
+                        }
+                    });
             } else {
                 this.loaderService.isLoading.next(false);
                 resolve();
@@ -57,17 +55,16 @@ export class StartupService {
     }
 
     private setMenu(menu: IMenuItem[]) {
-        // this.menuService.addNamespace(menu, 'menu');
         this.menuService.set(menu);
     }
 
-    setPermissions(user: any) {
-        if (get(user, "data.roles")) {
-            this.permissionsService.loadPermissions(user.data.roles);
-            this.rolesService.flushRoles();
-        } else {
-            this.permissionsService.loadPermissions([]);
-            this.rolesService.flushRoles();
-        }
-    }
+
+setPermissions(user: any) {
+  if (get(user, "roles")) {
+    this.permissionsService.loadPermissions(user.roles);
+  } else {
+    this.permissionsService.loadPermissions([]);
+  }
+  this.rolesService.flushRoles();
+}
 }

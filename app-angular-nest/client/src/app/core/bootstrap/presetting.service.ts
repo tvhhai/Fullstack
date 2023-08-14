@@ -3,11 +3,11 @@ import { LoaderService } from "@shared/services/loader.service";
 import { BehaviorSubject, Observable } from "rxjs";
 import { PreferenceService } from "../../features/preferences/preference.service";
 import { HttpClient } from "@angular/common/http";
-import { DataRes } from "@shared/model";
-import { AppSettings, LanguageType, ThemeOptions } from "@core/models/app-settings";
+import { AppSettings } from "@core/models/app-settings";
 import { isEmptyObj } from "@shared/helpers";
 import { Preference } from "../../features/preferences/model/preference.model";
 import { SettingConstant } from "@core/constants/setting.constant";
+import { AuthService } from "@core/authentication/services/auth.service";
 
 @Injectable({
     providedIn: "root"
@@ -15,7 +15,8 @@ import { SettingConstant } from "@core/constants/setting.constant";
 export class PreSettingService {
     constructor(private loaderService: LoaderService,
                 private preferenceService: PreferenceService,
-                private http: HttpClient) {
+                private http: HttpClient,
+                private authService: AuthService) {
     }
 
 
@@ -28,36 +29,39 @@ export class PreSettingService {
     private settings: AppSettings = this.defaultSettings;
 
     load() {
-        this.preferenceService.getData().subscribe({
-            next: (res) => {
-                if (isEmptyObj(res.data)) {
-                    let defaultSetting: Preference[] = [];
+        if (this.authService.isLoggedIn()) {
+            this.preferenceService.getData().subscribe({
+                next: (res) => {
 
-                    Object.keys(this.defaultSettings).forEach((val) => {
-                        defaultSetting.push(
-                            {
-                                settingKey: val,
-                                settingValue: this.defaultSettings[val]
+                    if (isEmptyObj(res.data)) {
+                        let defaultSetting: Preference[] = [];
+
+                        Object.keys(this.defaultSettings).forEach((val) => {
+                            defaultSetting.push(
+                                {
+                                    settingKey: val,
+                                    settingValue: this.defaultSettings[val]
+                                }
+                            );
+                        });
+                        this.preferenceService.createDefault(defaultSetting).subscribe({
+                            next: (res) => {
+                                this.setSettings(res.data);
+                                this.setDataPreSetting(res.data);
                             }
-                        );
-                    });
+                        });
 
-                    this.preferenceService.createDefault(defaultSetting).subscribe({
-                        next: (res) => {
-                            this.setSettings(res.data);
-                            this.setDataPreSetting(res.data);
-                        }
-                    });
-                } else {
-                    this.preferenceService.getData().subscribe({
-                        next: (res) => {
-                            this.setSettings(res.data);
-                            this.setDataPreSetting(res.data);
-                        }
-                    });
+                    } else {
+                        this.preferenceService.getData().subscribe({
+                            next: (res) => {
+                                this.setSettings(res.data);
+                                this.setDataPreSetting(res.data);
+                            }
+                        });
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     getSettings() {

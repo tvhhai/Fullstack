@@ -1,4 +1,4 @@
-.abc{
+.abc {
   position: unset;
 }
 
@@ -8,6 +8,7 @@
   .app-sidebar {
     width: 256px;
     background: #3c4b64;
+
     .mat-toolbar.mat-primary {
       position: sticky;
       top: 0;
@@ -19,6 +20,7 @@
 .app-main-container {
   background: #eef5f9;
   padding: 24px;
+
   .card-container {
     min-height: calc(100vh - 172px);
   }

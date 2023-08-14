@@ -12,17 +12,22 @@ export class HelpersService {
     }
 
     formatCurrency(amount: number): string {
-        const currency = this.settings.currency;
+        const currency = typeof this.settings.currency === "string"
+            ? JSON.parse(this.settings.currency)
+            : this.settings.currency;
+
         if (currency) {
-            const locale: string = currency.locale, currencyCode: string = currency.currencyCode;
-            // Create a new Intl.NumberFormat object with the specified locale and currency code
+            const locale: string = currency.locale,
+                currencyCode: string = currency.currencyCode;
+
             const formatter = new Intl.NumberFormat(locale, {
                 style: "currency",
-                currency: currencyCode
+                currency: currencyCode,
             });
-            // Format the amount as currency using the formatter
+
             return formatter.format(amount);
         }
+
         return "";
     }
 

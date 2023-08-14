@@ -1,5 +1,5 @@
 <mat-form-field
-  class="app-input-container"
+  class="app-input"
   [ngClass]="{ 'app-input-small': inputSize === 'small' }"
   [appearance]="appearance"
   [subscriptSizing]="subscriptSizing"
@@ -8,7 +8,6 @@
 
   <input
     matInput
-    class="app-input"
     [type]="inputType"
     [(ngModel)]="inputModel"
     (ngModelChange)="inputModelChange.emit($event)"
