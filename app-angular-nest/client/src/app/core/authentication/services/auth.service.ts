@@ -34,7 +34,8 @@ export class AuthService {
                         this.redirectUrl = null;
                     } else {
                         // this.router.navigate([`${AppConstant.PAGE.DASHBOARD_PAGE}`]);
-                        window.location.href = AppConstant.PAGE.DASHBOARD_PAGE;
+                        console.log('alo');
+                        // window.location.href = AppConstant.PAGE.DASHBOARD_PAGE;
                     }
                     // const afterLoginService = this.injector.get(StartupService);
                     // const appInitializer = StartupServiceFactory(afterLoginService)
