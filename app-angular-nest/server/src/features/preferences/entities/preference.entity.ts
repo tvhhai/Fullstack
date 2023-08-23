@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
+import { User } from '../../rbac/users/entities/user.entity';
 import { BaseEntity } from '../../../shared/base.entity';
 import { Exclude } from 'class-transformer';
 

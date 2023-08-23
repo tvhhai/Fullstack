@@ -1,6 +1,6 @@
-import { BaseEntity } from '../../../shared/base.entity';
+import { BaseEntity } from '@shared/base.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
+import { User } from '../../rbac/users/entities/user.entity';
 
 @Entity()
 export class ActionLog extends BaseEntity {

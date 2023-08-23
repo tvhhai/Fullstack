@@ -4,8 +4,8 @@ import { UpdatePreferenceDto } from './dto/update-preference.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Preference } from './entities/preference.entity';
 import { Repository } from 'typeorm';
-import { User } from '../users/entities/user.entity';
-import { isDefined } from '../../helper';
+import { User } from '../rbac/users/entities/user.entity';
+import { isDefined } from '../../shared/helper';
 
 @Injectable()
 export class PreferencesService {

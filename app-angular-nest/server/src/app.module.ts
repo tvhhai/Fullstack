@@ -2,24 +2,25 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './features/users/users.module';
-import { AuthModule } from './auth/auth.module';
+import { UsersModule } from '@features/rbac/users/users.module';
+import { AuthModule } from '@auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
-import { RolesModule } from './features/roles/roles.module';
+import { RolesModule } from '@features/rbac/roles/roles.module';
 import { SeedModule } from './db/seeders/seed.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { appConfig, dbConfig, jwtConfig } from './configs';
 import { config } from 'dotenv';
-import { AuthMiddleware } from './auth/middleware/auth.middleware';
-import { AuthGuard } from './auth/guards/auth.guard';
+import { AuthMiddleware } from '@auth/middleware/auth.middleware';
+import { AuthGuard } from '@auth/guards/auth.guard';
 import { httpInterceptorProviders } from './interceptors';
-import { PermissionsModule } from './features/permissions/permissions.module';
-import { FeatureAccessModule } from './features/feature-access/feature-access.module';
-import { PersonalExpensesModule } from './features/personal-expenses/personal-expenses.module';
-import { ExpenseCategoryModule } from './features/expense-category/expense-category.module';
-import { WalletModule } from './features/wallet/wallet.module';
-import { ActionLogModule } from './features/action-log/action-log.module';
-import { PreferencesModule } from './features/preferences/preferences.module';
+import { PermissionsModule } from '@features/rbac/permissions/permissions.module';
+import { FeatureAccessModule } from '@features/rbac/feature-access/feature-access.module';
+import { PersonalExpensesModule } from '@features/expense-tracker/personal-expenses/personal-expenses.module';
+import { ExpenseCategoryModule } from '@features/expense-tracker/expense-category/expense-category.module';
+import { WalletModule } from '@features/expense-tracker/wallet/wallet.module';
+import { ActionLogModule } from '@features/action-log/action-log.module';
+import { PreferencesModule } from '@features/preferences/preferences.module';
+import { TableSettingsModule } from '@features/table-settings/table-settings.module';
 
 const ENV = process.env.NODE_ENV;
 
@@ -55,6 +56,7 @@ config({
     WalletModule,
     ActionLogModule,
     PreferencesModule,
+    TableSettingsModule,
   ],
   controllers: [AppController],
   providers: [

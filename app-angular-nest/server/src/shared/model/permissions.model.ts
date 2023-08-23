@@ -1,4 +1,4 @@
-import { EPermission } from 'src/features/permissions/enum/permission.enum';
+import { EPermission } from '@features/rbac/permissions/enum/permission.enum';
 
 export interface IPermissions {
   feature: string;

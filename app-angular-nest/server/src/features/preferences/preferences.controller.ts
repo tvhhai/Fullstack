@@ -21,7 +21,7 @@ export class PreferencesController {
 
   @UseGuards(JwtGuards)
   @Post('create-default')
-  async create(@Req() req, @Body() createPreferenceDto: CreatePreferenceDto) {
+  async create(@Req() req: any, @Body() createPreferenceDto: CreatePreferenceDto) {
     try {
       await this.preferencesService.createDataDefault(
         createPreferenceDto,
@@ -39,7 +39,7 @@ export class PreferencesController {
 
   @UseGuards(JwtGuards)
   @Get()
-  async findAll(@Req() req) {
+  async findAll(@Req() req: any) {
     try {
       const data = await this.preferencesService.findAll(req.user);
 
@@ -53,14 +53,14 @@ export class PreferencesController {
 
   @UseGuards(JwtGuards)
   @Get(':id')
-  findOne(@Req() req, @Param('id') id: string) {
+  findOne(@Req() req: any, @Param('id') id: string) {
     return this.preferencesService.findOne(+id);
   }
 
   @UseGuards(JwtGuards)
   @Patch(':settingKey')
   update(
-    @Req() req,
+    @Req() req: any,
     @Param('settingKey') settingKey: string,
     @Body() updatePreferenceDto: UpdatePreferenceDto,
   ) {

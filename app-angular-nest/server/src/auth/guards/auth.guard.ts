@@ -9,7 +9,7 @@ import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 import { isEmpty } from 'lodash';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { COOKIE_NAME } from 'src/shared/constants/common.constant';
+import { COOKIE_NAME } from '@shared/constants/common.constant';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

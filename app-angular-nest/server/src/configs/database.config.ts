@@ -14,6 +14,8 @@ export const dbConfig = registerAs('dbConfig', () => ({
   extra: {
     charset: 'utf8mb4_unicode_ci',
   },
+  url: process.env.DB_URL,
+  // ssl: { rejectUnauthorized: false },
   synchronize: false,
   // logging: true,
 }));

@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { UsersService } from 'src/features/users/users.service';
+import { UsersService } from '@features/rbac/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import * as randomToken from 'rand-token';
 import * as dayjs from 'dayjs';
-import { UserRes } from 'src/features/users/dto/res/user-res.dto';
+import { UserRes } from '@features/rbac/users/dto/res/user-res.dto';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
-import { CreateUserDto } from 'src/features/users/dto/req/create-user.dto';
+import { CreateUserDto } from '@features/rbac/users/dto/req/create-user.dto';
 import { get, unset } from 'lodash';
-import { User } from 'src/features/users/entities/user.entity';
+import { User } from '@features/rbac/users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -97,12 +97,11 @@ export class AuthService {
     response: Response,
     name: string,
     value: any,
-    secure?: boolean,
     domain?: string,
   ): void => {
     response.cookie(name, value, {
       httpOnly: true,
-      secure,
+      secure: process.env.NODE_ENV === 'prod',
       maxAge: this.configService.get<number>('jwtConfig.cookieExpireIn'),
       domain,
     });

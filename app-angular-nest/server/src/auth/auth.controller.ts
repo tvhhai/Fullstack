@@ -13,17 +13,19 @@ import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { LocalGuards } from './guards/local.guard';
 import { JwtGuards } from './guards/jwt.guard';
-import { UserRes } from 'src/features/users/dto/res/user-res.dto';
-import { DataRes } from 'src/shared/dto/res/data-res.dto';
+import { UserRes } from '@features/rbac/users/dto/res/user-res.dto';
+import { DataRes } from '@shared/dto/res/data-res.dto';
 import { get } from 'lodash';
-import { CreateUserDto } from 'src/features/users/dto/req/create-user.dto';
+import { CreateUserDto } from '@features/rbac/users/dto/req/create-user.dto';
 import { RefreshGuard } from './guards/refresh.guard';
 import { Public } from './decorators/public.decorator';
-import { COOKIE_NAME } from 'src/shared/constants/common.constant';
+import { COOKIE_NAME } from '@shared/constants/common.constant';
 
 @Controller('api')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) {
+  }
+
   @Public()
   @UseGuards(LocalGuards)
   @Post('auth/sign-in')
@@ -94,6 +96,7 @@ export class AuthController {
       );
     }
   }
+
   @Public()
   @UseGuards(RefreshGuard)
   @Get('token/refresh')
@@ -126,12 +129,13 @@ export class AuthController {
         data: [],
       };
       return dataResponse;
-    } catch (error) {}
+    } catch (error) {
+    }
   }
 
   @UseGuards(JwtGuards)
   @Get('current-user')
-  getCurrentUser(@Req() req): DataRes<UserRes> {
+  getCurrentUser(@Req() req: any): DataRes<UserRes> {
     try {
       const user = req.user;
 

@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { FeatureAccessService } from 'src/features/feature-access/feature-access.service';
-import { ERole } from 'src/features/roles/enum/role.enum';
-import { RolesService } from 'src/features/roles/roles.service';
-import { UsersService } from 'src/features/users/users.service';
+import { FeatureAccessService } from '@features/rbac/feature-access/feature-access.service';
+import { ERole } from '@features/rbac/roles/enum/role.enum';
+import { RolesService } from '@features/rbac/roles/roles.service';
+import { UsersService } from '@features/rbac/users/users.service';
 import {
   ROLE_ADMIN,
   ROLE_READ,
   ROLE_WRITE,
-} from 'src/shared/constants/role.constant';
+} from '@shared/constants/role.constant';
 
 @Injectable()
 export class SeedService {

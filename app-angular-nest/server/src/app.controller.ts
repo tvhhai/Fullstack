@@ -1,14 +1,14 @@
 import { Controller, Get } from '@nestjs/common';
-import { Public } from './auth/decorators/public.decorator';
 import { ConfigService } from '@nestjs/config';
+import { Public } from '@auth/decorators/public.decorator';
 
 @Controller()
 export class AppController {
-  constructor(private config: ConfigService) {}
+  constructor(private readonly configService: ConfigService) {}
 
   @Public()
   @Get()
   getHello(): string {
-    return `App is running on port ` + this.config.get('appConfig.port');
+    return `App is running on port ` + this.configService.get('appConfig.port');
   }
 }

@@ -1,4 +1,4 @@
-import { User } from '../../users/entities/user.entity';
+import { User } from '../../rbac/users/entities/user.entity';
 export class CreatePreferenceDto {
   user: User;
 }
