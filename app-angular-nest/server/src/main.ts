@@ -14,8 +14,9 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
 
-  const port = process.env.PORT || 3000;
+  const port = process.env.APP_PORT || 3000;
 
   await app.listen(port);
 }
+
 bootstrap();
