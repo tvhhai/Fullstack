@@ -1,0 +1,101 @@
+<!-- Basic Button -->
+<button *ngIf="btnType === ButtonTypes.Basic" mat-button color="{{ btnColor }}">
+  {{ btnText | translate }}
+</button>
+
+<!-- Raised Button -->
+<button
+  *ngIf="btnType === ButtonTypes.Raised"
+  mat-raised-button
+  color="{{ btnColor }}"
+  [disabled]="isDisabled"
+  (click)="handleClick()"
+>
+  {{ btnText | translate }}
+</button>
+
+<!-- Stroked Button -->
+<button
+  *ngIf="btnType === ButtonTypes.Outline"
+  mat-stroked-button
+  color="{{ btnColor }}"
+  [disabled]="isDisabled"
+>
+  {{ btnText | translate }}
+</button>
+
+<!-- Flat Button -->
+<button
+  *ngIf="btnType === ButtonTypes.Flat"
+  mat-flat-button
+  color="{{ btnColor }}"
+  [disabled]="isDisabled"
+>
+  {{ btnText | translate }}
+</button>
+
+<!-- Icon Button -->
+<button
+  *ngIf="btnType === ButtonTypes.Icon"
+  mat-icon-button
+  color="{{ btnColor }}"
+  [attr.aria-label]="ariaLabel"
+  [disabled]="isDisabled"
+  (click)="handleClick()"
+>
+  <mat-icon>{{ btnIcon }}</mat-icon>
+</button>
+
+<!-- FAB Icon Button -->
+<button
+  *ngIf="btnType === ButtonTypes.IconFat"
+  mat-fab
+  color="{{ btnColor }}"
+  [attr.aria-label]="ariaLabel"
+  [disabled]="isDisabled"
+  (click)="handleClick()"
+>
+  <mat-icon>{{ btnIcon }}</mat-icon>
+</button>
+
+<!-- Mini FAB Icon Button -->
+<button
+  *ngIf="btnType === ButtonTypes.IconCircle"
+  mat-mini-fab
+  color="{{ btnColor }}"
+  [attr.aria-label]="ariaLabel"
+  [disabled]="isDisabled"
+  (click)="handleClick()"
+>
+  <mat-icon>{{ btnIcon }}</mat-icon>
+</button>
+
+<!-- Icon Button Square Outline-->
+<button
+  class="icon-btn-square"
+  *ngIf="btnType === ButtonTypes.IconSquareOutline"
+  mat-stroked-button
+  color="{{ btnColor }}"
+  [attr.aria-label]="ariaLabel"
+  [disabled]="isDisabled"
+  (click)="handleClick()"
+>
+  <span class="d-flex">
+    <mat-icon>{{ btnIcon }}</mat-icon>
+  </span>
+</button>
+
+<!-- Icon Button Square Contained-->
+<button
+  class="icon-btn-square"
+  *ngIf="btnType === ButtonTypes.IconSquareContained"
+  mat-raised-button
+  color="{{ btnColor }}"
+  [attr.aria-label]="ariaLabel"
+  [disabled]="isDisabled"
+  (click)="handleClick()"
+>
+  <span class="d-flex">
+    <mat-icon>{{ btnIcon }}</mat-icon>
+  </span>
+</button>

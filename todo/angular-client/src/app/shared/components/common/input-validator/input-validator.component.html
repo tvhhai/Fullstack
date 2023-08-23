@@ -1,0 +1,7 @@
+<form class="form-field-full" [formGroup]="form" *ngIf="!isEmptyObj(form)">
+  <mat-form-field appearance="outline" class="mb-2 app-input">
+    <input matInput [type]="inputType"
+           [placeholder]="placeholder"
+           [formControlName]="formControlName"/>
+  </mat-form-field>
+</form>

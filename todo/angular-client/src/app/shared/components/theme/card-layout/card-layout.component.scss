@@ -1,0 +1,17 @@
+.card-layout {
+  .card-layout-header {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+  }
+
+  .card-layout-body {
+    margin-bottom: 24px;
+  }
+
+  .card-layout-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+}

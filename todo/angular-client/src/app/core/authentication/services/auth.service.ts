@@ -1,5 +1,5 @@
-import { Injectable, Injector } from "@angular/core";
-import { finalize, iif, Observable, of } from "rxjs";
+import { Injectable } from "@angular/core";
+import { finalize, iif, Observable, of, switchMap } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { AppConstant } from "@shared/constants";
 import { map } from "rxjs/operators";
@@ -8,6 +8,9 @@ import { LoaderService } from "@shared/services/loader.service";
 import { MenuConstant } from "../../menu/menu-items";
 import { UserResponse } from "../models/auth";
 import { SettingConstant } from "@core/constants/auth.constant";
+import { ProjectService } from "../../../features/todos/project/project.service";
+import { isEmptyArray } from "@shared/helpers";
+import { IMenuChildrenItem, IMenuItem } from "@core/menu/menu.model";
 
 @Injectable({
     providedIn: "root"
@@ -18,8 +21,8 @@ export class AuthService {
     constructor(
         private http: HttpClient,
         private router: Router,
-        private injector: Injector,
-        private loaderService: LoaderService
+        private loaderService: LoaderService,
+        private projectService: ProjectService
     ) {
     }
 
@@ -29,15 +32,11 @@ export class AuthService {
             .pipe(
                 map(() => {
                     if (this.redirectUrl) {
-                        // this.router.navigate([this.redirectUrl]);
                         window.location.href = this.redirectUrl;
                         this.redirectUrl = null;
                     } else {
-                        this.router.navigate([`${AppConstant.PAGE.DASHBOARD_PAGE}`]);
+                        this.router.navigate([`${AppConstant.PAGE.TODAY_PAGE}`]);
                     }
-                    // const afterLoginService = this.injector.get(StartupService);
-                    // const appInitializer = StartupServiceFactory(afterLoginService)
-                    // appInitializer().then(() => noop());
                 })
             );
     }
@@ -77,26 +76,47 @@ export class AuthService {
         return this.doesHttpOnlyCookieExist(SettingConstant.COOKIE_NAME);
     }
 
-    isRefreshTokenExist() {
-        return this.doesHttpOnlyCookieExist("refreshToken");
-    }
-
     getCurrentUser() {
         return this.http.get<UserResponse>("api/current-user");
     }
 
     getConditionalMenu() {
-        return iif(() => this.isLoggedIn(), this.getMenu(), of([]));
+        return iif(() => this.isLoggedIn(), this.getMenu(), of({}));
     }
 
     getMenu(): Observable<any> {
-        return of([
-            MenuConstant.MENU_ITEMS["dashboard"],
-            MenuConstant.MENU_ITEMS["expenses"],
-            MenuConstant.MENU_ITEMS['user'],
-            MenuConstant.MENU_ITEMS['preferences'],
-            MenuConstant.MENU_ITEMS["test"]
-        ]);
+        // this.projectService.getData().subscribe({
+        //     next: (res) => {
+        //         console.log(res);
+        //     }
+        // });
+        // return of(MenuConstant.MENU_ITEMS);
+        const menu = MenuConstant.MENU_ITEMS;
+
+        return this.projectService.getData().pipe(
+            switchMap((res) => {
+
+                if (!isEmptyArray(res.data)) {
+
+                    res.data.forEach((item) => {
+                        const typedItem: IMenuItem = item as unknown as IMenuItem;
+                        typedItem.name = item.title;
+                        typedItem.route = item.title;
+                        typedItem.type = "link";
+                        typedItem.icon = "";
+                    });
+
+
+                    menu.forEach(val => {
+                        if (val.id === "project") {
+                            val.child = res.data as unknown as IMenuChildrenItem[];
+                        }
+                    });
+                }
+
+                return of(menu);
+            })
+        );
     }
 
 }

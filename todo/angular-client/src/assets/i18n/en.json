@@ -1,0 +1,164 @@
+{
+  "common": {
+    "home": "Home",
+    "name": "Name",
+    "description": "Description",
+    "username": "Username",
+    "note": "Note",
+    "date": "Date",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "email": "Email",
+    "type": "Type",
+    "icon": "Icon",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "dashboard": "Dashboard",
+    "searchAll": "Search All",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At",
+    "cancel": "Cancel",
+    "save": "Save",
+    "ok": "OK",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "custom": "Custom",
+    "settings": "Settings",
+    "refresh": "Refresh",
+    "fullscreen": "Full Screen",
+    "report": "Report",
+    "confirmDelete": "Confirm Delete",
+    "deleteItemMsg": "Are you sure you want to delete {{count}} selected item{{s}}?"
+  },
+  "status": {
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "critical": "Critical"
+  },
+  "agGrid": {
+    "agGridNoData": "No items to show"
+  },
+  "pagination": {
+    "pageInform1": "Showing <b>{{fromIndex}}</b> - <b>{{toIndex}}</b> of <b>{{totalRow}}</b> records",
+    "pageInform2": "Page <b>{{currentPage}}</b> of <b>{{totalPage}}</b>"
+  },
+  "auth": {
+    "sign-in": {
+      "title": "Sign In",
+      "rememberMe": "Remember Me",
+      "haveNoAccount": "Don't have an account?",
+      "createOneAccount": "Click here to create one"
+    },
+    "sign-up": {
+      "title": "Sign Up",
+      "haveAnAccount": "Already have an account?",
+      "agreeTermOfService": "I have read and agree to the terms of service"
+    },
+    "logout": "Logout"
+  },
+  "rbac": {
+    "user": {
+      "title": "User",
+      "titlePage": "User Management",
+      "titleCreate": "Add User",
+      "titleEdit": "Edit User",
+      "profile": "Profile",
+      "editProfile": "Edit Profile",
+      "columns": {
+        "id": "ID",
+        "username": "Username",
+        "email": "Email",
+        "role": "Role",
+        "status": "Status",
+        "firstName": "First Name",
+        "lastName": "Last Name"
+      }
+    },
+    "role": {
+      "title": "Role",
+      "titlePage": "Role Management",
+      "titleCreate": "Add Role",
+      "titleEdit": "Edit Role",
+      "accessControl": "Application Access Control",
+      "columns": {
+        "systemDefine": "System Define",
+        "app": "Application"
+      },
+      "permission": {
+        "read": "Read",
+        "write": "Write",
+        "view": "View",
+        "add": "Add",
+        "edit": "Edit",
+        "delete": "Delete"
+      }
+    }
+  },
+  "todo": {
+    "title": "Todo",
+    "today": {
+      "title": "Today"
+    },
+    "project": {
+      "title": "Project"
+    }
+  },
+  "preferences": {
+    "title": "Preferences",
+    "userSetting": {
+      "title": "User Setting",
+      "languages": {
+        "title": "Language",
+        "english": "English",
+        "vietnamese": "Vietnamese"
+      },
+      "currency": "Base Currency",
+      "dateFormat": "Date Format",
+      "timeFormat": "Time Format",
+      "themeOptions": "Theme Options",
+      "themeColor": "Theme Color"
+    },
+    "systemSetting": {
+      "title": "System Setting"
+    }
+  },
+  "expenses": {
+    "transactions": "Transactions",
+    "title": "Expense",
+    "titleSidebar": "Expenses",
+    "amount": "Amount",
+    "category": {
+      "title": "Expense Category",
+      "addTitle": "Add Expense Category"
+    },
+    "income": {
+      "title": "Income"
+    },
+    "debt": {
+      "title": "Debt/Loan",
+      "category": {
+        "lend": "Lend",
+        "repayment": "Repayment",
+        "borrow": "Borrow",
+        "debtCollection": "Debt Collection"
+      }
+    },
+    "waller": {
+      "nameWallet": "Name Wallet",
+      "createTitle": "Create Wallet",
+      "initBalance": "Initial Balance"
+    },
+    "personal": {
+      "title": "Personal Expenses",
+      "create": "Add Personal Expenses",
+      "edit": "Edit Personal Expenses"
+    },
+    "reports": {
+    }
+  },
+  "chart": {
+    "noData": "There is no data to display the chart."
+  }
+}
