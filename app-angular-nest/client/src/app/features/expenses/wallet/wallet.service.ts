@@ -4,6 +4,7 @@ import { DataRes } from "@shared/model";
 import { HttpClient } from "@angular/common/http";
 import { LoaderService } from "@shared/services/loader.service";
 import { IWallet } from "./model/waller.model";
+import { isEmptyArray } from "@shared/helpers";
 
 @Injectable({
     providedIn: "root"

@@ -60,14 +60,13 @@ export class MenuConstant {
 
         user: {
             id: "user",
-            name: "user.title",
-            // sectionType: true,
+            name: "rbac.user.title",
             route: "rbac",
             type: "section",
             child: [
                 {
                     id: 4,
-                    name: "user.title",
+                    name: "rbac.user.title",
                     icon: "manage_accounts",
                     route: "user",
                     type: "link",
@@ -77,7 +76,7 @@ export class MenuConstant {
                 },
                 {
                     id: "role",
-                    name: "role.title",
+                    name: "rbac.role.title",
                     icon: "perm_identity",
                     route: "role",
                     type: "link",
@@ -117,7 +116,6 @@ export class MenuConstant {
             id: "expenses",
             name: "expenses.titleSidebar",
             route: "expenses",
-            // sectionType: true,
             type: "section",
             child: [
                 {

@@ -10,17 +10,17 @@ import {
     SelectionChangedEvent,
     ValueFormatterParams,
 } from "ag-grid-community";
-import { forEach, get } from "lodash";
+import { forEach, get, size } from "lodash";
 import { UserService } from "./user-manager.service";
 import { User } from "./user-manager.model";
 import { TranslateService } from "@ngx-translate/core";
 import { EViewMode } from "@shared/enum/view-mode.enum";
 import { isEmptyArray } from "@shared/helpers";
-import { formatDateTime } from "@shared/helpers/time.helper";
 import { MatDialog } from "@angular/material/dialog";
 import { DialogComponent } from "@shared/components/common/dialog/dialog.component";
 import { BtnLeftAction } from "@shared/components/common/ag-grid/model/ag-grid.model";
 import { TimeHelpersService } from "@shared/helpers/time.helper.service";
+import { Role } from "../role/role.model";
 
 @Component({
     selector: "rbac-user-manager",
@@ -37,19 +37,19 @@ export class UserManagerComponent {
     columnDefs: ColDef[] = [
         {
             field: "username",
-            headerName: this.translateService.instant("user.columns.username"),
+            headerName: this.translateService.instant("rbac.user.columns.username"),
         },
         {
             field: "firstName",
-            headerName: this.translateService.instant("user.columns.firstName"),
+            headerName: this.translateService.instant("rbac.user.columns.firstName"),
         },
         {
             field: "lastName",
-            headerName: this.translateService.instant("user.columns.lastName"),
+            headerName: this.translateService.instant("rbac.user.columns.lastName"),
         },
         {
             field: "email",
-            headerName: this.translateService.instant("user.columns.email"),
+            headerName: this.translateService.instant("rbac.user.columns.email"),
         },
         {
             field: "updated_at",
@@ -144,7 +144,7 @@ export class UserManagerComponent {
     selectRowsFromData() {
         if (!isEmptyArray(this.selectedRows)) {
             this.gridApi.forEachNode((node) => {
-                forEach(this.selectedRows, function(val) {
+                forEach(this.selectedRows, function (val) {
                     if (val.id === node.data.id) {
                         node.setSelected(true);
                     }
@@ -191,7 +191,7 @@ export class UserManagerComponent {
     };
 
     handleDisable(spDeleteMulti?: boolean): boolean {
-        let selected;
+        let selected: User[] = [];
         if (
             get(this.gridApi, "getSelectedRows") &&
             !this.gridApi["destroyCalled"]
@@ -199,8 +199,12 @@ export class UserManagerComponent {
             selected = this.selectedRows;
         }
         return spDeleteMulti
-            ? !(selected && !isEmptyArray(selected))
-            : !(selected && !isEmptyArray(selected) && selected.length <= 1);
+            ? this.isSystemDefined(selected) || size(selected) === 0
+            : size(selected) !== 1;
+    }
+
+    isSystemDefined(selected: User[]) {
+        return !!selected.find((val) => val.systemDefine);
     }
 
     onSelectionChanged(event: SelectionChangedEvent) {

@@ -4,7 +4,7 @@
  * @returns True if the array is empty, false otherwise.
  */
 export function isEmptyArray(arr: any[]): boolean {
-    return !Array.isArray(arr) || arr.length===0;
+    return !Array.isArray(arr) || arr.length === 0;
 }
 
 /**
@@ -13,7 +13,7 @@ export function isEmptyArray(arr: any[]): boolean {
  * @returns True if the value is an object, false otherwise.
  */
 export function isObject(obj: any): boolean {
-    return typeof obj==="object" && !Array.isArray(obj);
+    return typeof obj === "object" && !Array.isArray(obj);
 }
 
 /**
@@ -23,9 +23,9 @@ export function isObject(obj: any): boolean {
  */
 export function isEmptyObj(obj: any): boolean {
     if (Array.isArray(obj)) {
-        return obj.length===0;
+        return obj.length === 0;
     }
-    if (typeof obj==="object" && obj!==null) {
+    if (typeof obj === "object" && obj !== null) {
         for (let key in obj) {
             if (obj.hasOwnProperty(key)) {
                 return false;
@@ -76,5 +76,32 @@ export function getLastDataObj(obj: Record<string, any>): object {
     const lastIndex = keys.length - 1;
     return obj[keys[lastIndex]];
 }
+
+/**
+ * @description
+ * Sort object in the array  by array keymap
+ * If the array lengths are not equal, the residuals will be at the end of the array
+ *
+ * @example
+ * Input:
+ *      obj: [{key: 'c'}, {key: 'd'}, {key:'a'}, {key:'b'}]
+ *      arrMap: [a,b,c]
+ *      keySort: key
+ * Output :
+ *      obj: [{key:'a'}, {key:'b'}, {key:'c'}, {key:'d'} ]
+ *
+ * */
+export const sortObjByObjMap = (obj: any, arrMap: object[], keySort: string): object[] => {
+    const NOT_FOUND_INDEX = -1;
+    const MAX_VALUE = Number.MAX_VALUE;
+
+    obj = [...obj];
+
+    return obj.sort((a: { [x: string]: object; }, b: { [x: string]: object; }) => {
+        const aIndex = arrMap.indexOf(a[keySort]);
+        const bIndex = arrMap.indexOf(b[keySort]);
+        return (aIndex === -1 ? MAX_VALUE : aIndex) - (bIndex === NOT_FOUND_INDEX ? MAX_VALUE : bIndex);
+    });
+};
 
 

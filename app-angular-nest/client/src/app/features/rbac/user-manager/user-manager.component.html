@@ -2,7 +2,7 @@
   <ng-container [ngSwitch]="viewMod">
     <div *ngSwitchCase="'view'">
       <app-ag-grid
-        [gridName]="'user.titlePage'"
+        [gridName]="'rbac.user.titlePage'"
         [columnDefs]="columnDefs"
         [rowData]="rowData"
         [selectMultiWithCheckbox]="true"
@@ -18,7 +18,7 @@
     <div *ngSwitchCase="EViewMode.Create">
       <app-card-layout
         [showBackToView]="true"
-        [title]="'user.titleCreate'"
+        [title]="'rbac.user.titleCreate'"
         (backToView)="backToView()"
       >
         <add-edit-user-mng-form
@@ -34,7 +34,7 @@
     <div *ngSwitchCase="EViewMode.Edit">
       <app-card-layout
         [showBackToView]="true"
-        [title]="'user.titleEdit'"
+        [title]="'rbac.user.titleEdit'"
         (backToView)="backToView()"
       >
         <add-edit-user-mng-form

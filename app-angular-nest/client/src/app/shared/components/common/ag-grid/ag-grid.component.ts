@@ -9,7 +9,7 @@ import {
 } from "@angular/core";
 import {
     ColDef,
-    ColumnApi,
+    ColumnApi, DragStoppedEvent,
     GridApi,
     GridOptions,
     GridReadyEvent,
@@ -17,7 +17,7 @@ import {
 } from "ag-grid-community";
 import { AgGridAngular } from "ag-grid-angular";
 import { AgGridConstant } from "@shared/components/common/ag-grid/constant/ag-grid.constant";
-import { isEmptyArray } from "@shared/helpers";
+import { getObjectKeys, isEmptyArray, sortObjByObjMap } from "@shared/helpers";
 import { cloneDeep } from "lodash";
 import { TranslateService } from "@ngx-translate/core";
 import {
@@ -86,7 +86,7 @@ export class AgGridComponent implements OnInit, OnDestroy, OnChanges {
 
     gridApi!: GridApi;
     columnApi!: ColumnApi;
-    gridOptions!: GridOptions;
+    gridOptions: GridOptions = {};
 
     currentPage: number = 1;
     totalRow: number = 0;
@@ -103,19 +103,21 @@ export class AgGridComponent implements OnInit, OnDestroy, OnChanges {
     AG_GRID_CHECKBOX_SELECTION = AgGridConstant.AG_GRID_CHECKBOX_SELECTION;
 
     public overlayNoRowsTemplate =
-            "<div class=\"custom-overlay-no-rows\">" +
-            "<span>" +
-            this.translateService.instant("agGrid.agGridNoData") +
-            "</span>" +
-            "</div>";
+        "<div class=\"custom-overlay-no-rows\">" +
+        "<span>" +
+        this.translateService.instant("agGrid.agGridNoData") +
+        "</span>" +
+        "</div>";
 
     constructor(
-            private translateService: TranslateService,
-            private agGridService: AgGridService
+        private translateService: TranslateService,
+        private agGridService: AgGridService
     ) {
     }
 
     ngOnInit() {
+        this.gridOptions.onDragStopped = (e: DragStoppedEvent) => this.onDragStopped(e);
+
         this.defaultColDef = this.defaultColDef || AgGridConstant.DEFAULT_COL_DEFS;
         this.itemsPerPage = this.itemsPerPage || this.ITEMS_PER_PAGE_OPTIONS[1];
 
@@ -124,6 +126,54 @@ export class AgGridComponent implements OnInit, OnDestroy, OnChanges {
         }
         this.addCheckboxSelectionToColumnDefs();
         this.showRefreshBtn();
+        this.getTableSettings();
+    }
+
+    getTableSettings() {
+        this.agGridService.getData(this.gridName).subscribe({
+            next: (res) => {
+                if (!res.data) {
+                    this.createTableSettings();
+                } else {
+                    const tableConfig: ColDef[] = res.data.tableConfig;
+                    this.updateColumnDefs(tableConfig);
+                }
+            }
+        });
+    }
+
+    updateColumnDefs(dataUpdate: ColDef[]) {
+        const currentColumnState = this.columnDefs;
+
+        const arrKeySort: any[] = dataUpdate.map((value: ColDef) => value.colId) || [];
+
+        const result: ColDef[] = sortObjByObjMap(currentColumnState, arrKeySort, "field");
+
+        this.gridApi.setColumnDefs(result);
+    }
+
+    createTableSettings() {
+        const data = {
+            tableId: this.gridName,
+            tableConfig: this.columnApi.getColumnState()
+        };
+        this.agGridService.create(data).subscribe({
+            next: (res) => {
+                console.log(res);
+            }
+        });
+    }
+
+    onDragStopped(event: DragStoppedEvent) {
+        const data = {
+            tableId: this.gridName,
+            tableConfig: this.columnApi.getColumnState()
+        };
+        this.agGridService.update(this.gridName, data).subscribe({
+            next: (res) => {
+                console.log(res);
+            }
+        });
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -169,10 +219,10 @@ export class AgGridComponent implements OnInit, OnDestroy, OnChanges {
         });
 
         isEmptyArray(filteredRows)
-                ? this.gridApi.showNoRowsOverlay()
-                :this.gridApi.hideOverlay();
+            ? this.gridApi.showNoRowsOverlay()
+            : this.gridApi.hideOverlay();
 
-        this.rowDataPagination = !!value ? filteredRows:this.rowData;
+        this.rowDataPagination = !!value ? filteredRows : this.rowData;
     }
 
     onPageChange(number: number) {
@@ -208,9 +258,9 @@ export class AgGridComponent implements OnInit, OnDestroy, OnChanges {
 
     private updatePageIndices() {
         let fromIndex =
-                this.currentPage >= 1
-                        ? (this.currentPage - 1) * this.itemsPerPage + 1
-                        :0;
+            this.currentPage >= 1
+                ? (this.currentPage - 1) * this.itemsPerPage + 1
+                : 0;
         let toIndex = Math.min(fromIndex + this.itemsPerPage - 1, this.totalRow);
         this.fromIndex = fromIndex;
         this.toIndex = toIndex;
@@ -224,7 +274,7 @@ export class AgGridComponent implements OnInit, OnDestroy, OnChanges {
 
     private isHaveCheckBox() {
         return this.columnDefs.find((val) => {
-            return val.colId===this.AG_GRID_CHECKBOX_SELECTION.colId;
+            return val.colId === this.AG_GRID_CHECKBOX_SELECTION.colId;
         });
     }
 }

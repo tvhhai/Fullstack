@@ -54,12 +54,12 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
                 deps: [HttpClient]
             }
         }),
-        ServiceWorkerModule.register("ngsw-worker.js", {
-            enabled: !isDevMode(),
-            // Register the ServiceWorker as soon as the application is stable
-            // or after 30 seconds (whichever comes first).
-            registrationStrategy: "registerWhenStable:30000"
-        })
+        // ServiceWorkerModule.register("ngsw-worker.js", {
+        //     enabled: !isDevMode(),
+        //     // Register the ServiceWorker as soon as the application is stable
+        //     // or after 30 seconds (whichever comes first).
+        //     registrationStrategy: "registerWhenStable:30000"
+        // })
     ],
     providers: [
         {
@@ -69,7 +69,6 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
         { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
         httpInterceptorProviders,
         appInitializerProviders,
-
         LoaderService
     ],
     bootstrap: [AppComponent]

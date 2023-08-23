@@ -6,6 +6,7 @@
 
         <mat-card-content>
             <form class="form-field-full" [formGroup]="form" (ngSubmit)="onSubmit()">
+
                 <mat-form-field appearance="outline" class="mb-2">
                     <mat-label>{{ "common.username" | translate }}</mat-label>
                     <input matInput type="text" placeholder="" formControlName="username"/>
@@ -21,9 +22,13 @@
                     </mat-error>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="mb-2">
+                <mat-form-field appearance="outline"
+                                class="mb-2"
+                >
+
                     <mat-label>{{ "common.password" | translate }}</mat-label>
-                    <input matInput placeholder="" formControlName="password"/>
+
+                    <input matInput type="password" placeholder="" formControlName="password" appPasswordView/>
 
                     <mat-error *ngIf="f['password'].errors">
                         <span *ngIf="f['password'].errors?.['required']">Password is required</span>
@@ -37,7 +42,7 @@
                 <!--                <mat-checkbox class="mb-2" formControlName="rememberMe">{{'auth.sign-in.rememberMe' | translate}}-->
                 <!--                </mat-checkbox>-->
 
-                <button class="w-100 mt-3 mb-2" mat-raised-button color="primary" [disabled]="this.form.invalid">
+                <button class="w-100 mb-2" mat-raised-button color="primary" [disabled]="this.form.invalid">
                     {{ "auth.sign-in.title" | translate }}
                 </button>
 

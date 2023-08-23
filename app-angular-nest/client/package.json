@@ -27,6 +27,7 @@
     "@angular/service-worker": "^15.2.6",
     "@ng-bootstrap/ng-bootstrap": "^14.1.0",
     "@popperjs/core": "^2.11.6",
+    "@types/zxcvbn": "^4.4.1",
     "ag-grid-angular": "^29.3.4",
     "ag-grid-community": "^29.3.4",
     "apexcharts": "^3.41.1",
@@ -40,7 +41,8 @@
     "ngx-toastr": "^16.1.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.12.0"
+    "zone.js": "~0.12.0",
+    "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^15.2.5",

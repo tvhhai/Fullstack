@@ -8,6 +8,7 @@ export interface User {
   roles: string[];
   password?: string;
   confirmPassword?: string;
+  systemDefine: boolean;
 }
 
 export interface UserRequest {

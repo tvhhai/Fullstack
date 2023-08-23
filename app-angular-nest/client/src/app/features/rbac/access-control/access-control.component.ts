@@ -37,22 +37,22 @@ export class AccessControlComponent implements OnDestroy {
     [EPermission.READ]: {
       value: false,
       name: EPermission.VIEW,
-      titleI18n: 'role.permission.view',
+      titleI18n: 'rbac.role.permission.view',
     },
     [EPermission.ADD]: {
       value: false,
       name: EPermission.ADD,
-      titleI18n: 'role.permission.add',
+      titleI18n: 'rbac.role.permission.add',
     },
     [EPermission.EDIT]: {
       value: false,
       name: EPermission.EDIT,
-      titleI18n: 'role.permission.edit',
+      titleI18n: 'rbac.role.permission.edit',
     },
     [EPermission.DELETE]: {
       value: false,
       name: EPermission.DELETE,
-      titleI18n: 'role.permission.delete',
+      titleI18n: 'rbac.role.permission.delete',
     },
   };
 
@@ -63,14 +63,14 @@ export class AccessControlComponent implements OnDestroy {
 
   accessControlHeader: ControlHeaders[] = [
     {
-      headerName: this.translateService.instant('role.columns.app'),
+      headerName: this.translateService.instant('rbac.role.columns.app'),
       rowspan: 2,
     },
     {
-      headerName: this.translateService.instant('role.permission.read'),
+      headerName: this.translateService.instant('rbac.role.permission.read'),
     },
     {
-      headerName: this.translateService.instant('role.permission.write'),
+      headerName: this.translateService.instant('rbac.role.permission.write'),
       colspan: 3,
       class: 'width-cell-fit',
       checkbox: {
@@ -84,7 +84,7 @@ export class AccessControlComponent implements OnDestroy {
 
   subHeaders: SubHeaders[] = [
     {
-      headerName: this.translateService.instant('role.permission.view'),
+      headerName: this.translateService.instant('rbac.role.permission.view'),
       class: 'width-cell-fit',
       checkbox: {
         value: false,
@@ -92,7 +92,7 @@ export class AccessControlComponent implements OnDestroy {
       },
     },
     {
-      headerName: this.translateService.instant('role.permission.add'),
+      headerName: this.translateService.instant('rbac.role.permission.add'),
       class: 'width-cell-fit',
       checkbox: {
         name: EPermission.ADD,
@@ -100,7 +100,7 @@ export class AccessControlComponent implements OnDestroy {
       },
     },
     {
-      headerName: this.translateService.instant('role.permission.edit'),
+      headerName: this.translateService.instant('rbac.role.permission.edit'),
       class: 'width-cell-fit',
       checkbox: {
         name: EPermission.EDIT,
@@ -108,7 +108,7 @@ export class AccessControlComponent implements OnDestroy {
       },
     },
     {
-      headerName: this.translateService.instant('role.permission.delete'),
+      headerName: this.translateService.instant('rbac.role.permission.delete'),
       class: 'width-cell-fit',
       checkbox: {
         name: EPermission.DELETE,

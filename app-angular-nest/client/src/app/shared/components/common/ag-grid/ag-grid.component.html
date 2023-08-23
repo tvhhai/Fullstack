@@ -69,6 +69,7 @@
           style="width: 100%; height: 490px"
           class="app-ag-grid-body ag-theme-alpine"
           [suppressCellFocus]="true"
+          [gridOptions]="gridOptions"
           [suppressPaginationPanel]="true"
           [suppressMenuHide]="true"
           [suppressDragLeaveHidesColumns]="true"
@@ -90,6 +91,7 @@
           (gridReady)="onGridReady($event)"
           (paginationChanged)="onPaginationChanged()"
           (selectionChanged)="onSelectionChanged($event)"
+
         ></ag-grid-angular>
       </div>
 

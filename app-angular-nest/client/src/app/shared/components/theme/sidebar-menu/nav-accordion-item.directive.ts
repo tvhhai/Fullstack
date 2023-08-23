@@ -19,7 +19,7 @@ export class NavAccordionItemDirective implements OnDestroy {
 
     set expanded(value: boolean) {
         // Only sub menu can be expanded
-        this.isExpanded = this.type==="sub" && value;
+        this.isExpanded = this.type === "sub" && value;
 
         if (value) {
             this.nav.closeOtherLinks(this);

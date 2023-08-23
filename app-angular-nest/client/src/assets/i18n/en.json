@@ -58,40 +58,50 @@
     },
     "logout": "Logout"
   },
-  "user": {
-    "title": "User",
-    "titlePage": "User Management",
-    "titleCreate": "Add User",
-    "titleEdit": "Edit User",
-    "profile": "Profile",
-    "editProfile": "Edit Profile",
-    "columns": {
-      "id": "ID",
-      "username": "Username",
-      "email": "Email",
-      "role": "Role",
-      "status": "Status",
-      "firstName": "First Name",
-      "lastName": "Last Name"
+  "rbac": {
+    "user": {
+      "title": "User",
+      "titlePage": "User Management",
+      "titleCreate": "Add User",
+      "titleEdit": "Edit User",
+      "profile": "Profile",
+      "editProfile": "Edit Profile",
+      "columns": {
+        "id": "ID",
+        "username": "Username",
+        "email": "Email",
+        "role": "Role",
+        "status": "Status",
+        "firstName": "First Name",
+        "lastName": "Last Name"
+      }
+    },
+    "role": {
+      "title": "Role",
+      "titlePage": "Role Management",
+      "titleCreate": "Add Role",
+      "titleEdit": "Edit Role",
+      "accessControl": "Application Access Control",
+      "columns": {
+        "systemDefine": "System Define",
+        "app": "Application"
+      },
+      "permission": {
+        "read": "Read",
+        "write": "Write",
+        "view": "View",
+        "add": "Add",
+        "edit": "Edit",
+        "delete": "Delete"
+      }
     }
   },
-  "role": {
-    "title": "Role",
-    "titlePage": "Role Management",
-    "titleCreate": "Add Role",
-    "titleEdit": "Edit Role",
-    "accessControl": "Application Access Control",
-    "columns": {
-      "systemDefine": "System Define",
-      "app": "Application"
-    },
-    "permission": {
-      "read": "Read",
-      "write": "Write",
-      "view": "View",
-      "add": "Add",
-      "edit": "Edit",
-      "delete": "Delete"
+  "apps": {
+    "title": "Application",
+    "todo": {
+      "title": "Todo",
+      "todayTitle": "Today",
+      "prjTitle": "Project"
     }
   },
   "preferences": {

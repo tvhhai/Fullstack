@@ -258,7 +258,7 @@ export class ReportComponent {
 
     calculateTotalExpense(expenses: PersonalExpense[]): number {
         return expenses.reduce(
-            (sum: number, val: PersonalExpense) => sum + val.amount,
+            (sum: number, val: PersonalExpense) => -(sum + val.amount),
             0
         );
     }

@@ -1,10 +1,15 @@
-import {ButtonColor} from "@shared/components/common/button/button.enum";
+import { ButtonColor } from "@shared/components/common/button/button.enum";
 
 export interface BtnLeftAction {
-  id: string;
-  i18nKey: string;
-  onClick: () => void;
-  disable: () => boolean;
-  icon: string;
-  color: ButtonColor;
+    id: string;
+    i18nKey: string;
+    onClick: () => void;
+    disable: () => boolean;
+    icon: string;
+    color: ButtonColor;
+}
+
+export interface ITableSettings {
+    tableId: string;
+    tableConfig: [];
 }

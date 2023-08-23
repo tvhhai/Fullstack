@@ -40,10 +40,11 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="mb-2">
+        <mat-form-field appearance="outline" class="mb-2"  [appPasswordMeter]="f['password'].value">
           <mat-label>{{ "common.password" | translate }}</mat-label>
           <input
             matInput
+            appPasswordView
             type="password"
             placeholder=""
             formControlName="password"
@@ -66,6 +67,7 @@
           <mat-label>{{ "common.confirmPassword" | translate }}</mat-label>
           <input
             matInput
+            appPasswordView
             type="password"
             placeholder=""
             formControlName="confirmPassword"

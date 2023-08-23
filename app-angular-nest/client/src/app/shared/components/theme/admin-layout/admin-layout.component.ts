@@ -3,6 +3,7 @@ import { MatSidenav } from "@angular/material/sidenav";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { PreSettingService } from "@core/bootstrap/presetting.service";
 import { TranslateService } from "@ngx-translate/core";
+import { IMenuItem } from "@core/menu/menu.model";
 
 @Component({
     selector: "app-admin-layout",

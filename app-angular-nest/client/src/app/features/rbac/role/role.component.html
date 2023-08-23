@@ -2,7 +2,7 @@
   <ng-container [ngSwitch]="viewMod">
     <div *ngSwitchCase="EViewMode.View">
       <app-ag-grid
-        [gridName]="'role.titlePage'"
+        [gridName]="'rbac.role.titlePage'"
         [columnDefs]="columnDefs"
         [rowData]="rowData"
         [selectMultiWithCheckbox]="true"
@@ -18,7 +18,7 @@
     <div *ngSwitchCase="EViewMode.Create">
       <app-card-layout
         [showBackToView]="true"
-        [title]="'role.titleCreate'"
+        [title]="'rbac.role.titleCreate'"
         (backToView)="backToView()"
       >
         <add-edit-role-form
@@ -34,7 +34,7 @@
     <div *ngSwitchCase="EViewMode.Edit">
       <app-card-layout
         [showBackToView]="true"
-        [title]="'role.titleEdit'"
+        [title]="'rbac.role.titleEdit'"
         (backToView)="backToView()"
       >
         <add-edit-role-form

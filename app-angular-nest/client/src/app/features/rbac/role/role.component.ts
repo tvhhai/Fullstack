@@ -47,7 +47,7 @@ export class RoleComponent {
         },
         {
             field: "systemDefine",
-            headerName: this.translateService.instant("role.columns.systemDefine"),
+            headerName: this.translateService.instant("rbac.role.columns.systemDefine"),
             cellRendererSelector: (params) => {
                 const data = {
                     value: params.value

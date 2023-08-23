@@ -6,9 +6,9 @@ import { AppModule } from './app/app.module';
 import { environment } from "@env/environment";
 import { enableProdMode } from "@angular/core";
 
-if (environment.production) {
+// if (environment.production) {
     enableProdMode();
-}
+// }
 
 platformBrowserDynamic()
     .bootstrapModule(AppModule)

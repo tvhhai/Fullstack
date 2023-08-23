@@ -11,6 +11,7 @@
 
 @import "app/shared/style/expense";
 @import "app/shared/style/chart";
+@import "app/shared/style/password-strength";
 @import "app/features/expenses/expense";
 
 body {
@@ -74,5 +75,8 @@ body {
     margin-top: 24px;
   }
 
+  .mat-mdc-form-field-icon-prefix > .mat-icon, .mat-mdc-form-field-icon-suffix > .mat-icon {
+    padding: 0
+  }
 
 }

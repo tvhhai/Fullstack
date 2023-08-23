@@ -58,40 +58,42 @@
     },
     "logout": "Đăng xuất"
   },
-  "user": {
-    "title": "Người dùng",
-    "titlePage": "Quản lý Người dùng",
-    "titleCreate": "Thêm Người dùng",
-    "titleEdit": "Sửa Người dùng",
-    "profile": "Hồ sơ",
-    "editProfile": "Chỉnh sửa Hồ sơ",
-    "columns": {
-      "id": "ID",
-      "username": "Tên người dùng",
-      "email": "Email",
-      "role": "Vai trò",
-      "status": "Trạng thái",
-      "firstName": "Tên",
-      "lastName": "Họ"
-    }
-  },
-  "role": {
-    "title": "Vai trò",
-    "titlePage": "Quản lý Vai trò",
-    "titleCreate": "Thêm Vai trò",
-    "titleEdit": "Sửa Vai trò",
-    "accessControl": "Kiểm soát Truy cập Ứng dụng",
-    "columns": {
-      "systemDefine": "Định nghĩa Hệ thống",
-      "app": "Ứng dụng"
+  "rbac": {
+    "user": {
+      "title": "Người dùng",
+      "titlePage": "Quản lý Người dùng",
+      "titleCreate": "Thêm Người dùng",
+      "titleEdit": "Sửa Người dùng",
+      "profile": "Hồ sơ",
+      "editProfile": "Chỉnh sửa Hồ sơ",
+      "columns": {
+        "id": "ID",
+        "username": "Tên người dùng",
+        "email": "Email",
+        "role": "Vai trò",
+        "status": "Trạng thái",
+        "firstName": "Tên",
+        "lastName": "Họ"
+      }
     },
-    "permission": {
-      "read": "Đọc",
-      "write": "Ghi",
-      "view": "Xem",
-      "add": "Thêm",
-      "edit": "Sửa",
-      "delete": "Xóa"
+    "role": {
+      "title": "Vai trò",
+      "titlePage": "Quản lý Vai trò",
+      "titleCreate": "Thêm Vai trò",
+      "titleEdit": "Sửa Vai trò",
+      "accessControl": "Kiểm soát Truy cập Ứng dụng",
+      "columns": {
+        "systemDefine": "Định nghĩa Hệ thống",
+        "app": "Ứng dụng"
+      },
+      "permission": {
+        "read": "Đọc",
+        "write": "Ghi",
+        "view": "Xem",
+        "add": "Thêm",
+        "edit": "Sửa",
+        "delete": "Xóa"
+      }
     }
   },
   "preferences": {

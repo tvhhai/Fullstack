@@ -70,11 +70,4 @@ export class SignInComponent {
             },
         });
     }
-
-    showDetails!: boolean;
-
-
-    onStrengthChanged(strength: number) {
-        console.log('password strength = ', strength);
-    }
 }

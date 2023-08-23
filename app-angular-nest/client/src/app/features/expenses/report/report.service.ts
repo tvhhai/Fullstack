@@ -16,9 +16,9 @@ export class ReportExpenseService {
         this.loaderService.isLoading.next(true);
 
         return this.http.post<DataRes<PersonalExpense[]>>("api/personal-expenses/report", data).pipe(
-                finalize(() => {
-                    this.loaderService.isLoading.next(false);
-                })
+            finalize(() => {
+                this.loaderService.isLoading.next(false);
+            })
         );
     }
 

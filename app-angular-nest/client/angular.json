@@ -19,7 +19,9 @@
           "options": {
             "allowedCommonJsDependencies": [
               "dayjs",
-              "lodash"
+              "lodash",
+              "apexcharts",
+              "zxcvbn"
             ],
             "outputPath": "dist/client",
             "index": "src/index.html",

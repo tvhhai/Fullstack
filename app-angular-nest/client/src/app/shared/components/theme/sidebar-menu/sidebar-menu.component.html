@@ -1,6 +1,6 @@
 <ng-container
-  [ngTemplateOutlet]="menuListTpl"
-  [ngTemplateOutletContext]="{
+        [ngTemplateOutlet]="menuListTpl"
+        [ngTemplateOutletContext]="{
     menuList: menu$ | async,
     parentRoute: [],
     level: 1
@@ -8,91 +8,34 @@
 >
 </ng-container>
 
-<ng-template
-        #menuListTpl
-        let-menuList="menuList"
-        let-parentRoute="parentRoute"
-        let-level="level"
->
-  <ul
-    appNavAccordion
-    class="sidebar-menu level-{{ level }}"
-    [class.submenu]="level > 1"
-  >
+<ng-template #menuListTpl let-menuList="menuList" let-parentRoute="parentRoute" let-level="level">
+  <ul appNavAccordion class="sidebar-menu level-{{ level }}" [class.submenu]="level > 1">
     <ng-container *ngFor="let menuItem of menuList">
-      <ng-template
-        [ngxPermissionsOnly]="menuItem.permissions?.only"
-        [ngxPermissionsExcept]="menuItem.permissions?.except"
-      >
+      <ng-template [ngxPermissionsOnly]="menuItem.permissions?.only" [ngxPermissionsExcept]="menuItem.permissions?.except">
         <div class="" *ngIf="menuItem.type ==='section'">
-          <ng-container
-            [ngTemplateOutlet]="sectionTpl"
-            [ngTemplateOutletContext]="{ item: menuItem }"
-          >
-          </ng-container>
+          <ng-container [ngTemplateOutlet]="sectionTpl" [ngTemplateOutletContext]="{ item: menuItem }"> </ng-container>
         </div>
 
-        <li
-          appNavAccordionItem
-          class="sidebar-item"
-          routerLinkActive="active-link"
-          [route]="menuItem.route"
-          [type]="menuItem.type"
-        >
-          <a
-            class="menu-heading"
-            [style.padding-left.px]="level !== 1 ? level * 16 : ''"
-            [routerLink]="buildRoute(parentRoute.concat([menuItem.route]))"
-            *ngIf="menuItem.type === 'link'"
-          >
-            <ng-container
-              [ngTemplateOutlet]="linkTypeTpl"
-              [ngTemplateOutletContext]="{ item: menuItem, level: level }"
-            >
-            </ng-container>
+        <li appNavAccordionItem class="sidebar-item" routerLinkActive="active-link" [route]="menuItem.route" [type]="menuItem.type">
+          <a class="menu-heading" [style.padding-left.px]="level !== 1 ? level * 16 : ''" [routerLink]="buildRoute(parentRoute.concat([menuItem.route]))" *ngIf="menuItem.type === 'link'">
+            <ng-container [ngTemplateOutlet]="linkTypeTpl" [ngTemplateOutletContext]="{ item: menuItem, level: level }"> </ng-container>
           </a>
 
-          <a
-            class="menu-heading"
-            [href]="menuItem.route"
-            *ngIf="menuItem.type === 'extLink'"
-          >
-            <ng-container
-              [ngTemplateOutlet]="linkTypeTpl"
-              [ngTemplateOutletContext]="{ item: menuItem, level: level }"
-            >
-            </ng-container>
+          <a class="menu-heading" [href]="menuItem.route" *ngIf="menuItem.type === 'extLink'">
+            <ng-container [ngTemplateOutlet]="linkTypeTpl" [ngTemplateOutletContext]="{ item: menuItem, level: level }"> </ng-container>
           </a>
 
-          <a
-            class="menu-heading"
-            [href]="menuItem.route"
-            target="_blank"
-            *ngIf="menuItem.type === 'extTabLink'"
-          >
-            <ng-container
-              [ngTemplateOutlet]="linkTypeTpl"
-              [ngTemplateOutletContext]="{ item: menuItem, level: level }"
-            >
-            </ng-container>
+          <a class="menu-heading" [href]="menuItem.route" target="_blank" *ngIf="menuItem.type === 'extTabLink'">
+            <ng-container [ngTemplateOutlet]="linkTypeTpl" [ngTemplateOutletContext]="{ item: menuItem, level: level }"> </ng-container>
           </a>
 
-          <div
-            appNavAccordionToggle
-            class="menu-heading menu-toggle"
-            *ngIf="menuItem.type === 'sub'"
-            [style.padding-left.px]="level !== 1 ? level * 16 : ''"
-          >
-            <ng-container
-              [ngTemplateOutlet]="linkTypeTpl"
-              [ngTemplateOutletContext]="{ item: menuItem, level: level }"
-            >
-            </ng-container>
+          <div appNavAccordionToggle class="menu-heading menu-toggle" *ngIf="menuItem.type === 'sub'" [style.padding-left.px]="level !== 1 ? level * 16 : ''">
+            <ng-container [ngTemplateOutlet]="linkTypeTpl" [ngTemplateOutletContext]="{ item: menuItem, level: level }"> </ng-container>
           </div>
 
           <ng-container
-            [ngTemplateOutlet]="menuListTpl"
-            [ngTemplateOutletContext]="{
+                  [ngTemplateOutlet]="menuListTpl"
+                  [ngTemplateOutletContext]="{
               menuList: menuItem.child,
               parentRoute: parentRoute.concat([menuItem.route]),
               level: menuItem.type ==='section' ? 1 : level + 1
@@ -116,6 +59,6 @@
   <div class="dot-icon" *ngIf="level !== 1"></div>
   <span class="menu-name">{{ item.name | translate }}</span>
   <mat-icon class="menu-caret" *ngIf="item.type !== 'link'">
-    {{ item.type==="sub" ? "chevron_left":"launch" }}
+    {{ item.type === "sub" ? "chevron_left" : "launch" }}
   </mat-icon>
 </ng-template>
