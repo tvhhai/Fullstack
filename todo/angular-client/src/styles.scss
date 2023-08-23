@@ -1,0 +1,84 @@
+@use "@angular/material" as mat;
+
+// regular style toast
+@import "ngx-toastr/toastr";
+
+/* Importing Bootstrap SCSS file. */
+@import "bootstrap/scss/bootstrap";
+
+@import "ag-grid-community/styles/ag-grid.css";
+@import "ag-grid-community/styles/ag-theme-alpine.css";
+
+@import "app/shared/style/expense";
+@import "app/shared/style/chart";
+@import "app/shared/style/password-strength";
+
+body {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  margin: 0;
+}
+
+html,
+body {
+  height: 100%;
+
+  ul {
+    padding: 0;
+    margin: 0;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  .dot-icon {
+    width: 8px;
+    height: 8px;
+    border-radius: 100%;
+    background: rgb(206, 203, 227);
+    display: inline-flex;
+    margin-right: 16px;
+  }
+
+  .checked-icon {
+    color: green !important;
+  }
+
+  .app-panel {
+    background: white;
+    padding: 24px;
+    border-radius: 4px;
+  }
+
+  .full-screen-backdrop.full-screen {
+    .app-panel {
+      padding: 0;
+    }
+  }
+
+  .app-input {
+    @include mat.all-component-densities(-3);
+    width: 100%;
+  }
+
+  .full-screen-modal .mat-dialog-container {
+    padding: 1em;
+    width: 100%;
+    height: 100%;
+  }
+
+  .btn-action-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 24px;
+  }
+
+  .mat-mdc-form-field-icon-prefix > .mat-icon, .mat-mdc-form-field-icon-suffix > .mat-icon {
+    padding: 0
+  }
+
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -1,0 +1,74 @@
+<ng-container
+        [ngTemplateOutlet]="menuListTpl"
+        [ngTemplateOutletContext]="{
+          menuList: menu$ | async,
+          parentRoute: [],
+          level: 1
+        }"
+>
+</ng-container>
+
+<ng-template #menuListTpl
+             let-menuList="menuList"
+             let-parentRoute="parentRoute"
+             let-level="level"
+>
+    <ul appNavAccordion
+        class="sidebar-menu level-{{ level }}"
+        [class.submenu]="level > 1"
+    >
+        <ng-container *ngFor="let menuItem of menuList">
+            <ng-template [ngxPermissionsOnly]="menuItem.permissions?.only"
+                         [ngxPermissionsExcept]="menuItem.permissions?.except"
+            >
+                <li appNavAccordionItem class="sidebar-item"
+                    routerLinkActive="active-link"
+                    [route]="menuItem.route"
+                    [type]="menuItem.type"
+                >
+                    <a class="menu-heading"
+                       [style.padding-left.px]="level !== 1 ? level * 16 : ''"
+                       [routerLink]="buildRoute(parentRoute.concat([menuItem.route]))"
+                       *ngIf="menuItem.type === 'link'"
+                    >
+                        <ng-container [ngTemplateOutlet]="linkTypeTpl"
+                                      [ngTemplateOutletContext]="{ item: menuItem, level: level }"
+                        ></ng-container>
+                    </a>
+
+                    <div appNavAccordionToggle
+                         class="menu-heading menu-toggle"
+                         *ngIf="menuItem.type === 'sub'"
+                         [style.padding-left.px]="level !== 1 ? level * 16 : ''"
+                    >
+                        <ng-container [ngTemplateOutlet]="linkTypeTpl"
+                                      [ngTemplateOutletContext]="{ item: menuItem, level: level }"
+                        ></ng-container>
+                    </div>
+
+                    <ng-container
+                            [ngTemplateOutlet]="menuListTpl"
+                            [ngTemplateOutletContext]="{
+                              menuList: menuItem.child,
+                              parentRoute: parentRoute.concat([menuItem.route]),
+                              level: menuItem.type ==='section' ? 1 : level + 1
+                            }"
+                    >
+                    </ng-container>
+                </li>
+            </ng-template>
+        </ng-container>
+    </ul>
+</ng-template>
+
+<ng-template #linkTypeTpl let-item="item" let-level="level">
+    <mat-icon class="menu-icon" *ngIf="level === 1">{{ item.icon }}</mat-icon>
+    <div class="dot-icon" *ngIf="level !== 1"></div>
+    <span class="menu-name">{{ item.name | translate }}</span>
+
+    <div *ngIf="item.type === 'sub'" class="icon">
+        <mat-icon class="menu-add" (click)="addProject()">add</mat-icon>
+        <mat-icon class="menu-caret">chevron_left</mat-icon>
+    </div>
+
+</ng-template>

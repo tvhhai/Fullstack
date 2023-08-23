@@ -1,0 +1,22 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li
+      class="breadcrumb-item"
+      *ngFor="let navLink of nav; first as isFirst; last as isLast"
+    >
+      <a [routerLink]="['dashboard']" class="link" *ngIf="isFirst">{{
+        navLink | translate
+      }}</a>
+
+      <ng-container *ngIf="nav.length !== 1">
+        <ng-container *ngIf="!isFirst && !isLast">
+          <span>{{ navLink | translate }}</span>
+        </ng-container>
+
+        <ng-container *ngIf="isLast">
+          <span class="last">{{ navLink | translate }}</span>
+        </ng-container>
+      </ng-container>
+    </li>
+  </ol>
+</nav>

@@ -1,0 +1,32 @@
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.875rem;
+  list-style: none;
+  margin: 0;
+}
+
+.breadcrumb-item {
+  line-height: 18px;
+  //     text-transform: capitalize;
+
+  > * {
+    vertical-align: middle;
+  }
+
+  > a.link {
+    &:hover {
+    }
+  }
+
+  > .chevron {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+    user-select: none;
+  }
+
+  .last {
+    color: #8a93a2;
+  }
+}

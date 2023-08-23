@@ -1,0 +1,88 @@
+<div>
+    <h1 class="mat-h1 my-0">
+        {{ 'preferences.userSetting.title' | translate }}
+    </h1>
+
+    <app-card-layout
+            [showBackToView]="false"
+    >
+        <div class="row">
+            <div class="col-md-6">
+                <form class="form-field-full">
+
+                    <div class="form-group row justify-content-between my-4">
+                        <mat-label class="col-sm-4 col-form-label fw-bold">
+                            {{ "preferences.userSetting.languages.title" | translate }}
+                        </mat-label>
+                        <div class="col-sm-6 justify-content-end">
+                            <app-select [arrObjVal]="languageSettings"
+                                        [(modelValue)]="setting.language"
+                                        (selectionChange)="onChangeLanguage($event)"
+                                        class="mb-2 app-input"></app-select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row justify-content-between my-4">
+                        <mat-label class="col-sm-4 col-form-label fw-bold">
+                            {{ "preferences.userSetting.currency" | translate }}
+                        </mat-label>
+                        <div class="col-sm-6 justify-content-end">
+                            <app-select [arrObjVal]="currencySettings"
+                                        [(modelValue)]="setting.currency"
+                                        (selectionChange)="onChangeCurrency($event)"
+                                        class="mb-2 app-input"></app-select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row justify-content-between my-4">
+                        <mat-label class="col-sm-4 col-form-label fw-bold">
+                            {{ "preferences.userSetting.dateFormat" | translate }}
+                        </mat-label>
+                        <div class="col-sm-6 justify-content-end">
+                            <app-select [arrObjVal]="dateFormatSettings"
+                                        [(modelValue)]="setting.dateFormat"
+                                        (selectionChange)="onChangeDateFormat($event)"
+                                        class="mb-2 app-input"></app-select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row justify-content-between my-4">
+                        <mat-label class="col-sm-4 col-form-label fw-bold">
+                            {{ "preferences.userSetting.timeFormat" | translate }}
+                        </mat-label>
+                        <div class="col-sm-6 justify-content-end">
+                            <app-select [arrObjVal]="timeFormatSettings"
+                                        [(modelValue)]="setting.timeFormat"
+                                        (selectionChange)="onChangeTimeFormat($event)"
+                                        class="mb-2 app-input"></app-select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row justify-content-between my-4">
+                        <mat-label class="col-sm-4 col-form-label fw-bold">
+                            {{ "preferences.userSetting.themeOptions" | translate }}
+                        </mat-label>
+                        <div class="col-sm-6 justify-content-end">
+                            <app-select [arrObjVal]="themeOptionsSettings"
+                                        [(modelValue)]="setting.themeOptions"
+                                        (selectionChange)="onChangeThemeOptions($event)"
+                                        class="mb-2 app-input"></app-select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row justify-content-between my-4">
+                        <mat-label class="col-sm-4 col-form-label fw-bold">
+                            {{ "preferences.userSetting.themeColor" | translate }}
+                        </mat-label>
+                        <div class="col-sm-6 justify-content-end">
+                            <app-select [arrObjVal]="themeColorSettings"
+                                        [(modelValue)]="setting.themeColor"
+                                        (selectionChange)="onChangeThemeColor($event)"
+                                        class="mb-2 app-input"></app-select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </app-card-layout>
+</div>
