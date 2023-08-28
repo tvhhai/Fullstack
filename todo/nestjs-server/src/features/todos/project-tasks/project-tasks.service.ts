@@ -26,7 +26,14 @@ export class ProjectTasksService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} projectTask`;
+    const data = this.projectTaskRepository.find({
+      where: { id },
+      relations: ['sectionTasks', 'tasks', 'sectionTasks.tasks'],
+    });
+    if (!data) {
+      throw new Error('Project not found');
+    }
+    return data;
   }
 
   update(id: number, updateProjectTaskDto: UpdateProjectTaskDto) {

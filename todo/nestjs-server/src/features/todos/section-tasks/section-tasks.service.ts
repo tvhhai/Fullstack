@@ -21,6 +21,7 @@ export class SectionTasksService {
       where: {
         projectTask: { id: projectTaskId },
       },
+      relations: ['tasks'],
     });
   }
 

@@ -3,7 +3,6 @@ import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { User } from '../../../rbac/users/entities/user.entity';
 import { Task } from '../../tasks/entities/task.entity';
 import { SectionTask } from '@features/todos/section-tasks/entities/section-task.entity';
-import { Exclude } from 'class-transformer';
 
 @Entity()
 export class ProjectTask extends BaseEntity {
@@ -18,16 +17,4 @@ export class ProjectTask extends BaseEntity {
 
   @OneToMany(() => SectionTask, (sectionTask) => sectionTask.projectTask)
   sectionTasks: SectionTask[];
-
-  @Exclude()
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  created_at: Date;
-
-  @Exclude()
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    onUpdate: 'CURRENT_TIMESTAMP',
-  })
-  updated_at: Date;
 }

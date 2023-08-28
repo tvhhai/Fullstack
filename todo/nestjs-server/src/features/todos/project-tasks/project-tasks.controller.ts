@@ -44,7 +44,6 @@ export class ProjectTasksController {
   async findAll(@Req() req: any) {
     try {
       const projectTasks = await this.projectTasksService.findAll(req.user);
-
       return {
         statusCode: HttpStatus.OK,
         message: 'Success',
@@ -54,8 +53,15 @@ export class ProjectTasksController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.projectTasksService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    try {
+      const data = await this.projectTasksService.findOne(+id);
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Success',
+        data: data,
+      };
+    } catch (err) {}
   }
 
   @Patch(':id')

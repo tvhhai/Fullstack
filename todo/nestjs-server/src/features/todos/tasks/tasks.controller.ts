@@ -6,13 +6,13 @@ import {
   Patch,
   Param,
   Delete,
-  HttpStatus,
+  HttpStatus, Query
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 
-@Controller('tasks')
+@Controller('api/tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
@@ -30,9 +30,11 @@ export class TasksController {
   }
 
   @Get()
-  async findAll() {
+  async findAll(@Query('project-task') projectTaskId: number) {
     try {
-      const projectTasks = await this.tasksService.findAll();
+      const projectTasks = await this.tasksService.findByProjectTaskId(
+        projectTaskId,
+      );
 
       return {
         statusCode: HttpStatus.OK,

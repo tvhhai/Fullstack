@@ -25,6 +25,14 @@ export class TasksService {
     });
   }
 
+  findByProjectTaskId(projectTaskId: number) {
+    return this.taskRepository.find({
+      where: {
+        projectTask: { id: projectTaskId },
+      },
+    });
+  }
+
   findOne(id: number) {
     return `This action returns a #${id} task`;
   }

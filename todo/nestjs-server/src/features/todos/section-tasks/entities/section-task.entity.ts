@@ -8,9 +8,11 @@ export class SectionTask extends BaseEntity {
   @Column({ length: 50 })
   title: string;
 
-  @OneToMany(() => Task, (task) => task.sectionTask)
+  @OneToMany(() => Task, (task) => task.sectionTask, { onDelete: 'CASCADE' })
   tasks: Task[];
 
-  @ManyToOne(() => ProjectTask, (projectTask) => projectTask.sectionTasks)
+  @ManyToOne(() => ProjectTask, (projectTask) => projectTask.sectionTasks, {
+    onDelete: 'CASCADE',
+  })
   projectTask: ProjectTask;
 }

@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { SectionTasksService } from './section-tasks.service';
 import { CreateSectionTaskDto } from './dto/create-section-task.dto';
@@ -29,11 +30,9 @@ export class SectionTasksController {
     } catch (err) {}
   }
 
-  @Get(':projectTaskId')
-  async findAll(@Param('projectTaskId') projectTaskId: number) {
+  @Get()
+  async findAll(@Query('project-task') projectTaskId: number) {
     try {
-      // return this.sectionTasksService.findAll();
-
       const projectTasks = await this.sectionTasksService.findAll(
         projectTaskId,
       );
