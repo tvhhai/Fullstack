@@ -25,6 +25,7 @@
                     routerLinkActive="active-link"
                     [route]="menuItem.route"
                     [type]="menuItem.type"
+                    [child]="menuItem.child"
                 >
                     <a class="menu-heading"
                        [style.padding-left.px]="level !== 1 ? level * 16 : ''"
@@ -51,7 +52,7 @@
                             [ngTemplateOutletContext]="{
                               menuList: menuItem.child,
                               parentRoute: parentRoute.concat([menuItem.route]),
-                              level: menuItem.type ==='section' ? 1 : level + 1
+                              level: level + 1
                             }"
                     >
                     </ng-container>
@@ -66,7 +67,7 @@
     <div class="dot-icon" *ngIf="level !== 1"></div>
     <span class="menu-name">{{ item.name | translate }}</span>
 
-    <div *ngIf="item.type === 'sub'" class="icon">
+    <div class="icon-group" *ngIf="item.type === 'sub'">
         <mat-icon class="menu-add" (click)="addProject()">add</mat-icon>
         <mat-icon class="menu-caret">chevron_left</mat-icon>
     </div>

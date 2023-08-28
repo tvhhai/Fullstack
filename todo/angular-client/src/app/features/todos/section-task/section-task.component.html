@@ -1,0 +1,44 @@
+<div>
+    <div class="section-task-list" *ngIf="!isEmptyArray(sectionTaskList)">
+
+        <ng-container *ngFor="let item of sectionTaskList">
+
+            <header class="section-head">
+                <div class="overflow-actions">
+                    <span class="section-drag">
+
+                    </span>
+                    <span class="collapser">
+                        <app-button
+                                [btnType]="ButtonTypes.Icon"
+                                [btnColor]="ButtonColor.Basic"
+                                (click)="onCancelSaveTask()"
+                                [btnIcon]="'arrow_forward_ios'"
+                        ></app-button>
+                    </span>
+                </div>
+
+
+                <div class="title-box">
+                    {{item.title}}
+                </div>
+
+                <div class="actions">
+
+                </div>
+            </header>
+
+            <div class="list-holder">
+                <ng-container *ngFor="let task of item.tasks">
+                    {{task.title}}
+                </ng-container>
+            </div>
+
+
+        </ng-container>
+
+    </div>
+
+    <app-action-task></app-action-task>
+
+</div>

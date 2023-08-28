@@ -8,7 +8,7 @@ export class AppConstant {
 
   public static readonly PAGE = {
     DASHBOARD_PAGE: 'dashboard',
-    TODAY_PAGE: 'todo/today',
+    TODAY_PAGE: 'today',
     SIGN_IN_PAGE: 'auth/sign-in',
     SIGN_UP_PAGE: 'auth/sign-up',
   };

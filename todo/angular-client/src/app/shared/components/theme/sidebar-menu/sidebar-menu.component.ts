@@ -30,6 +30,7 @@ export class SidebarMenuComponent {
         this.projectService.create(data).subscribe({
             next: (res) => {
                 // console.log(res);
+                const dataResponse = res.data;
                 this.menu$.subscribe(
                     {
                         next: (res) => {
@@ -39,7 +40,7 @@ export class SidebarMenuComponent {
                                     val.child?.push({
                                         id: 9,
                                         name: data.title,
-                                        route: "today",
+                                        route: dataResponse.title + "-" + dataResponse.id,
                                         type: "link",
                                         icon: "task"
                                     });

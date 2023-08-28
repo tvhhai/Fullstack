@@ -1,1 +1,13 @@
-<p>project works!</p>
+<h1 class="mat-h1 my-0">
+    {{ title }}
+</h1>
+<app-card-layout
+        [showBackToView]="false"
+>
+    <div class="project-list-view" *ngIf="prjTaskId">
+        <app-task [prjTaskId]="prjTaskId"></app-task>
+
+<!--        <app-section-task [prjTaskId]="prjTaskId"></app-section-task>-->
+
+    </div>
+</app-card-layout>

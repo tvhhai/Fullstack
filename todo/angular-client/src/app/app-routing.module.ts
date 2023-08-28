@@ -15,9 +15,9 @@ const appRoutes: Routes = [
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         children: [
-            { path: "", redirectTo: "todo/today", pathMatch: "full" },
+            { path: "", redirectTo: "today", pathMatch: "full" },
             {
-                path: "todo",
+                path: "",
                 loadChildren: () =>
                     import("././features/todos/todos.module").then(
                         (m) => m.TodosModule

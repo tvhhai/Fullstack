@@ -103,6 +103,14 @@
     },
     "project": {
       "title": "Project"
+    },
+    "task": {
+      "title": "Task",
+      "taskName": "Task Name"
+    },
+    "section": {
+      "title": "Section",
+      "name": "Section Name"
     }
   },
   "preferences": {

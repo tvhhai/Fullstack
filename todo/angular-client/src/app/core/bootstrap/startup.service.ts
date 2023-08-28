@@ -55,7 +55,6 @@ export class StartupService {
     }
 
     private setMenu(menu: IMenuItem[]) {
-        console.log(menu);
         this.menuService.set(menu);
     }
 

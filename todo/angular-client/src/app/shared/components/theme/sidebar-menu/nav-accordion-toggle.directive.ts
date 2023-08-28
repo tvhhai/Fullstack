@@ -1,10 +1,10 @@
-import { Directive, ElementRef, HostListener, Inject, Renderer2 } from "@angular/core";
+import { AfterViewInit, Directive, ElementRef, HostListener, Inject, Renderer2 } from "@angular/core";
 import { NavAccordionItemDirective } from "./nav-accordion-item.directive";
 
 @Directive({
     selector: "[appNavAccordionToggle]",
 })
-export class NavAccordionToggleDirective {
+export class NavAccordionToggleDirective implements AfterViewInit {
     protected navLink: NavAccordionItemDirective;
 
     constructor(
@@ -16,20 +16,18 @@ export class NavAccordionToggleDirective {
     }
 
     ngOnInit() {
-
     }
+
 
     ngAfterViewInit() {
-        this.renderPasswordVisibilityToggle();
+        this.addClickEvent();
     }
 
 
-    renderPasswordVisibilityToggle() {
+    addClickEvent() {
         const targetElement = this.el.nativeElement.querySelector(".menu-caret");
-        console.log(targetElement);
         this.renderer.listen(targetElement, "click", () => {
             this.navLink.toggle();
         });
     }
-
 }

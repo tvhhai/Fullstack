@@ -1,14 +1,16 @@
 import { Directive, HostBinding, Inject, Input, OnDestroy } from "@angular/core";
 import { NavAccordionDirective } from "./nav-accordion.directive";
+import { IMenuChildrenItem } from "@core/menu/menu.model";
 
 @Directive({
     selector: "[appNavAccordionItem]"
 })
 export class NavAccordionItemDirective implements OnDestroy {
     protected nav: NavAccordionDirective;
-    protected isExpanded = false;
+    protected isExpanded = true;
 
     @Input() route = "";
+    @Input() child: IMenuChildrenItem[] = [];
     @Input() type: "link" | "sub" | "extLink" | "extTabLink" = "link";
 
     @HostBinding("class.expanded")

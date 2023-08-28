@@ -3,40 +3,40 @@ import { HttpClient } from "@angular/common/http";
 import { LoaderService } from "@shared/services/loader.service";
 import { finalize, Observable } from "rxjs";
 import { DataRes } from "@shared/model";
-import { Project, ProjectReq } from "./model/project.model";
+import { ISectionTask, ISectionTaskReq } from "./model/section-task.model";
 
 
 @Injectable({
     providedIn: "root",
 })
-export class ProjectService {
+export class SectionTaskService {
     constructor(private http: HttpClient, private loaderService: LoaderService) {
     }
 
-    getData(): Observable<DataRes<Project[]>> {
+    getDataByPrjTask(prjTaskId: number): Observable<DataRes<ISectionTask[]>> {
         this.loaderService.isLoading.next(true);
 
-        return this.http.get<DataRes<Project[]>>("api/project-tasks").pipe(
+        return this.http.get<DataRes<ISectionTask[]>>("api/section-tasks?project-task=" + prjTaskId).pipe(
             finalize(() => {
                 this.loaderService.isLoading.next(false);
             })
         );
     }
 
-    getById(id: number): Observable<DataRes<Project>> {
+    getById(id: string): Observable<DataRes<ISectionTask>> {
         this.loaderService.isLoading.next(true);
 
-        return this.http.get<DataRes<Project>>("api/project-tasks" + "/" + id).pipe(
+        return this.http.get<DataRes<ISectionTask>>("api/section-tasks" + "/" + id).pipe(
             finalize(() => {
                 this.loaderService.isLoading.next(false);
             })
         );
     }
 
-    create(data: ProjectReq): Observable<DataRes<Project>> {
+    create(data: ISectionTaskReq): Observable<DataRes<ISectionTask>> {
         this.loaderService.isLoading.next(true);
 
-        return this.http.post<DataRes<Project>>("api/project-tasks", data).pipe(
+        return this.http.post<DataRes<ISectionTask>>("api/section-tasks", data).pipe(
             finalize(() => {
                 this.loaderService.isLoading.next(false);
             })

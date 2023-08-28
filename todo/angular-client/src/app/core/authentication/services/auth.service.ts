@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Injector } from "@angular/core";
 import { finalize, iif, Observable, of, switchMap } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { AppConstant } from "@shared/constants";
@@ -8,9 +8,9 @@ import { LoaderService } from "@shared/services/loader.service";
 import { MenuConstant } from "../../menu/menu-items";
 import { UserResponse } from "../models/auth";
 import { SettingConstant } from "@core/constants/auth.constant";
-import { ProjectService } from "../../../features/todos/project/project.service";
 import { isEmptyArray } from "@shared/helpers";
 import { IMenuChildrenItem, IMenuItem } from "@core/menu/menu.model";
+import { ProjectService } from "../../../features/todos/project/project.service";
 
 @Injectable({
     providedIn: "root"
@@ -76,44 +76,43 @@ export class AuthService {
         return this.doesHttpOnlyCookieExist(SettingConstant.COOKIE_NAME);
     }
 
+    isRefreshTokenExist() {
+        return this.doesHttpOnlyCookieExist("refreshToken");
+    }
+
     getCurrentUser() {
         return this.http.get<UserResponse>("api/current-user");
     }
 
     getConditionalMenu() {
-        return iif(() => this.isLoggedIn(), this.getMenu(), of({}));
+        return iif(() => this.isLoggedIn(), this.getMenu(), of([]));
     }
 
+
     getMenu(): Observable<any> {
-        // this.projectService.getData().subscribe({
-        //     next: (res) => {
-        //         console.log(res);
-        //     }
-        // });
-        // return of(MenuConstant.MENU_ITEMS);
         const menu = MenuConstant.MENU_ITEMS;
 
         return this.projectService.getData().pipe(
             switchMap((res) => {
-
-                if (!isEmptyArray(res.data)) {
-
-                    res.data.forEach((item) => {
-                        const typedItem: IMenuItem = item as unknown as IMenuItem;
-                        typedItem.name = item.title;
-                        typedItem.route = item.title;
-                        typedItem.type = "link";
-                        typedItem.icon = "";
+                if (res && !isEmptyArray(res.data)) {
+                    const typedItems: IMenuChildrenItem[] = res.data.map((item: any) => {
+                        const typedItem: IMenuChildrenItem = {
+                            id: item.id,
+                            name: item.title,
+                            route: item.title + "-" + item.id,
+                            type: "link",
+                            icon: "",
+                            child: []
+                        };
+                        return typedItem;
                     });
 
-
-                    menu.forEach(val => {
+                    menu.forEach((val) => {
                         if (val.id === "project") {
-                            val.child = res.data as unknown as IMenuChildrenItem[];
+                            val.child = typedItems;
                         }
                     });
                 }
-
                 return of(menu);
             })
         );

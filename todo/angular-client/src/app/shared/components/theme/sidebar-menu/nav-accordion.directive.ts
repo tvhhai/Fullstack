@@ -42,10 +42,11 @@ export class NavAccordionDirective {
 
   checkOpenLinks() {
     this.navLinks.forEach((link) => {
+      link.expanded = true;
       if (link.route) {
         if (this.router.url.split('/').includes(link.route)) {
           link.expanded = true;
-          this.closeOtherLinks(link);
+          // this.closeOtherLinks(link);
         }
       }
     });
