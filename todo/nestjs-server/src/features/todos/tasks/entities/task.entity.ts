@@ -14,9 +14,16 @@ export class Task extends BaseEntity {
   @Column({ length: 50 })
   status: string;
 
-  @ManyToOne(() => SectionTask, (sectionTask) => sectionTask.tasks)
+  @Column()
+  index: number;
+
+  @ManyToOne(() => SectionTask, (sectionTask) => sectionTask.tasks, {
+    onDelete: 'CASCADE',
+  })
   sectionTask: SectionTask;
 
-  @ManyToOne(() => ProjectTask, (projectTask) => projectTask.tasks)
+  @ManyToOne(() => ProjectTask, (projectTask) => projectTask.tasks, {
+    onDelete: 'CASCADE',
+  })
   projectTask: ProjectTask;
 }

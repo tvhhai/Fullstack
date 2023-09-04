@@ -7,8 +7,7 @@ import { ProjectComponent } from './project/project.component';
 import { TranslateModule } from "@ngx-translate/core";
 import { SharedModule } from "@shared/shared.module";
 import { TaskComponent } from './task/task.component';
-import { SectionTaskComponent } from './section-task/section-task.component';
-import { ActionTaskComponent } from './action-task/action-task.component';
+import { NgIconComponent } from "@ng-icons/core";
 
 
 @NgModule({
@@ -16,14 +15,13 @@ import { ActionTaskComponent } from './action-task/action-task.component';
     TodayComponent,
     ProjectComponent,
     TaskComponent,
-    SectionTaskComponent,
-    ActionTaskComponent
   ],
     imports: [
         CommonModule,
         TodosRoutingModule,
         TranslateModule,
-        SharedModule
+        SharedModule,
+        NgIconComponent,
     ]
 })
 export class TodosModule { }

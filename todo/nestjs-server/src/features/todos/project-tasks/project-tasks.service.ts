@@ -26,9 +26,17 @@ export class ProjectTasksService {
   }
 
   findOne(id: number) {
-    const data = this.projectTaskRepository.find({
+    const data = this.projectTaskRepository.findOne({
       where: { id },
       relations: ['sectionTasks', 'tasks', 'sectionTasks.tasks'],
+      order: {
+        sectionTasks: {
+          index: 'ASC',
+        },
+        tasks: {
+          index: 'ASC',
+        },
+      },
     });
     if (!data) {
       throw new Error('Project not found');

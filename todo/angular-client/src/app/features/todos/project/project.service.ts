@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { LoaderService } from "@shared/services/loader.service";
 import { finalize, Observable } from "rxjs";
 import { DataRes } from "@shared/model";
-import { Project, ProjectReq } from "./model/project.model";
+import { IProject, IProjectReq } from "./model/project.model";
 
 
 @Injectable({
@@ -13,30 +13,30 @@ export class ProjectService {
     constructor(private http: HttpClient, private loaderService: LoaderService) {
     }
 
-    getData(): Observable<DataRes<Project[]>> {
+    getData(): Observable<DataRes<IProject[]>> {
         this.loaderService.isLoading.next(true);
 
-        return this.http.get<DataRes<Project[]>>("api/project-tasks").pipe(
+        return this.http.get<DataRes<IProject[]>>("api/project-tasks").pipe(
             finalize(() => {
                 this.loaderService.isLoading.next(false);
             })
         );
     }
 
-    getById(id: number): Observable<DataRes<Project>> {
+    getById(id: number): Observable<DataRes<IProject>> {
         this.loaderService.isLoading.next(true);
 
-        return this.http.get<DataRes<Project>>("api/project-tasks" + "/" + id).pipe(
+        return this.http.get<DataRes<IProject>>("api/project-tasks" + "/" + id).pipe(
             finalize(() => {
                 this.loaderService.isLoading.next(false);
             })
         );
     }
 
-    create(data: ProjectReq): Observable<DataRes<Project>> {
+    create(data: IProjectReq): Observable<DataRes<IProject>> {
         this.loaderService.isLoading.next(true);
 
-        return this.http.post<DataRes<Project>>("api/project-tasks", data).pipe(
+        return this.http.post<DataRes<IProject>>("api/project-tasks", data).pipe(
             finalize(() => {
                 this.loaderService.isLoading.next(false);
             })

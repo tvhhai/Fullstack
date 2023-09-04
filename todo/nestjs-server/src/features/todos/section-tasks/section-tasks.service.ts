@@ -12,8 +12,24 @@ export class SectionTasksService {
     private readonly sectionTaskRepository: Repository<SectionTask>,
   ) {}
 
+  async createAndUpdate(data: CreateSectionTaskDto): Promise<SectionTask> {
+    const projectTask = await this.create(data);
+
+    if (Array.isArray(data.sectionTaskUpdateIndex)) {
+      data.sectionTaskUpdateIndex.forEach((val) => {
+        if (!val.id) {
+          val.id = projectTask.id;
+          val.index = projectTask.index;
+        }
+      });
+    }
+
+    await this.updateMulti(data);
+    return projectTask;
+  }
+
   create(data: CreateSectionTaskDto): Promise<SectionTask> {
-    return this.sectionTaskRepository.save(data);
+    return this.sectionTaskRepository.save(data.sectionTaskReq);
   }
 
   findAll(projectTaskId: number) {
@@ -31,6 +47,22 @@ export class SectionTasksService {
 
   update(id: number, updateSectionTaskDto: UpdateSectionTaskDto) {
     return `This action updates a #${id} sectionTask`;
+  }
+
+  updateMulti(data: UpdateSectionTaskDto) {
+    const promises = data.sectionTaskUpdateIndex.map(async (item) => {
+      const [entityToUpdate] = await Promise.all([
+        this.sectionTaskRepository.findOne({
+          where: { id: item.id },
+        }),
+      ]);
+      if (entityToUpdate) {
+        entityToUpdate.index = item.index;
+        return this.sectionTaskRepository.save(entityToUpdate);
+      }
+    });
+
+    return Promise.all(promises);
   }
 
   remove(id: number) {

@@ -30,6 +30,19 @@ export class SectionTasksController {
     } catch (err) {}
   }
 
+  @Post('arrange')
+  async createAndUpdate(@Body() data: CreateSectionTaskDto) {
+    try {
+      const result = await this.sectionTasksService.createAndUpdate(data);
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Success',
+        data: result,
+      };
+    } catch (err) {}
+  }
+
   @Get()
   async findAll(@Query('project-task') projectTaskId: number) {
     try {

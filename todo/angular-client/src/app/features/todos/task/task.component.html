@@ -1,171 +1,149 @@
-<div>
-    <div class="task-list" *ngIf="!isEmptyArray(taskList)">
+<div class="list-box">
+    <div [ngClass]="currentView==='list'?'list-view':'board-view'">
 
-        <ng-container *ngFor="let item of taskList">
-            <div *ngFor="let item of taskList ">
-                {{item.title}}
-            </div>
-        </ng-container>
-        <div class="task-content">
-            <div class="add-task" (click)="onAddTask()" *ngIf="!viewTaskEditor">
-                <mat-icon class="icon">add</mat-icon>
-                <span> Add task </span>
-            </div>
-
-            <div class="task-editor" *ngIf="viewTaskEditor">
-                <div class="task-editor-input">
-                    <input class="app-input task-name"
-                           [(ngModel)]="taskName"
-                           placeholder="{{'todo.task.taskName' | translate}}"
-                    />
-                    <input class="app-input task-description"
-                           [(ngModel)]="taskDescription"
-                           placeholder="{{'common.description' | translate}}"
-                    />
-                </div>
-
-                <div class="task-editor-footer">
-                    <div></div>
-                    <div class="btn-action">
-                        <app-button
-                                [btnType]="ButtonTypes.Outline"
-                                [btnColor]="ButtonColor.Basic"
-                                (click)="onCancelSaveTask()"
-                                [btnText]="'common.cancel'"
-                        ></app-button>
-                        <app-button
-                                [btnType]="ButtonTypes.Flat"
-                                [btnColor]="ButtonColor.Primary"
-                                (click)="onSaveTask()"
-                                [btnText]="'common.save'"
-                                [btnDisabled]="isValid"
-                        ></app-button>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        <div class="section-content">
-            <div class="add-section" *ngIf="!viewAddSection" (click)="onAddSection()">
-                Add section
-            </div>
-
-            <div *ngIf="viewAddSection" class="section">
-                <input class="app-input section-name"
-                       [(ngModel)]="sectionName"
-                       placeholder="{{'todo.section.name' | translate}}"
-                />
-                <div class="btn-action">
-                    <app-button
-                            [btnType]="ButtonTypes.Outline"
-                            [btnColor]="ButtonColor.Basic"
-                            (click)="onCancelSaveSection()"
-                            [btnText]="'common.cancel'"
-                    ></app-button>
-                    <app-button
-                            [btnType]="ButtonTypes.Flat"
-                            [btnColor]="ButtonColor.Primary"
-                            (click)="onSaveSection()"
-                            [btnText]="'common.save'"
-                            [btnDisabled]="isValid"
-                    ></app-button>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="section-task-list" *ngIf="!isEmptyArray(sectionTaskList)" [ngClass]="open?'open':''">
-        <ng-container *ngFor="let item of sectionTaskList">
-            <header class="section-head">
-                <div class="overflow-actions">
-                    <span class="section-drag"> </span>
-                    <span class="section-collapse" (click)="openSection()">
-                            <mat-icon>arrow_forward_ios</mat-icon>
-                        </span>
-                </div>
-
+        <div class="task-list" *ngIf="!isEmptyArray(data.tasks)">
+            <header class="task-header" *ngIf="currentView!=='list'">
                 <div class="title-box">
-                    {{item.title}}
+                    (No Section)
                 </div>
-
-                <div class="actions"></div>
             </header>
+            <div *ngFor="let item of data.tasks">
+                <ng-container [ngTemplateOutlet]="taskItemTemplate"
+                              [ngTemplateOutletContext]="{task:item}"></ng-container>
+            </div>
+            <ng-container [ngTemplateOutlet]="taskAction"
+                          [ngTemplateOutletContext]="{id:'task'}"></ng-container>
 
-            <div class="list-holder">
-                <ng-container *ngFor="let task of item.tasks">
-                    <div>
-                        {{task.title}}
+            <ng-container *ngIf="currentView==='list'"
+                          [ngTemplateOutlet]="sectionTaskAction"
+                          [ngTemplateOutletContext]="{id:'task'}"></ng-container>
+        </div>
+
+
+        <ng-container *ngFor="let item of data.sectionTasks; let i = index">
+
+            <div class="board-add-section-container" *ngIf="currentView!=='list'">
+                <ng-container [ngTemplateOutlet]="sectionTaskAction"
+                              [ngTemplateOutletContext]="{item:item, index:i}"></ng-container>
+            </div>
+
+            <div class="section-list">
+                <section [ngClass]="item.isExpand?'collapsed':''">
+                    <header class="section-head">
+                        <div class="overflow-actions">
+                            <div class="section-drag">
+                                <mat-icon class="icon">drag_indicator</mat-icon>
+                            </div>
+                            <div class="section-collapse" (click)="openSection(item)">
+                                <mat-icon class="icon">
+                                    expand_more
+                                </mat-icon>
+                            </div>
+                        </div>
+
+                        <div class="title-box">
+                            <span>{{item.title}}</span>
+                            <small>{{item.tasks.length}}</small>
+                        </div>
+
+                        <div class="actions"></div>
+                    </header>
+
+                    <div class="list-holder">
+                        <div *ngIf="!isEmptyArray(item.tasks)">
+                            <div class="task-list">
+                                <ng-container *ngFor="let task of item.tasks">
+                                    <ng-container [ngTemplateOutlet]="taskItemTemplate"
+                                                  [ngTemplateOutletContext]="{task:task}"></ng-container>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <ng-container [ngTemplateOutlet]="taskAction"
+                                      [ngTemplateOutletContext]="{item:item, id:'section'}"></ng-container>
                     </div>
-                </ng-container>
+                    <ng-container *ngIf="currentView==='list'" [ngTemplateOutlet]="sectionTaskAction"
+                                  [ngTemplateOutletContext]="{item:item, id:'section', index:i}"></ng-container>
+                </section>
             </div>
         </ng-container>
 
-        <div class="task-content">
-            <div class="add-task" (click)="onAddTask()" *ngIf="!viewTaskEditor">
-                <mat-icon class="icon">add</mat-icon>
-                <span> Add task </span>
-            </div>
-
-            <div class="task-editor" *ngIf="viewTaskEditor">
-                <div class="task-editor-input">
-                    <input class="app-input task-name"
-                           [(ngModel)]="taskName"
-                           placeholder="{{'todo.task.taskName' | translate}}"
-                    />
-                    <input class="app-input task-description"
-                           [(ngModel)]="taskDescription"
-                           placeholder="{{'common.description' | translate}}"
-                    />
-                </div>
-
-                <div class="task-editor-footer">
-                    <div></div>
-                    <div class="btn-action">
-                        <app-button
-                                [btnType]="ButtonTypes.Outline"
-                                [btnColor]="ButtonColor.Basic"
-                                (click)="onCancelSaveTask()"
-                                [btnText]="'common.cancel'"
-                        ></app-button>
-                        <app-button
-                                [btnType]="ButtonTypes.Flat"
-                                [btnColor]="ButtonColor.Primary"
-                                (click)="onSaveTask()"
-                                [btnText]="'common.save'"
-                                [btnDisabled]="isValid"
-                        ></app-button>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="section-content">
-        <div class="add-section" *ngIf="!viewAddSection" (click)="onAddSection()">
-            Add section
+        <div class="only-section-task-action">
+            <ng-container *ngIf="currentView!=='list'"
+                          [ngTemplateOutlet]="sectionTaskAction"
+                          [ngTemplateOutletContext]="{ id:'section'}"></ng-container>
         </div>
 
-        <div *ngIf="viewAddSection" class="section">
-            <input class="app-input section-name"
-                   [(ngModel)]="sectionName"
-                   placeholder="{{'todo.section.name' | translate}}"
-            />
-            <div class="btn-action">
-                <app-button
-                        [btnType]="ButtonTypes.Outline"
-                        [btnColor]="ButtonColor.Basic"
-                        (click)="onCancelSaveSection()"
-                        [btnText]="'common.cancel'"
-                ></app-button>
-                <app-button
-                        [btnType]="ButtonTypes.Flat"
-                        [btnColor]="ButtonColor.Primary"
-                        (click)="onSaveSection()"
-                        [btnText]="'common.save'"
-                        [btnDisabled]="isValid"
-                ></app-button>
-            </div>
-        </div>
     </div>
 </div>
+
+<ng-template #taskItemTemplate let-task="task">
+    <div class="task-item">
+        <div class="overflow-actions"></div>
+        <div class="task-checkbox">
+            <mat-checkbox class="app-checkbox-circle app-checkbox-hide-ripple"></mat-checkbox>
+        </div>
+        <div class="item-content">
+            <div class="task-title">
+                {{ task.title }}
+            </div>
+        </div>
+        <div class="actions">
+            <div class="icon" *ngFor="let icon of listIconAction">
+                <ng-icon size="20" strokeWidth="1" [name]="icon"></ng-icon>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #taskAction let-item="item" let-id="id">
+    <div class="task-action-content" [id]="id">
+        <div class="add-task" (click)="onAddTask(item)"
+             *ngIf="!(id!=='task' ? item?.isViewTaskEditor : isViewTaskEditor)">
+            <mat-icon class="icon">add</mat-icon>
+            <span> Add task </span>
+        </div>
+
+        <div class="task-editor" *ngIf="id!=='task' ? item?.isViewTaskEditor : isViewTaskEditor ">
+            <div class="task-editor-input">
+                <input class="app-input task-name" [(ngModel)]="taskName"
+                       placeholder="{{'todo.task.taskName' | translate}}"/>
+                <input class="app-input task-description" [(ngModel)]="taskDescription"
+                       placeholder="{{'common.description' | translate}}"/>
+            </div>
+
+            <div class="task-editor-footer">
+                <div></div>
+                <div class="btn-action">
+                    <app-button [btnType]="ButtonTypes.Outline" [btnColor]="ButtonColor.Basic"
+                                (click)="onCancelSaveTask(item)" [btnText]="'common.cancel'"></app-button>
+                    <app-button [btnType]="ButtonTypes.Flat" [btnColor]="ButtonColor.Primary" (click)="onSaveTask(item)"
+                                [btnText]="'common.save'" [btnDisabled]="isValid"></app-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #sectionTaskAction let-item="item" let-id="id" let-index="index">
+    <div class="section-task-action-content">
+        <div class="add-section" *ngIf="!(id!=='section'? item?.isViewSectionEditor : isViewSectionEditor)"
+             (click)="onAddSection(item)">
+            <span *ngIf="id==='section'&&!item" class="icon">
+                <ng-icon size="20" strokeWidth="1.5" name="iconoirAddHexagon"></ng-icon>
+            </span>
+            <span>Add section</span>
+        </div>
+
+        <div *ngIf="id!=='section' ? item?.isViewSectionEditor : isViewSectionEditor" class="section-editor">
+            <input class="app-input section-name" [(ngModel)]="sectionName"
+                   placeholder="{{'todo.section.name' | translate}}"/>
+            <div class="btn-action">
+                <app-button [btnType]="ButtonTypes.Outline" [btnColor]="ButtonColor.Basic"
+                            (click)="onCancelSaveSection(item)" [btnText]="'common.cancel'"></app-button>
+                <app-button [btnType]="ButtonTypes.Flat" [btnColor]="ButtonColor.Primary"
+                            (click)="onSaveSection(item, index)"
+                            [btnText]="'common.save'" [btnDisabled]="isValidSection"></app-button>
+            </div>
+        </div>
+    </div>
+</ng-template>

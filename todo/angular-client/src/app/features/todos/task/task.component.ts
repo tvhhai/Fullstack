@@ -1,10 +1,15 @@
-import { Component, Input } from "@angular/core";
+import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { ButtonColor, ButtonTypes } from "@shared/components/common/button/button.enum";
 import { TaskService } from "./task.service";
-import { ITask, ITaskReq } from "./model/task.model";
-import { isEmptyArray } from "@shared/helpers";
-import { SectionTaskService } from "../section-task/section-task.service";
-import { ISectionTask, ISectionTaskReq } from "../section-task/model/section-task.model";
+import {
+    IDataSectionTaskReq,
+    ISectionTask,
+    ISectionTaskReq,
+    ISectionTaskUpdateIndexReq,
+    ITask,
+    ITaskReq
+} from "./model/task.model";
+import { isDefined, isEmptyArray } from "@shared/helpers";
 
 @Component({
     selector: "app-task",
@@ -14,102 +19,176 @@ import { ISectionTask, ISectionTaskReq } from "../section-task/model/section-tas
 export class TaskComponent {
     protected readonly ButtonTypes = ButtonTypes;
     protected readonly ButtonColor = ButtonColor;
+    protected readonly isEmptyArray = isEmptyArray;
+
     @Input() prjTaskId!: number;
+    @Input() data!: { tasks: ITask[], sectionTasks: ISectionTask[] };
+    @Input() view!: string;
+    @Output() saveTask = new EventEmitter();
+    @Output() saveSection = new EventEmitter();
 
     taskName: string = "";
-    taskList: ITask[] = [];
-    sectionTaskList: ISectionTask[] = [];
-    viewTaskEditor: boolean = false;
     taskDescription: string = "";
 
-    viewAddSection: boolean = false;
+    isViewTaskEditor: boolean = false;
+    isViewSectionEditor: boolean = false;
+
     sectionName: string = "";
 
-    constructor(private taskService: TaskService,
-                private sectionTaskService: SectionTaskService) {
-        console.log(this.prjTaskId);
+    listIconAction: string[] = ["iconoirEditPencil", "iconoirCalendarPlus", "iconoirMessageText", "iconoirMoreHoriz"];
+    currentView!: string;
+
+    constructor(private taskService: TaskService,) {
     }
 
     ngOnInit(): void {
-        console.log(this.prjTaskId);
-        this.getTask(this.prjTaskId);
-        this.getSectionTask(this.prjTaskId);
-
+        console.log("this.data", this.view);
+        this.currentView = this.view;
+        // console.log(this.currentView);
     }
 
-    getTask(prjTaskId: number) {
-        this.taskService.getDataByPrjTask(prjTaskId).subscribe(
-            (res) => {
-                console.log(res);
-                this.taskList = res.data;
-            }
-        );
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes["view"]) {
+            this.currentView = changes["view"].currentValue;
+        }
+        // console.log(this.currentView);
     }
 
+    // getTask(prjTaskId: number) {
+    //     this.taskService.getDataByPrjTask(prjTaskId).subscribe(
+    //         (res) => {
+    //             // console.log(res);
+    //             this.taskList = res.data;
+    //         }
+    //     );
+    // }
 
-    getSectionTask(prjTaskId: number) {
-        this.sectionTaskService.getDataByPrjTask(prjTaskId).subscribe(
-            (res) => {
-                console.log(res);
-                this.sectionTaskList = res.data;
-            }
-        );
+
+    onAddTask(item: any) {
+        this.isViewTaskEditor = false;
+        if (item) {
+            this.data.sectionTasks.forEach(val => {
+                val.isViewTaskEditor = item.id === val.id;
+            });
+        } else {
+            this.data.sectionTasks.forEach(val => {
+                val.isViewTaskEditor = false;
+            });
+            this.isViewTaskEditor = true;
+        }
     }
 
-    onAddTask() {
-        this.viewTaskEditor = true;
+    onAddSection(item: any) {
+        this.isViewSectionEditor = false;
+        if (item) {
+            this.data.sectionTasks.forEach(val => {
+                val.isViewSectionEditor = item.id === val.id;
+            });
+        } else {
+            this.data.sectionTasks.forEach(val => {
+                val.isViewSectionEditor = false;
+            });
+            this.isViewSectionEditor = true;
+        }
     }
 
-    onCancelSaveTask() {
-        this.viewTaskEditor = false;
+    onCancelSaveTask(item: any) {
+        item ? item.isViewTaskEditor = false :
+            this.isViewTaskEditor = false;
     }
 
-    onSaveTask() {
-        console.log(this.taskName, this.taskDescription);
-        this.viewTaskEditor = false;
-        const taskReq: ITaskReq = {
-            title: this.taskName,
-            description: this.taskDescription,
-            projectTask: this.prjTaskId
-        };
-        this.taskService.create(taskReq).subscribe((res) => {
+    onCancelSaveSection(item: any) {
+        item ? item.isViewSectionEditor = false :
+            this.isViewSectionEditor = false;
+    }
+
+    onSaveTask(item: any) {
+        let taskReq;
+        if (item) {
+            console.log(item);
+            taskReq = {
+                sectionTask: item.id,
+                title: this.taskName,
+                description: this.taskDescription
+            };
+        } else {
+            console.log(item);
+            taskReq = {
+                projectTask: this.prjTaskId,
+                title: this.taskName,
+                description: this.taskDescription
+            };
+        }
+
+        this.taskService.createTask(taskReq).subscribe((res) => {
             console.log(res);
-            this.getTask(this.prjTaskId);
+            // this.getTask(this.prjTaskId);
+            this.saveTask.emit();
         });
     }
 
     isValid = (): boolean => {
         return !this.taskName;
     };
-    protected readonly isEmptyArray = isEmptyArray;
 
-    open: boolean = false;
+    isValidSection = (): boolean => {
+        return !this.sectionName;
+    };
 
-    openSection() {
-        this.open = !this.open;
+
+    openSection(item: ISectionTask) {
+        item.isExpand = !item.isExpand;
     }
 
-    onAddSection() {
-        this.viewAddSection = true;
+    prepareDataSectionTasksDefault(name: string, index: number): ISectionTask {
+        return {
+            id: 0,
+            index: index,
+            isExpand: false,
+            isViewSectionEditor: false,
+            isViewTaskEditor: false,
+            tasks: [],
+            title: name
+        };
     }
 
-    onSaveSection() {
-        console.log(this.sectionName);
-        this.viewAddSection = false;
+    onSaveSection(item: ISectionTask, insertPosition: number) {
+        const sectionTasksSize = this.data.sectionTasks.length;
 
+        if (isDefined(insertPosition)) {
+            const dataSectionTasksReq = this.prepareDataSectionTasksDefault(this.sectionName, insertPosition);
+            this.data.sectionTasks.splice(insertPosition, 0, dataSectionTasksReq);
+        } else {
+            const dataSectionTasksReq = this.prepareDataSectionTasksDefault(this.sectionName, sectionTasksSize + 1);
+            this.data.sectionTasks.push(dataSectionTasksReq);
+        }
+
+        this.updateIndexSectionTasks();
+
+        this.prepareDataReqAndSaveSection(item, insertPosition ?? sectionTasksSize);
+    }
+
+    updateIndexSectionTasks() {
+        this.data.sectionTasks.forEach((val, i) => {
+            val.index = i + 1;
+        });
+    }
+
+    prepareDataReqAndSaveSection(item: ISectionTask, index: number) {
         const sectionTaskReq: ISectionTaskReq = {
             title: this.sectionName,
-            projectTask: this.prjTaskId
+            projectTask: this.prjTaskId,
+            index: index + 1,
         };
 
-        this.sectionTaskService.create(sectionTaskReq).subscribe(
-            () => {
-                // this.getSectionTask(this.prjTaskId);
-            }
-        );
-    }
+        const sectionTaskUpdateIndex: ISectionTaskUpdateIndexReq[] = this.data.sectionTasks.map(val => ({
+            id: val.id,
+            index: val.index,
+        }));
 
-    onCancelSaveSection() {
-        this.viewAddSection = false;
+        this.taskService.createAndUpdateSection({ sectionTaskReq, sectionTaskUpdateIndex }).subscribe((res) => {
+            this.saveSection.emit();
+            item ? item.isViewSectionEditor = false : this.isViewSectionEditor = false;
+        });
     }
 }

@@ -2,10 +2,9 @@ import { Component } from "@angular/core";
 import { ProjectService } from "./project.service";
 import { ActivatedRoute } from "@angular/router";
 import { ButtonColor, ButtonTypes } from "@shared/components/common/button/button.enum";
-import { TaskService } from "../task/task.service";
-import { SectionTaskService } from "../section-task/section-task.service";
-import { ITask } from "../task/model/task.model";
-import { ISectionTask } from "../section-task/model/section-task.model";
+import { ISectionTask, ITask } from "../task/model/task.model";
+import { IProject } from "./model/project.model";
+import { isEmptyArray } from "@shared/helpers";
 
 @Component({
     selector: "app-project",
@@ -18,51 +17,64 @@ export class ProjectComponent {
 
     title: string = "";
     prjTaskId!: number;
-
-    taskList: ITask[] = [];
-    sectionTaskList: ISectionTask[] = [];
+    data: { tasks: ITask[], sectionTasks: ISectionTask[] } = {
+        tasks: [],
+        sectionTasks: []
+    };
+    view: string = "list";
 
     constructor(
         private projectService: ProjectService,
         private route: ActivatedRoute,
-        private taskService: TaskService,
-        private sectionTaskService: SectionTaskService
+        // private taskService: TaskService,
     ) {
         route.params.subscribe(() => {
             const url = this.route.snapshot.paramMap.get("subPath") || "";
             const parts = url.split("-");
 
-            const name = parts[0];
+            // const name = parts[0];
             this.prjTaskId = Number(parts[1]);
             this.getProject(this.prjTaskId);
         });
     }
 
     ngOnInit() {
-        // this.getData();
     }
 
     getProject(id: number) {
         this.projectService.getById(id).subscribe(res => {
             this.title = res.data.title;
+            this.data = this.parseDataResponse(res.data);
         });
     }
-    getTask(prjTaskId: number) {
-        this.taskService.getDataByPrjTask(prjTaskId).subscribe(
-            (res) => {
-                console.log(res);
-                this.taskList = res.data;
+
+    parseDataResponse(dataResponse: IProject) {
+        dataResponse.sectionTasks.forEach(
+            val => {
+                val.isViewTaskEditor = false;
+                val.isViewSectionEditor = false;
             }
-        );
+        )
+        const data: { tasks: ITask[], sectionTasks: ISectionTask[] } = {
+            tasks: dataResponse.tasks,
+            sectionTasks: dataResponse.sectionTasks
+        };
+
+        console.log(data);
+        return data;
     }
 
-
-    getSectionTask(prjTaskId: number) {
-        this.sectionTaskService.getDataByPrjTask(prjTaskId).subscribe(
-            (res) => {
-                console.log(res);
-                this.sectionTaskList = res.data;
-            }
-        );
+    saveSection() {
+        console.log('saveSection');
     }
+
+    list() {
+        this.view = "list";
+    }
+
+    board() {
+        this.view = "board";
+    }
+
+    protected readonly isEmptyArray = isEmptyArray;
 }

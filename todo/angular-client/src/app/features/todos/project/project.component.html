@@ -1,13 +1,17 @@
-<h1 class="mat-h1 my-0">
-    {{ title }}
-</h1>
-<app-card-layout
-        [showBackToView]="false"
->
-    <div class="project-list-view" *ngIf="prjTaskId">
-        <app-task [prjTaskId]="prjTaskId"></app-task>
-
-<!--        <app-section-task [prjTaskId]="prjTaskId"></app-section-task>-->
-
+<div class="d-flex align-items-center justify-content-between">
+    <h1 class="mat-h1 my-0">
+        {{ title }}
+    </h1>
+    <div class="d-flex">
+        <button (click)="list()">list</button>
+        <button (click)="board()">board</button>
     </div>
-</app-card-layout>
+</div>
+
+<div class="project-list-view" *ngIf="prjTaskId">
+    <app-task [prjTaskId]="prjTaskId"
+              [data]="data"
+              [view]="view"
+              (saveTask)="getProject(prjTaskId)"
+              (saveSection)="getProject(prjTaskId)"></app-task>
+</div>

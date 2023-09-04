@@ -61,6 +61,24 @@ body {
     width: 100%;
   }
 
+  .app-checkbox-circle {
+    .mdc-checkbox__background {
+      border-radius: 50%;
+    }
+
+  }
+
+  .app-checkbox-hide-ripple {
+    .mdc-checkbox:hover .mdc-checkbox__ripple,
+    .mdc-checkbox:active .mdc-checkbox__native-control ~ .mdc-checkbox__ripple,
+    .mdc-checkbox:active .mdc-checkbox__native-control:checked ~ .mdc-checkbox__ripple,
+    .mdc-checkbox .mdc-checkbox__native-control:focus:checked ~ .mdc-checkbox__ripple,
+    .mdc-checkbox .mdc-checkbox__native-control:focus ~ .mdc-checkbox__ripple,
+    .mdc-checkbox:hover .mdc-checkbox__native-control:checked ~ .mdc-checkbox__ripple {
+      opacity: 0;
+    }
+  }
+
   .full-screen-modal .mat-dialog-container {
     padding: 1em;
     width: 100%;
@@ -80,5 +98,5 @@ body {
 
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+

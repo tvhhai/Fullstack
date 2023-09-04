@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { LoaderService } from "@shared/services/loader.service";
 import { finalize, Observable } from "rxjs";
 import { DataRes } from "@shared/model";
-import { ITask, ITaskReq } from "./model/task.model";
+import { IDataSectionTaskReq, ISectionTaskReq, ITask, ITaskReq } from "./model/task.model";
 
 
 @Injectable({
@@ -43,7 +43,7 @@ export class TaskService {
         );
     }
 
-    create(data: ITaskReq): Observable<DataRes<ITask>> {
+    createTask(data: ITaskReq): Observable<DataRes<ITask>> {
         this.loaderService.isLoading.next(true);
 
         return this.http.post<DataRes<ITask>>("api/tasks", data).pipe(
@@ -52,4 +52,26 @@ export class TaskService {
             })
         );
     }
+
+    createAndUpdateSection(data: IDataSectionTaskReq): Observable<DataRes<ISectionTaskReq>> {
+        this.loaderService.isLoading.next(true);
+
+        return this.http.post<DataRes<ISectionTaskReq>>("api/section-tasks/arrange", data).pipe(
+            finalize(() => {
+                this.loaderService.isLoading.next(false);
+            })
+        );
+    }
+
+    createSection(data: any): Observable<DataRes<ISectionTaskReq>> {
+        this.loaderService.isLoading.next(true);
+
+        return this.http.post<DataRes<ISectionTaskReq>>("api/section-tasks", data).pipe(
+            finalize(() => {
+                this.loaderService.isLoading.next(false);
+            })
+        );
+    }
+
+
 }
