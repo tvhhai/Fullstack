@@ -82,6 +82,7 @@ export class TaskComponent {
         this.isViewSectionEditor = false;
         if (item) {
             this.data.sectionTasks.forEach(val => {
+                console.log(item.id === val.id);
                 val.isViewSectionEditor = item.id === val.id;
             });
         } else {

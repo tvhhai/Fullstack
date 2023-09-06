@@ -1,17 +1,75 @@
-<div class="d-flex align-items-center justify-content-between">
-    <h1 class="mat-h1 my-0">
-        {{ title }}
-    </h1>
-    <div class="d-flex">
-        <button (click)="list()">list</button>
-        <button (click)="board()">board</button>
+<div class="project-container" [ngClass]="view ==='list'?'main-view-layout--narrow':'main-view-layout--wide'">
+    <div class="project-view">
+        <header>
+            <div class="view-header-content">
+
+                <div class="header-editable">
+                    <h1 class="mat-h1 my-0">
+                        {{ title }}
+                    </h1>
+                </div>
+
+                <div class="header-action">
+                    <div class="d-flex">
+                        <span class="item-action"
+                              [matMenuTriggerFor]="menu"
+                              #bbb="matMenuTrigger"
+                        >
+                            <i class="fa-light fa-sliders fa-lg"></i>
+                            <span>View</span>
+                        </span>
+
+                        <span class="item-action">
+                           <i class="fa-light fa-ellipsis-stroke fa-2xl"></i>
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="project-list-view" *ngIf="prjTaskId">
+            <app-task [prjTaskId]="prjTaskId"
+                      [data]="data"
+                      [view]="view"
+                      (saveTask)="getProject(prjTaskId)"
+                      (saveSection)="getProject(prjTaskId)"></app-task>
+        </div>
     </div>
 </div>
+<mat-menu #menu="matMenu" class="menu-list">
+    <div (click)="$event.stopPropagation();">
+        <header>
+            <span>View</span>
+            <i class="fa-light fa-circle-question fa-lg"></i>
+        </header>
+        <div class="menu-item">
+            <i class="fa-light fa-square-list fa-lg"></i>
+            <div class="view-dropdown">
+                <span>layout</span>
+                <div class="view-menu"
+                     [matMenuTriggerFor]="menu2"
+                     #aaa="matMenuTrigger"
+                >
+                    <span>{{viewMode[view].name}}</span>
+                    <i class="fa-light fa-angle-down"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-menu>
 
-<div class="project-list-view" *ngIf="prjTaskId">
-    <app-task [prjTaskId]="prjTaskId"
-              [data]="data"
-              [view]="view"
-              (saveTask)="getProject(prjTaskId)"
-              (saveSection)="getProject(prjTaskId)"></app-task>
-</div>
+<mat-menu #menu2="matMenu" xPosition="before" class="menu-view" [overlapTrigger]="false">
+    <div class="menu-view-item" (click)="changeView(ViewState.List)">
+        <span>{{viewMode[ViewState.List].name}}</span>
+        <i *ngIf="view === ViewState.List" class="fa-solid fa-check fa-xs"></i>
+    </div>
+
+    <div class="menu-view-item" (click)="changeView(ViewState.Board)">
+        <span>{{viewMode[ViewState.Board].name}}</span>
+        <i *ngIf="view === ViewState.Board" class="fa-solid fa-check fa-xs"></i>
+    </div>
+</mat-menu>
+
+
+

@@ -62,11 +62,13 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
     display: flex;
     align-items: flex-start;
     overflow-x: auto;
-    height: calc(100vh - 137px);
+    overflow-y: hidden;
+    height: calc(100vh - 167px);
     position: relative;
     box-sizing: border-box;
     width: 100%;
     overscroll-behavior-x: none;
+
 
     > * {
       flex-shrink: 0;
@@ -147,10 +149,9 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
     }
 
     .section-list {
-      width: 300px;
       position: relative;
       display: flex;
-      flex-direction: column;
+      //flex-direction: column;
       box-sizing: border-box;
       max-height: 100%;
       padding: 0;
@@ -173,7 +174,7 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
         transition-duration: .3s;
       }
 
-      &:hover:before {
+      &:before {
         border-radius: 8px;
         border: 1px solid #eee;
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
@@ -185,7 +186,13 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 
 
       section {
-        margin-right: 8px;
+        width: 300px;
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        box-sizing: border-box;
+        //margin-right: 8px;
+        max-height: 100%;
 
         .section-head {
           padding: 0 12px;
@@ -196,11 +203,41 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
         }
 
         .list-holder {
+          box-sizing: border-box;
+          flex-shrink: 1;
+          overflow-y: hidden;
+          overflow-x: hidden;
+
+          &:hover {
+            overflow-y: auto;
+          }
+
           .task-action-content {
             padding-left: 8px;
             padding-top: 8px;
           }
 
+          .task-list {
+            padding: 0 8px;
+
+            .task-item {
+              border: 1px solid rgba(0, 0, 0, .12);
+              border-radius: 8px;
+              margin-bottom: 8px;
+            }
+          }
+        }
+
+        .board-section-footer {
+          box-sizing: border-box;
+          min-height: 44px;
+          display: flex;
+          align-content: stretch;
+          flex: 0 0 auto;
+          padding: 0 8px;
+          transition: border-top-color .3s;
+          border-top: 1px solid rgba(0, 0, 0, .12);
+          z-index: 1;
         }
       }
     }
@@ -254,6 +291,9 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 
     .section-head {
       display: flex;
+      box-sizing: border-box;
+      justify-content: space-between;
+      flex: 0 0 44px;
       align-items: center;
       height: 44px;
       position: relative;

@@ -5,8 +5,9 @@ export interface IProject {
     title: string;
     tasks: ITask[];
     sectionTasks: ISectionTask[]
-
 }
+
+
 
 export interface IProjectReq {
     title: string;

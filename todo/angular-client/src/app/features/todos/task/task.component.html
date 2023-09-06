@@ -7,10 +7,12 @@
                     (No Section)
                 </div>
             </header>
+
             <div *ngFor="let item of data.tasks">
                 <ng-container [ngTemplateOutlet]="taskItemTemplate"
                               [ngTemplateOutletContext]="{task:item}"></ng-container>
             </div>
+
             <ng-container [ngTemplateOutlet]="taskAction"
                           [ngTemplateOutletContext]="{id:'task'}"></ng-container>
 
@@ -24,7 +26,7 @@
 
             <div class="board-add-section-container" *ngIf="currentView!=='list'">
                 <ng-container [ngTemplateOutlet]="sectionTaskAction"
-                              [ngTemplateOutletContext]="{item:item, index:i}"></ng-container>
+                              [ngTemplateOutletContext]="{item:item, index:i, id:'section'}"></ng-container>
             </div>
 
             <div class="section-list">
@@ -58,19 +60,22 @@
                                 </ng-container>
                             </div>
                         </div>
+                    </div>
+                    <div class="board-section-footer">
                         <ng-container [ngTemplateOutlet]="taskAction"
                                       [ngTemplateOutletContext]="{item:item, id:'section'}"></ng-container>
                     </div>
                     <ng-container *ngIf="currentView==='list'" [ngTemplateOutlet]="sectionTaskAction"
                                   [ngTemplateOutletContext]="{item:item, id:'section', index:i}"></ng-container>
                 </section>
+
             </div>
         </ng-container>
 
         <div class="only-section-task-action">
             <ng-container *ngIf="currentView!=='list'"
                           [ngTemplateOutlet]="sectionTaskAction"
-                          [ngTemplateOutletContext]="{ id:'section'}"></ng-container>
+                          [ngTemplateOutletContext]="{ id:'task'}"></ng-container>
         </div>
 
     </div>
@@ -126,15 +131,16 @@
 
 <ng-template #sectionTaskAction let-item="item" let-id="id" let-index="index">
     <div class="section-task-action-content">
-        <div class="add-section" *ngIf="!(id!=='section'? item?.isViewSectionEditor : isViewSectionEditor)"
+        <div class="add-section" *ngIf="!(id!=='task'? item?.isViewSectionEditor : isViewSectionEditor)"
              (click)="onAddSection(item)">
-            <span *ngIf="id==='section'&&!item" class="icon">
+            <span *ngIf="id==='section'&&!item && view!=='list'" class="icon">
                 <ng-icon size="20" strokeWidth="1.5" name="iconoirAddHexagon"></ng-icon>
             </span>
-            <span>Add section</span>
+            <span>Add section </span>
+            {{id}} {{item?.isViewSectionEditor}}
         </div>
 
-        <div *ngIf="id!=='section' ? item?.isViewSectionEditor : isViewSectionEditor" class="section-editor">
+        <div *ngIf="id!=='task' ? item?.isViewSectionEditor : isViewSectionEditor" class="section-editor">
             <input class="app-input section-name" [(ngModel)]="sectionName"
                    placeholder="{{'todo.section.name' | translate}}"/>
             <div class="btn-action">
