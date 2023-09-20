@@ -47,6 +47,7 @@ import { BarChartComponent } from './components/common/chart/bar-chart/bar-chart
 
 import { PasswordMeterDirective } from './directives/password-meter.directive';
 import { PasswordViewDirective } from './directives/password-view.directive';
+import { AddEditComponent } from "../features/todos/project/add-edit/add-edit.component";
 
 const MODULES: any[] = [
     CommonModule,
@@ -59,7 +60,8 @@ const MODULES: any[] = [
     AgGridModule,
     NgxPaginationModule,
     CurrencyMaskModule,
-    NgApexchartsModule
+    NgApexchartsModule,
+    // TodosModule
 ];
 
 const COMPONENTS: any[] = [
@@ -91,6 +93,7 @@ const COMPONENTS: any[] = [
     BarChartComponent,
     ChartComponent,
     LineChartComponent,
+    AddEditComponent
 ];
 const COMPONENTS_DYNAMIC: any[] = [];
 const DIRECTIVES: any[] = [
@@ -103,7 +106,7 @@ const PIPES: any[] = [
 ];
 
 @NgModule({
-    imports: [...MODULES],
+    imports: [...MODULES, ],
     exports: [...MODULES, ...COMPONENTS, ...DIRECTIVES, ...PIPES,],
     declarations: [...COMPONENTS, ...COMPONENTS_DYNAMIC, ...DIRECTIVES, ...PIPES, PasswordMeterDirective, PasswordViewDirective],
 })

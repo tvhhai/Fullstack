@@ -31,7 +31,7 @@ export class SignInComponent {
     ngOnInit(): void {
         this.form = this.formBuilder.group({
             username: [
-                '',
+                'admin',
                 [
                     Validators.required,
                     Validators.minLength(3),
@@ -39,7 +39,7 @@ export class SignInComponent {
                 ],
             ],
             password: [
-                '',
+                'switch',
                 [
                     Validators.required,
                     Validators.minLength(6),

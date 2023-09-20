@@ -11,17 +11,19 @@ import { SettingConstant } from "@core/constants/auth.constant";
 import { isEmptyArray } from "@shared/helpers";
 import { IMenuChildrenItem, IMenuItem } from "@core/menu/menu.model";
 import { ProjectService } from "../../../features/todos/project/project.service";
+import { DataRes } from "@shared/model";
+import { ISectionTaskReq } from "../../../features/todos/task/model/task.model";
+import { HttpService } from "@shared/services/http.service";
 
 @Injectable({
     providedIn: "root"
 })
 export class AuthService {
-    redirectUrl: any;
+    redirectUrl: string | null = null;
 
     constructor(
         private http: HttpClient,
-        private router: Router,
-        private loaderService: LoaderService,
+        private httpService: HttpService,
         private projectService: ProjectService
     ) {
     }
@@ -35,7 +37,8 @@ export class AuthService {
                         window.location.href = this.redirectUrl;
                         this.redirectUrl = null;
                     } else {
-                        this.router.navigate([`${AppConstant.PAGE.TODAY_PAGE}`]);
+                        window.location.href = AppConstant.PAGE.TODAY_PAGE;
+                        // this.router.navigate([`${AppConstant.PAGE.TODAY_PAGE}`]);
                     }
                 })
             );
@@ -50,12 +53,8 @@ export class AuthService {
     }
 
     logout(): Observable<any> {
-        this.loaderService.isLoading.next(true);
-
-        return this.http.post(AppConstant.API.SIGN_OUT_API, {}).pipe(
-            finalize(() => {
-                this.loaderService.isLoading.next(false);
-            })
+        return this.httpService.performRequest(
+            "post", AppConstant.API.SIGN_OUT_API
         );
     }
 
@@ -102,6 +101,7 @@ export class AuthService {
                             route: item.title + "-" + item.id,
                             type: "link",
                             icon: "",
+                            color: item.color,
                             child: []
                         };
                         return typedItem;

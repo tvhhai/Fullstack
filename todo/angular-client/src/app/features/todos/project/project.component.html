@@ -28,7 +28,8 @@
             </div>
         </header>
 
-        <div class="project-list-view" *ngIf="prjTaskId">
+        <div class="project-list-view"
+             *ngIf="prjTaskId">
             <app-task [prjTaskId]="prjTaskId"
                       [data]="data"
                       [view]="view"
@@ -37,12 +38,14 @@
         </div>
     </div>
 </div>
+
 <mat-menu #menu="matMenu" class="menu-list">
     <div (click)="$event.stopPropagation();">
         <header>
             <span>View</span>
             <i class="fa-light fa-circle-question fa-lg"></i>
         </header>
+
         <div class="menu-item">
             <i class="fa-light fa-square-list fa-lg"></i>
             <div class="view-dropdown">
@@ -70,6 +73,3 @@
         <i *ngIf="view === ViewState.Board" class="fa-solid fa-check fa-xs"></i>
     </div>
 </mat-menu>
-
-
-

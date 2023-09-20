@@ -8,20 +8,25 @@ import { TranslateModule } from "@ngx-translate/core";
 import { SharedModule } from "@shared/shared.module";
 import { TaskComponent } from './task/task.component';
 import { NgIconComponent } from "@ng-icons/core";
+import { CdkDrag, CdkDropList, CdkDropListGroup } from "@angular/cdk/drag-drop";
 
 
 @NgModule({
-  declarations: [
-    TodayComponent,
-    ProjectComponent,
-    TaskComponent,
-  ],
+    declarations: [
+        TodayComponent,
+        ProjectComponent,
+        TaskComponent,
+    ],
+    exports: [],
     imports: [
         CommonModule,
         TodosRoutingModule,
         TranslateModule,
         SharedModule,
         NgIconComponent,
+        CdkDropList,
+        CdkDrag,
+        CdkDropListGroup,
     ]
 })
 export class TodosModule { }

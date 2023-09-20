@@ -26,7 +26,6 @@ export class StartupService {
     load() {
         this.loaderService.isLoading.next(true);
         return new Promise<void>((resolve) => {
-            this.loaderService.isLoading.next(true);
 
             if (this.authService.isLoggedIn()) {
                 this.authService
@@ -59,12 +58,12 @@ export class StartupService {
     }
 
 
-setPermissions(user: any) {
-  if (get(user, "roles")) {
-    this.permissionsService.loadPermissions(user.roles);
-  } else {
-    this.permissionsService.loadPermissions([]);
-  }
-  this.rolesService.flushRoles();
-}
+    setPermissions(user: any) {
+        if (get(user, "roles")) {
+            this.permissionsService.loadPermissions(user.roles);
+        } else {
+            this.permissionsService.loadPermissions([]);
+        }
+        this.rolesService.flushRoles();
+    }
 }

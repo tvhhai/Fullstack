@@ -1,0 +1,37 @@
+<span (click)="addProject()">
+    <i class="menu-add fa-light fa-plus"></i>
+</span>
+
+<ng-template #dialogTemplate>
+    <form class="form-field-full" [formGroup]="form">
+        <div class="row">
+            <div class="col-md-6">
+                <mat-label class="fw-bold">{{ "common.name" | translate }}</mat-label>
+                <mat-form-field appearance="outline" class="mb-2 app-input">
+                    <input matInput type="text" placeholder="" formControlName="title"/>
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-6">
+                <mat-label class="fw-bold">{{ "common.color" | translate }}</mat-label>
+                <app-select
+                        [showColor]="true"
+                        [arrObjVal]="colors"
+                        [formCtrlName]="'color'"
+                        [formGroup]="form"
+                        (selectionChange)="onItemsPerPageChange($event)">
+                </app-select>
+            </div>
+
+            <div class="col-md-12">
+                <mat-label class="fw-bold">{{ "common.view" | translate }}</mat-label>
+                <app-select
+                        [arrObjVal]="views"
+                        [formCtrlName]="'view'"
+                        [formGroup]="form"
+                        (selectionChange)="onItemsPerPageChange($event)">
+                </app-select>
+            </div>
+        </div>
+    </form>
+</ng-template>

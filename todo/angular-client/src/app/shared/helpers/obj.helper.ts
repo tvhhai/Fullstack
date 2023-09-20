@@ -1,3 +1,5 @@
+import { identity, isArray, isEqual, isNull, isPlainObject, isUndefined, sortBy } from "lodash";
+
 /**
  * Checks if an array is empty.
  * @param arr - The array to check.
@@ -104,4 +106,62 @@ export const sortObjByObjMap = (obj: any, arrMap: object[], keySort: string): ob
     });
 };
 
+
+/**
+ * Deeply compares two objects and returns true if they are equal, false otherwise.
+ * @param obj1 - The first object to compare.
+ * @param obj2 - The second object to compare.
+ * @returns True if the objects are equal, false otherwise.
+ */
+export function deepCompareObj(obj1: any, obj2: any): boolean {
+    // If either object is not an object, perform a strict equality check
+    if (typeof obj1 !== "object" || typeof obj2 !== "object") {
+        return obj1 === obj2;
+    }
+
+    // Get the keys of both objects
+    const keys1 = Object.keys(obj1);
+    const keys2 = Object.keys(obj2);
+
+    // If the number of keys is not equal, the objects are not equal
+    if (keys1.length !== keys2.length) {
+        return false;
+    }
+
+    // Iterate over the keys and recursively compare the values
+    for (const key of keys1) {
+        if (!deepCompareObj(obj1[key], obj2[key])) {
+            return false;
+        }
+    }
+
+    // If all keys and values are equal, the objects are equal
+    return true;
+}
+
+/**
+ * Checks if two arrays are equal regardless of the order of their elements.
+ * @param arr1 - The first array to compare.
+ * @param arr2 - The second array to compare.
+ * @param sortByKey - The key to sort the arrays before comparison.
+ * @returns True if the arrays are equal, false otherwise.
+ */
+export function arraysEqualIgnoreOrder(arr1: any[], arr2: any[], sortByKey: string): boolean {
+  // Sort the arrays by the specified key
+  const sortedArr1 = sortBy(arr1, [sortByKey]);
+  const sortedArr2 = sortBy(arr2, [sortByKey]);
+
+  // Check if the sorted arrays are equal
+  return isEqual(sortedArr1, sortedArr2);
+}
+
+/**
+ * Compares two objects by stringifying them and returns true if they are equal, false otherwise.
+ * @param obj1 - The first object to compare.
+ * @param obj2 - The second object to compare.
+ * @returns True if the objects are equal, false otherwise.
+ */
+export function deepEqual(obj1: any, obj2: any): boolean {
+    return JSON.stringify(obj1) === JSON.stringify(obj2);
+}
 

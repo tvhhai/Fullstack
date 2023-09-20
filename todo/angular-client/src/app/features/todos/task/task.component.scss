@@ -1,21 +1,45 @@
 @use "@angular/material" as mat;
+@import "../../../shared/style/partials/mixin";
 
 $primary: mat.define-palette(mat.$indigo-palette);
 $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$list-view-max-width: 800px;
+$background-hover: rgb(238, 238, 238);
 
-.list-box {
+@mixin flex-column-grow {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+}
+
+@mixin icon-action {
+  @include flex-center;
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  color: grey;
+  cursor: pointer;
+}
+
+@mixin title-box {
+  span {
+    font-weight: 600;
+    margin-right: 8px;
+  }
+
+  small {
+    color: grey;
+  }
+}
+
+.list-box {
+  @include flex-column-grow;
 
   .list-view {
-    max-width: 800px;
+    @include flex-column-grow;
+    max-width: $list-view-max-width;
     margin: 0 auto;
-
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
     list-style: none;
     align-self: center;
 
@@ -24,10 +48,8 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
         opacity: 0;
         cursor: pointer;
         width: 100%;
-        display: flex;
+        @include flex-center;
         flex-direction: row;
-        justify-content: center;
-        align-items: center;
         color: mat.get-color-from-palette($primary);
         white-space: nowrap;
 
@@ -53,10 +75,46 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
         }
       }
     }
+
+    .task-item {
+      border-radius: 8px;
+    }
+
+    .cdk-drag-placeholder {
+      border-top: 3px solid mat.get-color-from-palette($primary);
+      background: $background-hover;
+      border-bottom-right-radius: 8px;
+      border-bottom-left-radius: 8px;
+      position: relative;
+
+      .section-in-list {
+        height: 64px;
+      }
+
+      &:before {
+        position: absolute;
+        top: -6px;
+        left: -8px;
+        content: "";
+        width: 9px;
+        height: 9px;
+        border: 2px solid mat.get-color-from-palette($primary);
+        border-radius: 50px;
+      }
+
+      div {
+        opacity: 0;
+      }
+    }
+
+    .cdk-drop-list {
+      .task-action-content {
+        padding: 0 !important;
+      }
+    }
   }
 
   // end list view
-
 
   .board-view {
     display: flex;
@@ -69,47 +127,62 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
     width: 100%;
     overscroll-behavior-x: none;
 
-
-    > * {
+    > .task-list {
       flex-shrink: 0;
     }
 
+    .drop-section {
+      display: flex;
+      align-items: flex-start;
+      height: calc(100vh - 167px);
+      position: relative;
+      box-sizing: border-box;
+    }
+
     > .task-list {
+      position: relative;
       width: 300px;
       margin-right: 8px;
-      //border-radius: 8px;
-      //border: 1px solid #eee;
+      padding: 0 8px;
 
       .task-header {
-        display: flex;
-        align-items: center;
+        @include flex-align-center;
         height: 44px;
         position: relative;
         padding: 0 12px;
 
         .title-box {
-          font-weight: 600;
+          @include title-box;
         }
       }
+
+      .task-item {
+        border: 1px solid rgba(0, 0, 0, .12);
+        border-radius: 8px;
+        margin-bottom: 8px;
+        padding: 8px;
+
+        .item-content {
+          padding: 0;
+        }
+      }
+
     }
 
     .board-add-section-container {
       position: relative;
       height: 100%;
       margin: 0 !important;
-      z-index: 2;
 
       .section-task-action-content {
         .add-section {
           cursor: pointer;
           position: absolute;
-          display: flex;
+          @include flex-center;
           top: 0;
           bottom: 0;
           left: -12px;
           width: 12px;
-          align-items: center;
-          justify-content: center;
           overflow: hidden;
           opacity: 0;
 
@@ -151,13 +224,13 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
     .section-list {
       position: relative;
       display: flex;
-      //flex-direction: column;
+      flex-direction: column;
       box-sizing: border-box;
       max-height: 100%;
+      height: fit-content;
       padding: 0;
       margin-right: 8px;
       background-color: #fff;
-      border: 1px solid transparent;
 
       &:before {
         content: "";
@@ -174,7 +247,7 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
         transition-duration: .3s;
       }
 
-      &:before {
+      &:hover:before {
         border-radius: 8px;
         border: 1px solid #eee;
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
@@ -183,7 +256,6 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
       > * {
         flex-shrink: 0;
       }
-
 
       section {
         width: 300px;
@@ -224,20 +296,18 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
               border: 1px solid rgba(0, 0, 0, .12);
               border-radius: 8px;
               margin-bottom: 8px;
+              padding: 8px;
+
+              .item-content {
+                padding: 0;
+              }
             }
           }
         }
 
         .board-section-footer {
-          box-sizing: border-box;
-          min-height: 44px;
           display: flex;
-          align-content: stretch;
-          flex: 0 0 auto;
           padding: 0 8px;
-          transition: border-top-color .3s;
-          border-top: 1px solid rgba(0, 0, 0, .12);
-          z-index: 1;
         }
       }
     }
@@ -249,8 +319,7 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
           background: rgb(250, 250, 250);
           height: 44px;
           border-radius: 4px;
-          display: flex;
-          align-items: center;
+          @include flex-align-center;
           padding: 8px 16px;
           color: grey;
           cursor: pointer;
@@ -268,13 +337,28 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 
       .section-editor {
         width: 300px;
-        padding: 12px 12px 0 0;
+      }
+    }
+
+    .cdk-drag-placeholder {
+      background: $background-hover;
+      border-radius: 8px;
+      height: fit-content;
+
+      div {
+        opacity: 0;
+      }
+    }
+
+    .drag-task, .drag-section {
+      .task-action-content {
+        margin-bottom: 8px;
+        padding: 0 !important;
       }
     }
   }
 
   // end board view
-
 
   .section-list {
 
@@ -290,13 +374,20 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
     }
 
     .section-head {
-      display: flex;
+      @include flex-align-center;
       box-sizing: border-box;
       justify-content: space-between;
       flex: 0 0 44px;
-      align-items: center;
       height: 44px;
       position: relative;
+
+      &:hover {
+        .overflow-actions {
+          .section-drag {
+            opacity: 1;
+          }
+        }
+      }
 
       .overflow-actions {
         position: absolute;
@@ -309,23 +400,26 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 
           &:hover {
             border-radius: 4px;
-            background: rgb(238, 238, 238);
+            background: $background-hover;
           }
+        }
+
+        .section-drag {
+          cursor: move;
+          opacity: 0;
         }
       }
 
       .title-box {
-        span {
-          font-weight: 600;
-          margin-right: 8px;
-        }
-
-        small {
-          color: grey;
-        }
+        @include title-box;
       }
 
       .actions {
+        @include icon-action;
+
+        &:hover {
+          background: $background-hover;
+        }
       }
 
       .list-holder {
@@ -334,16 +428,22 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
           overflow: hidden;
         }
       }
+    }
 
+    .list-holder {
+      position: relative;
+
+      .task-list {
+        height: fit-content;
+        min-height: 1px;
+      }
     }
 
   }
 
   .task-list {
-
     .task-item {
-      display: flex;
-      align-items: center;
+      @include flex-align-center;
       border-bottom: 1px solid #eee;
       cursor: pointer;
 
@@ -355,27 +455,36 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
         }
       }
 
+      .task-checkbox {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        width: 24px;
+        height: 24px;
+        margin-right: 8px;
+      }
+
       .item-content {
         flex: 1;
+        padding: 12px 0;
+
+        .task-done {
+          text-decoration: line-through;
+        }
       }
 
       .actions {
-        display: flex;
-        align-items: center;
+        @include flex-align-center;
         gap: 4px;
 
         .icon {
           opacity: 0;
-          width: 24px;
-          height: 24px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          @include icon-action;
+        }
 
-          :hover {
-            background: rgb(238, 238, 238);
-            border-radius: 4px;
-          }
+        :hover {
+          background: $background-hover;
         }
       }
     }
@@ -389,9 +498,8 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
     }
 
     .add-task {
+      @include flex-align-center;
       cursor: pointer;
-      display: flex;
-      align-items: center;
       padding-top: 8px;
       color: grey;
 
@@ -409,10 +517,12 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
         margin-right: 8px;
         color: mat.get-color-from-palette($primary);
       }
-
     }
 
     .task-editor {
+      border: 1px solid #e6e6e6;
+      border-radius: 8px;
+
       .task-editor-input {
         padding: 8px 8px 0 8px;
 
@@ -426,23 +536,14 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
           font-weight: 600;
         }
       }
-
-      border: 1px solid #e6e6e6;
-      border-radius: 8px;
     }
 
     .task-editor-footer {
-      display: flex;
-      align-items: center;
+      @include flex-align-center;
       justify-content: space-between;
       padding: 8px;
       margin-top: 8px;
       border-top: 1px solid #e6e6e6;
-    }
-
-    .btn-action {
-      display: flex;
-      gap: 8px;
     }
   }
 
@@ -460,7 +561,178 @@ $accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
   }
 }
 
-//.btn-action {
-//  display: flex;
-//  gap: 8px;
-//}
+.btn-action {
+  display: flex;
+  gap: 8px;
+}
+
+.mat-mdc-menu-panel {
+  width: 250px;
+  border-radius: 8px;
+}
+
+.menu-section-action, .menu-task-action {
+  .menu-item {
+    padding: 4px;
+    margin: 0 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    @include flex-align-center;
+    line-height: 24px;
+    min-height: 32px;
+
+    i {
+      margin-right: 12px;
+      @include icon-action;
+    }
+
+    &:hover {
+      background: $background-hover;
+    }
+  }
+}
+
+.menu-task-action {
+  .menu-section-item {
+    .scheduler-holder {
+      @include flex-align-center;
+      gap: 12px;
+
+      span {
+        @include flex-center;
+        width: 32px;
+        height: 32px;
+      }
+    }
+  }
+}
+
+
+.cdk-drag-preview {
+  .task-item {
+    background: white;
+    @include flex-align-center;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+    padding: 0 8px;
+
+    .task-checkbox {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      width: 24px;
+      height: 24px;
+      margin-right: 8px;
+    }
+
+    .item-content {
+      padding: 12px 0;
+      flex: 1;
+    }
+
+    .actions {
+      display: none;
+    }
+  }
+
+  .board-add-section-container {
+    display: none;
+  }
+
+
+  section {
+    background: #fff;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    box-sizing: border-box;
+    max-height: 100%;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
+
+    .section-head {
+      @include flex-align-center;
+      padding: 0 12px;
+      box-sizing: border-box;
+      justify-content: space-between;
+      flex: 0 0 44px;
+      height: 44px;
+      position: relative;
+
+      .overflow-actions {
+        display: none;
+      }
+
+      .title-box {
+        @include title-box;
+      }
+    }
+
+    .list-holder {
+      box-sizing: border-box;
+      flex-shrink: 1;
+
+      .task-action-content {
+        padding-left: 8px;
+        padding-top: 8px;
+      }
+
+      .task-list {
+        padding: 0 8px;
+
+        .task-item {
+          border: 1px solid rgba(0, 0, 0, .12);
+          border-radius: 8px;
+          margin-bottom: 8px;
+          padding: 8px;
+
+          .item-content {
+            padding: 0;
+          }
+        }
+      }
+    }
+
+    .board-section-footer {
+      padding: 0 8px;
+
+      .task-action-content {
+        margin-bottom: 8px;
+
+        .add-task {
+          @include flex-align-center;
+          padding-top: 8px;
+
+          .icon {
+            margin-right: 8px;
+            color: mat.get-color-from-palette($primary);
+          }
+        }
+      }
+    }
+  }
+
+  .section-in-list {
+    .list-holder {
+      height: 0;
+      overflow: hidden;
+    }
+  }
+
+  .task-action-in-list, .section-action-in-list {
+    display: none
+  }
+
+  .drag-task, .drag-section {
+    .task-action-content {
+      margin-bottom: 8px;
+      padding: 0 !important;
+    }
+  }
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}

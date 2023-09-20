@@ -2,6 +2,9 @@
   "common": {
     "home": "Home",
     "name": "Name",
+    "view": "View",
+    "duplicate": "Duplicate",
+    "color": "Color",
     "description": "Description",
     "username": "Username",
     "note": "Note",
@@ -101,16 +104,40 @@
     "today": {
       "title": "Today"
     },
+    "important": {
+      "title": "Important"
+    },
+    "planed": {
+      "title": "Planed"
+    },
     "project": {
-      "title": "Project"
+      "title": "Projects",
+      "add": "Add Project",
+      "edit": "Edit Project"
     },
     "task": {
       "title": "Task",
-      "taskName": "Task Name"
+      "taskName": "Task Name",
+      "add": "Add task",
+      "addAbove": "Add task above",
+      "addBelow": "Add task below",
+      "edit": "Edit task",
+      "delete": "Delete task",
+      "duplicate": "Duplicate task",
+      "move": "Move task",
+      "msg": {
+        "deleteWithTask": "Are you sure you want to delete <b>{{section}}</b> with its <b>{{task}}</b>  task?",
+        "deleteWithoutTask": "Are you sure you want to delete <b>{{section}}</b>?"
+      }
     },
     "section": {
       "title": "Section",
-      "name": "Section Name"
+      "name": "Section Name",
+      "add": "Add section",
+      "edit": "Edit section",
+      "delete": "Delete section",
+      "duplicate": "Duplicate section",
+      "move": "Move section"
     }
   },
   "preferences": {
@@ -130,40 +157,6 @@
     },
     "systemSetting": {
       "title": "System Setting"
-    }
-  },
-  "expenses": {
-    "transactions": "Transactions",
-    "title": "Expense",
-    "titleSidebar": "Expenses",
-    "amount": "Amount",
-    "category": {
-      "title": "Expense Category",
-      "addTitle": "Add Expense Category"
-    },
-    "income": {
-      "title": "Income"
-    },
-    "debt": {
-      "title": "Debt/Loan",
-      "category": {
-        "lend": "Lend",
-        "repayment": "Repayment",
-        "borrow": "Borrow",
-        "debtCollection": "Debt Collection"
-      }
-    },
-    "waller": {
-      "nameWallet": "Name Wallet",
-      "createTitle": "Create Wallet",
-      "initBalance": "Initial Balance"
-    },
-    "personal": {
-      "title": "Personal Expenses",
-      "create": "Add Personal Expenses",
-      "edit": "Edit Personal Expenses"
-    },
-    "reports": {
     }
   },
   "chart": {

@@ -9,3 +9,8 @@ export type ViewModeItem = {
 export type ViewMode = {
     [key in ViewState]: ViewModeItem;
 };
+
+export interface IColorPrj {
+    name: string,
+    value: string;
+};

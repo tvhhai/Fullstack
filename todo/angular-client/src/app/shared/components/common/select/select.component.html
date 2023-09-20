@@ -2,6 +2,7 @@
         class="app-select"
         appearance="outline"
         subscriptSizing="dynamic"
+        *ngIf="modelValue && !formGroup && !formCtrlName"
 >
     <mat-select
             disableRipple
@@ -10,9 +11,7 @@
             (selectionChange)="onValueChange($event)"
     >
         <ng-container *ngIf="!isListEmpty(arrVal)">
-            <mat-option *ngFor="let val of arrVal" [value]="val">
-                {{ val }}
-            </mat-option>
+            <mat-option *ngFor="let val of arrVal" [value]="val"> {{ val }} </mat-option>
         </ng-container>
 
         <ng-container *ngIf="!isListEmpty(arrObjVal)">
@@ -23,3 +22,32 @@
         </ng-container>
     </mat-select>
 </mat-form-field>
+
+
+<form [formGroup]="formGroup" *ngIf="!modelValue && formGroup && formCtrlName">
+    <mat-form-field
+            class="app-select"
+            appearance="outline"
+            subscriptSizing="dynamic"
+    >
+        <mat-select
+                disableRipple
+                [formControlName]="formCtrlName"
+                (selectionChange)="onValueChange($event)"
+        >
+            <ng-container *ngIf="!isListEmpty(arrVal)">
+                <mat-option *ngFor="let val of arrVal" [value]="val"> {{ val }} </mat-option>
+            </ng-container>
+
+            <ng-container *ngIf="!isListEmpty(arrObjVal)">
+                <mat-option *ngFor="let val of arrObjVal" [value]="val.value">
+                    <span *ngIf="showColor" class="dot-icon" [style.background-color]="val.value"></span>
+                    <span matListItemTitle>{{ val.name | translate }}</span>
+                    <span matListItemLine></span>
+                </mat-option>
+            </ng-container>
+        </mat-select>
+    </mat-form-field>
+
+</form>
+

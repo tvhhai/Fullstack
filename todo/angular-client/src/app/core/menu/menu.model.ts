@@ -6,6 +6,7 @@ export interface IMenuItem {
   route: string;
   child?: IMenuChildrenItem[];
   permissions?: IMenuPermissions;
+  color?: string
 }
 
 export interface IMenuChildrenItem extends IMenuItem{

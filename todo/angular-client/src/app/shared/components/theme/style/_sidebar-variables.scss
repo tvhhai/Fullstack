@@ -1,4 +1,24 @@
-$activeLinkBg: rgba(255, 255, 255, 0.05);
-$activeLinkColor: rgba(255, 255, 255, 0.87);
+@use '@angular/material' as mat;
 
-$subMenuBg: #303c50;
+$primary: mat.define-palette(mat.$indigo-palette);
+
+////////////////////////////////
+
+$primaryColor: mat.get-color-from-palette($primary);
+
+//Light
+$sideBarBgrLight: #fff;
+$activeLinkBgrLight: rgb(238, 238, 238);
+$activeLinkColorLight: rgba(0, 0, 0, 0.87);
+$linkColorLight: rgba(0, 0, 0, 0.87);
+$hoverActiveLinkBgrLight: rgba(238, 238, 238, .4);
+$hoverActiveLinkColorLight: rgb(246, 249, 252);
+
+
+//Dark
+$activeLinkBgrDark: rgb(54, 54, 54);
+$activeLinkColorDark: #fff;
+$sideBarBgrDark: rgb(40, 40, 40);
+$linkColorDark: #fff;
+$hoverActiveLinkBgrDark: rgb(54, 54, 54);
+$hoverActiveLinkColorDark: rgb(246, 249, 252);

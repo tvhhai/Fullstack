@@ -1,4 +1,4 @@
-import { NgModule, isDevMode } from "@angular/core";
+import { NgModule, isDevMode, forwardRef } from "@angular/core";
 import { Router } from "@angular/router";
 import { HttpClientModule, HttpClient } from "@angular/common/http";
 import { BrowserModule } from "@angular/platform-browser";
@@ -29,6 +29,8 @@ import { AppRoutingModule } from "./app-routing.module";
 import { CURRENCY_MASK_CONFIG } from "ng2-currency-mask";
 import { CustomCurrencyMaskConfig } from "@shared/configs/currency-mask.config";
 import { iconoirIconsPack } from "./iconoir-icon-pack";
+import { NG_VALUE_ACCESSOR } from "@angular/forms";
+import { SelectComponent } from "@shared/components/common/select/select.component";
 
 // Required for AOT compilation
 export function TranslateHttpLoaderFactory(http: HttpClient) {
@@ -65,14 +67,11 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
         NgIconsModule.withIcons(iconoirIconsPack),
     ],
     providers: [
-        {
-            provide: BASE_URL,
-            useValue: environment.baseUrl
-        },
-        { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
-        httpInterceptorProviders,
         appInitializerProviders,
-        LoaderService
+        httpInterceptorProviders,
+        LoaderService,
+        { provide: BASE_URL, useValue: environment.baseUrl },
+        { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
     ],
     bootstrap: [AppComponent]
 })

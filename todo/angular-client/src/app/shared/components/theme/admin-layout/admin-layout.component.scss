@@ -2,15 +2,19 @@
   height: 100%;
 
   .app-sidebar {
-    width: 256px;
-    background: #3c4b64;
-
+    width: 300px;
+    //background: #3c4b64;
 
     .mat-toolbar.mat-primary {
       position: sticky;
       top: 0;
       z-index: 1;
     }
+  }
+
+  .mat-drawer-side {
+    border-right: 1px solid #e5eaef;
+    box-shadow: 7px 0 60px rgba(0, 0, 0, .05);
   }
 
   .app-main_content {

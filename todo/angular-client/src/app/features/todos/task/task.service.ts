@@ -1,77 +1,66 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { LoaderService } from "@shared/services/loader.service";
-import { finalize, Observable } from "rxjs";
+import { Observable } from "rxjs";
 import { DataRes } from "@shared/model";
-import { IDataSectionTaskReq, ISectionTaskReq, ITask, ITaskReq } from "./model/task.model";
+import {
+    IDataSectionTaskReq,
+    ISectionTaskReq,
+    ITask,
+    IListTaskIndexReq,
+    ITaskReq, ISectionTask
+} from "./model/task.model";
+import { HttpService } from "@shared/services/http.service";
 
 
 @Injectable({
     providedIn: "root",
 })
 export class TaskService {
-    constructor(private http: HttpClient, private loaderService: LoaderService) {
+
+    apiTask: string = "api/tasks";
+    apiSectionTask: string = "api/section-tasks";
+
+    constructor(private httpService: HttpService) {
     }
 
     getData(): Observable<DataRes<ITask[]>> {
-        this.loaderService.isLoading.next(true);
-
-        return this.http.get<DataRes<ITask[]>>("api/tasks").pipe(
-            finalize(() => {
-                this.loaderService.isLoading.next(false);
-            })
-        );
+        return this.httpService.performRequestNotLoading<DataRes<ITask[]>>("get", this.apiTask);
     }
 
     getDataByPrjTask(prjTask: number): Observable<DataRes<ITask[]>> {
-        this.loaderService.isLoading.next(true);
-
-        return this.http.get<DataRes<ITask[]>>("api/tasks?project-task=" + prjTask).pipe(
-            finalize(() => {
-                this.loaderService.isLoading.next(false);
-            })
-        );
+        return this.httpService.performRequestNotLoading<DataRes<ITask[]>>("get", this.apiTask + "?project-task=" + prjTask);
     }
 
     getById(id: string): Observable<DataRes<ITask>> {
-        this.loaderService.isLoading.next(true);
-
-        return this.http.get<DataRes<ITask>>("api/tasks" + "/" + id).pipe(
-            finalize(() => {
-                this.loaderService.isLoading.next(false);
-            })
-        );
+        return this.httpService.performRequestNotLoading<DataRes<ITask>>("get", this.apiTask + "/" + id);
     }
 
     createTask(data: ITaskReq): Observable<DataRes<ITask>> {
-        this.loaderService.isLoading.next(true);
-
-        return this.http.post<DataRes<ITask>>("api/tasks", data).pipe(
-            finalize(() => {
-                this.loaderService.isLoading.next(false);
-            })
-        );
+        return this.httpService.performRequestNotLoading<DataRes<ITask>>("post", this.apiTask, data);
     }
 
-    createAndUpdateSection(data: IDataSectionTaskReq): Observable<DataRes<ISectionTaskReq>> {
-        this.loaderService.isLoading.next(true);
+    updateTask(id: number, data: ITaskReq): Observable<DataRes<ITask>> {
+        return this.httpService.performRequestNotLoading<DataRes<ITask>>("patch", this.apiTask + "/" + id, data);
+    }
 
-        return this.http.post<DataRes<ISectionTaskReq>>("api/section-tasks/arrange", data).pipe(
-            finalize(() => {
-                this.loaderService.isLoading.next(false);
-            })
-        );
+    updateIndexTask(data: IListTaskIndexReq): Observable<DataRes<ISectionTaskReq>> {
+        return this.httpService.performRequestNotLoading<DataRes<ISectionTaskReq>>("patch", this.apiTask + "/move", data);
+    }
+
+    ///////////////////////////// SECTION TASK
+
+    createAndUpdateSection(data: IDataSectionTaskReq): Observable<DataRes<ISectionTaskReq>> {
+        return this.httpService.performRequestNotLoading<DataRes<ISectionTaskReq>>("post", this.apiSectionTask + "/arrange", data);
+    }
+
+    updateTitleSection(idSection: number, data: IDataSectionTaskReq): Observable<DataRes<ISectionTaskReq>> {
+        return this.httpService.performRequestNotLoading<DataRes<ISectionTaskReq>>("patch", this.apiSectionTask + "/title/" + idSection, data);
     }
 
     createSection(data: any): Observable<DataRes<ISectionTaskReq>> {
-        this.loaderService.isLoading.next(true);
-
-        return this.http.post<DataRes<ISectionTaskReq>>("api/section-tasks", data).pipe(
-            finalize(() => {
-                this.loaderService.isLoading.next(false);
-            })
-        );
+        return this.httpService.performRequestNotLoading<DataRes<ISectionTaskReq>>("post", this.apiSectionTask, data);
     }
 
-
+    deleteSection(idSection: number): Observable<DataRes<ISectionTask>> {
+        return this.httpService.performRequestNotLoading<DataRes<ISectionTask>>("delete", this.apiSectionTask + "/" + idSection);
+    }
 }

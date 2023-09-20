@@ -20,6 +20,7 @@
   mat-stroked-button
   color="{{ btnColor }}"
   [disabled]="isDisabled"
+  (click)="handleClick()"
 >
   {{ btnText | translate }}
 </button>
@@ -30,6 +31,7 @@
   mat-flat-button
   color="{{ btnColor }}"
   [disabled]="isDisabled"
+  (click)="handleClick()"
 >
   {{ btnText | translate }}
 </button>

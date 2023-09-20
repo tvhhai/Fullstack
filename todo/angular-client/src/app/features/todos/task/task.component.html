@@ -1,155 +1,358 @@
 <div class="list-box">
-    <div [ngClass]="currentView==='list'?'list-view':'board-view'">
+    <div [ngClass]="currentView === ViewState.List ? 'list-view' : 'board-view'">
+        <div *ngIf="isEmptyArray(data.tasks) && currentView === ViewState.List">
+            <ng-container
+                    *ngIf="currentView === ViewState.List"
+                    [ngTemplateOutlet]="taskAction"
+                    [ngTemplateOutletContext]="{ actionMode: ActionMode.Add, length: 0 }"
+            ></ng-container>
 
+            <ng-container
+                    *ngIf="currentView === ViewState.List"
+                    [ngTemplateOutlet]="sectionTaskAction"
+                    [ngTemplateOutletContext]="{ actionMode: ActionMode.Add }"
+            ></ng-container>
+        </div>
+
+        <!--      START TASK LIST-->
         <div class="task-list" *ngIf="!isEmptyArray(data.tasks)">
-            <header class="task-header" *ngIf="currentView!=='list'">
+            <header class="task-header" *ngIf="currentView !== ViewState.List">
                 <div class="title-box">
-                    (No Section)
+                    <span>(No Section)</span>
+                    <small>{{ data.tasks.length }}</small>
                 </div>
+
             </header>
 
-            <div *ngFor="let item of data.tasks">
-                <ng-container [ngTemplateOutlet]="taskItemTemplate"
-                              [ngTemplateOutletContext]="{task:item}"></ng-container>
+            <div cdkDropList
+                 [id]="cdkTaskId"
+                 [cdkDropListConnectedTo]="cdkSectionId"
+                 [cdkDropListData]="data.tasks"
+                 (cdkDropListDropped)="dropTask($event)"
+            >
+                <div *ngFor="let item of data.tasks" cdkDrag class="drag-task"
+                     [cdkDragDisabled]="item.viewTaskEditor"
+                >
+                    <ng-container
+                            [ngTemplateOutlet]="taskItemTemplate"
+                            [ngTemplateOutletContext]="{ task: item }"
+                    ></ng-container>
+
+                    <ng-container
+                            [ngTemplateOutlet]="taskAction"
+                            [ngTemplateOutletContext]="{ item: item, actionMode: ActionMode.Edit }"
+                    ></ng-container>
+                </div>
             </div>
 
-            <ng-container [ngTemplateOutlet]="taskAction"
-                          [ngTemplateOutletContext]="{id:'task'}"></ng-container>
+            <ng-container
+                    [ngTemplateOutlet]="taskAction"
+                    [ngTemplateOutletContext]="{ actionMode: ActionMode.Add, length: data.tasks.length }"
+            ></ng-container>
 
-            <ng-container *ngIf="currentView==='list'"
-                          [ngTemplateOutlet]="sectionTaskAction"
-                          [ngTemplateOutletContext]="{id:'task'}"></ng-container>
+            <ng-container
+                    *ngIf="currentView === ViewState.List"
+                    [ngTemplateOutlet]="sectionTaskAction"
+                    [ngTemplateOutletContext]="{ actionMode: ActionMode.Add }"
+            ></ng-container>
+        </div>
+        <!--      END TASK LIST-->
+        <!------------------------------------------->
+        <!--      START SECTION TASK LIST-->
+
+        <div cdkDropList
+             [cdkDropListOrientation]="currentView !== ViewState.List ?'horizontal':'vertical'"
+             [cdkDropListData]="data.sectionTasks"
+             (cdkDropListDropped)="dropSection($event)"
+             class="drop-section">
+
+            <ng-container *ngFor="let item of data.sectionTasks; let i = index">
+                <div class="board-add-section-container" *ngIf="currentView !== ViewState.List">
+                    <ng-container [ngTemplateOutlet]="sectionTaskAction" [ngTemplateOutletContext]="{
+                                        item: item,
+                                        index: i,
+                                        actionMode: ActionMode.Add
+                                      }">
+                    </ng-container>
+                </div>
+
+                <div class="section-list drag-section" cdkDrag>
+                    <section [ngClass]="{ 'collapsed': item.isExpand,
+                                          'section-in-list': view === ViewState.List,
+                                          'section-in-board': view !== ViewState.List
+                                        }">
+                        <header class="section-head" *ngIf="!(item?.actionMode === ActionMode.Edit)">
+                            <div class="overflow-actions">
+                                <div class="section-drag">
+                                    <mat-icon class="icon">drag_indicator</mat-icon>
+                                </div>
+                                <div class="section-collapse" (click)="openSection(item)">
+                                    <mat-icon class="icon"> expand_more</mat-icon>
+                                </div>
+                            </div>
+
+                            <div class="title-box">
+                                <span>{{ item.title }}</span>
+                                <small>{{ item.tasks.length }}</small>
+                            </div>
+
+                            <div class="actions"
+                                 [matMenuTriggerFor]="sectionActionMenu"
+                                 [matMenuTriggerData]="{ sectionTask: item }"
+                            >
+                                <i class="fa-light fa-ellipsis-stroke fa-xl"></i>
+                            </div>
+                        </header>
+
+                        <ng-container
+                                [ngTemplateOutlet]="sectionTaskAction"
+                                [ngTemplateOutletContext]="{
+                              item: item,
+                              actionMode: ActionMode.Edit
+                            }"
+                        ></ng-container>
+
+                        <div class="list-holder">
+                            <div class="task-list"
+                                 cdkDropList
+                                 [id]="''+item.id"
+                                 [cdkDropListConnectedTo]="cdkSectionIdAndTaskId"
+                                 [cdkDropListData]="item.tasks"
+                                 (cdkDropListDropped)="dropTask($event)">
+
+                                <div *ngFor="let task of item.tasks" cdkDrag class="drag-task">
+                                    <ng-container
+                                            [ngTemplateOutlet]="taskItemTemplate"
+                                            [ngTemplateOutletContext]="{ task: task }"
+                                    ></ng-container>
+
+                                    <ng-container
+                                            [ngTemplateOutlet]="taskAction"
+                                            [ngTemplateOutletContext]="{ item: task, actionMode: ActionMode.Edit }"
+                                    ></ng-container>
+                                </div>
+                            </div>
+                            <ng-container *ngIf="view===ViewState.List"
+                                          [ngTemplateOutlet]="taskAction"
+                                          [ngTemplateOutletContext]="{ item: item, actionMode: ActionMode.Add, length: item.tasks.length }"
+                            ></ng-container>
+                        </div>
+                        <div class="board-section-footer" *ngIf="view!==ViewState.List">
+                            <ng-container
+                                    [ngTemplateOutlet]="taskAction"
+                                    [ngTemplateOutletContext]="{ item: item, actionMode: ActionMode.Add, length: item.tasks.length}"
+                            ></ng-container>
+                        </div>
+                        <ng-container
+                                *ngIf="currentView === ViewState.List"
+                                [ngTemplateOutlet]="sectionTaskAction"
+                                [ngTemplateOutletContext]="{
+                              item: item,
+                              index: i,
+                              actionMode: ActionMode.Add
+                            }"
+                        >
+                        </ng-container>
+                    </section>
+                </div>
+            </ng-container>
         </div>
 
-
-        <ng-container *ngFor="let item of data.sectionTasks; let i = index">
-
-            <div class="board-add-section-container" *ngIf="currentView!=='list'">
-                <ng-container [ngTemplateOutlet]="sectionTaskAction"
-                              [ngTemplateOutletContext]="{item:item, index:i, id:'section'}"></ng-container>
-            </div>
-
-            <div class="section-list">
-                <section [ngClass]="item.isExpand?'collapsed':''">
-                    <header class="section-head">
-                        <div class="overflow-actions">
-                            <div class="section-drag">
-                                <mat-icon class="icon">drag_indicator</mat-icon>
-                            </div>
-                            <div class="section-collapse" (click)="openSection(item)">
-                                <mat-icon class="icon">
-                                    expand_more
-                                </mat-icon>
-                            </div>
-                        </div>
-
-                        <div class="title-box">
-                            <span>{{item.title}}</span>
-                            <small>{{item.tasks.length}}</small>
-                        </div>
-
-                        <div class="actions"></div>
-                    </header>
-
-                    <div class="list-holder">
-                        <div *ngIf="!isEmptyArray(item.tasks)">
-                            <div class="task-list">
-                                <ng-container *ngFor="let task of item.tasks">
-                                    <ng-container [ngTemplateOutlet]="taskItemTemplate"
-                                                  [ngTemplateOutletContext]="{task:task}"></ng-container>
-                                </ng-container>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="board-section-footer">
-                        <ng-container [ngTemplateOutlet]="taskAction"
-                                      [ngTemplateOutletContext]="{item:item, id:'section'}"></ng-container>
-                    </div>
-                    <ng-container *ngIf="currentView==='list'" [ngTemplateOutlet]="sectionTaskAction"
-                                  [ngTemplateOutletContext]="{item:item, id:'section', index:i}"></ng-container>
-                </section>
-
-            </div>
-        </ng-container>
+        <!--      END SECTION TASK LIST-->
 
         <div class="only-section-task-action">
-            <ng-container *ngIf="currentView!=='list'"
-                          [ngTemplateOutlet]="sectionTaskAction"
-                          [ngTemplateOutletContext]="{ id:'task'}"></ng-container>
+            <ng-container
+                    *ngIf="currentView !== ViewState.List"
+                    [ngTemplateOutlet]="sectionTaskAction"
+                    [ngTemplateOutletContext]="{ actionMode: ActionMode.Add }"
+            ></ng-container>
         </div>
-
     </div>
 </div>
-
+<!--      END CONTAINER -->
 <ng-template #taskItemTemplate let-task="task">
-    <div class="task-item">
+    <div class="task-item"
+         [style.background-color]="priorityBackground[task.priority]"
+         [ngClass]="{'task-item-board': view === ViewState.Board }"
+         *ngIf="!task.viewTaskEditor">
         <div class="overflow-actions"></div>
         <div class="task-checkbox">
-            <mat-checkbox class="app-checkbox-circle app-checkbox-hide-ripple"></mat-checkbox>
+            <mat-checkbox [(ngModel)]="task.done"
+                          (ngModelChange)="taskComplete(task)"
+                          [color]="'primary'"
+                          class="app-checkbox-circle app-checkbox-hide-ripple"></mat-checkbox>
         </div>
         <div class="item-content">
-            <div class="task-title">
+            <div class="task-title"
+                 [ngClass]="{'task-done':task.done}"
+                 [style.color]="priorityColors[task.priority]">
                 {{ task.title }}
             </div>
         </div>
         <div class="actions">
-            <div class="icon" *ngFor="let icon of listIconAction">
-                <ng-icon size="20" strokeWidth="1" [name]="icon"></ng-icon>
-            </div>
+            <ng-container *ngFor="let item of listIconAction">
+                <div class="icon" *ngIf="item.openMenu; else elseBlock"
+                     [matMenuTriggerFor]="taskActionMenu"
+                     [matMenuTriggerData]="{ task: task }"
+                >
+                    <i [ngClass]="item.icon"></i>
+                </div>
+                <ng-template #elseBlock>
+                    <div class="icon"
+                         (click)="item.click(task)">
+                        <i [ngClass]="item.icon"></i>
+                    </div>
+                </ng-template>
+            </ng-container>
         </div>
     </div>
 </ng-template>
 
-<ng-template #taskAction let-item="item" let-id="id">
-    <div class="task-action-content" [id]="id">
-        <div class="add-task" (click)="onAddTask(item)"
-             *ngIf="!(id!=='task' ? item?.isViewTaskEditor : isViewTaskEditor)">
+<ng-template
+    #taskAction
+    let-item="item"
+    let-length="length"
+    let-actionMode="actionMode">
+    <div class="task-action-content"
+         [ngClass]="view === ViewState.List ? 'task-action-in-list' : 'task-action-in-board'">
+        <div class="add-task"
+             (click)="onAddTask(item)"
+             *ngIf="!(isEmptyObj(item) ? viewTaskEditorInTask : item.viewTaskEditor) && !(actionMode === ActionMode.Edit)"
+        >
             <mat-icon class="icon">add</mat-icon>
             <span> Add task </span>
         </div>
 
-        <div class="task-editor" *ngIf="id!=='task' ? item?.isViewTaskEditor : isViewTaskEditor ">
-            <div class="task-editor-input">
-                <input class="app-input task-name" [(ngModel)]="taskName"
-                       placeholder="{{'todo.task.taskName' | translate}}"/>
-                <input class="app-input task-description" [(ngModel)]="taskDescription"
-                       placeholder="{{'common.description' | translate}}"/>
-            </div>
-
-            <div class="task-editor-footer">
-                <div></div>
-                <div class="btn-action">
-                    <app-button [btnType]="ButtonTypes.Outline" [btnColor]="ButtonColor.Basic"
-                                (click)="onCancelSaveTask(item)" [btnText]="'common.cancel'"></app-button>
-                    <app-button [btnType]="ButtonTypes.Flat" [btnColor]="ButtonColor.Primary" (click)="onSaveTask(item)"
-                                [btnText]="'common.save'" [btnDisabled]="isValid"></app-button>
+        <div class="task-editor"
+             *ngIf="isEmptyObj(item) ? viewTaskEditorInTask : item.viewTaskEditor"
+        >
+            <ng-container>
+                <div class="task-editor-input">
+                    <input class="app-input task-name"
+                           [(ngModel)]="taskName"
+                           placeholder="{{ 'todo.task.taskName' | translate }}"
+                           autofocus
+                    />
+                    <input class="app-input task-description"
+                           [(ngModel)]="taskDescription"
+                           placeholder="{{ 'common.description' | translate }}"
+                    />
                 </div>
-            </div>
+
+                <div class="task-editor-footer">
+                    <div class="btn-action">
+                        <app-button
+                                [btnType]="ButtonTypes.Outline"
+                                [btnColor]="ButtonColor.Basic"
+                                (btnClick)="onCancelSaveTask(item)"
+                                [btnText]="'common.cancel'"
+                        ></app-button>
+                        <app-button
+                                [btnType]="ButtonTypes.Flat"
+                                [btnColor]="ButtonColor.Primary"
+                                (btnClick)="actionMode === ActionMode.Add
+                                        ? onSaveTask(item, length)
+                                        : handleEditTask(item)
+                                    "
+                                [btnText]="'common.save'"
+                                [btnDisabled]="isValidTask"
+                        ></app-button>
+                    </div>
+                </div>
+            </ng-container>
         </div>
     </div>
 </ng-template>
 
-<ng-template #sectionTaskAction let-item="item" let-id="id" let-index="index">
-    <div class="section-task-action-content">
-        <div class="add-section" *ngIf="!(id!=='task'? item?.isViewSectionEditor : isViewSectionEditor)"
-             (click)="onAddSection(item)">
-            <span *ngIf="id==='section'&&!item && view!=='list'" class="icon">
+<ng-template
+    #sectionTaskAction
+    let-item="item"
+    let-index="index"
+    let-actionMode="actionMode"
+>
+    <div class="section-task-action-content"
+         [ngClass]="view === ViewState.List ? 'section-action-in-list' : 'section-action-in-board'">
+        <div class="add-section" (click)="onAddSection(item)"
+             *ngIf="!(isEmptyObj(item) ? viewSectionEditorStandalone : item.viewSectionEditor) && !(actionMode === ActionMode.Edit)">
+
+            <span *ngIf="isEmptyObj(item) && view !== ViewState.List" class="icon">
                 <ng-icon size="20" strokeWidth="1.5" name="iconoirAddHexagon"></ng-icon>
             </span>
-            <span>Add section </span>
-            {{id}} {{item?.isViewSectionEditor}}
+
+            <span>Add section</span>
         </div>
 
-        <div *ngIf="id!=='task' ? item?.isViewSectionEditor : isViewSectionEditor" class="section-editor">
-            <input class="app-input section-name" [(ngModel)]="sectionName"
-                   placeholder="{{'todo.section.name' | translate}}"/>
+        <div class="section-editor"
+             *ngIf="(isEmptyObj(item) ? viewSectionEditorStandalone : item.viewSectionEditor && ( item.actionMode === actionMode) ) ">
+            <input class="app-input section-name"
+                   [(ngModel)]="sectionName"
+                   placeholder="{{ 'todo.section.name' | translate }}"
+                   autofocus
+            />
             <div class="btn-action">
-                <app-button [btnType]="ButtonTypes.Outline" [btnColor]="ButtonColor.Basic"
-                            (click)="onCancelSaveSection(item)" [btnText]="'common.cancel'"></app-button>
-                <app-button [btnType]="ButtonTypes.Flat" [btnColor]="ButtonColor.Primary"
-                            (click)="onSaveSection(item, index)"
-                            [btnText]="'common.save'" [btnDisabled]="isValidSection"></app-button>
+                <app-button
+                        [btnType]="ButtonTypes.Outline"
+                        [btnColor]="ButtonColor.Basic"
+                        (btnClick)="onCancelSaveSection(item)"
+                        [btnText]="'common.cancel'"
+                ></app-button>
+                <app-button
+                        [btnType]="ButtonTypes.Flat"
+                        [btnColor]="ButtonColor.Primary"
+                        (btnClick)="actionMode === ActionMode.Add
+                                      ? onSaveSection(item, index)
+                                      : onEditSection(item)"
+                        [btnText]="'common.save'"
+                        [btnDisabled]="isValidSection"
+                ></app-button>
             </div>
         </div>
     </div>
 </ng-template>
+
+<mat-menu #sectionActionMenu="matMenu" xPosition="before" class="menu-section-action">
+    <ng-template matMenuContent let-sectionTask="sectionTask">
+        <div class="menu-item"
+             *ngFor="let item of sectionActions"
+             (click)="item.click(sectionTask)"
+             [style.color]="item.icon === 'fa-light fa-trash-can'?'red':''"
+        >
+            <i [ngClass]="item.icon" [style.color]="item.icon === 'fa-light fa-trash-can'?'red':''"></i>
+            <span>{{item.title|translate}}</span>
+        </div>
+    </ng-template>
+</mat-menu>
+
+<mat-menu #taskActionMenu="matMenu" xPosition="before" class="menu-task-action">
+    <ng-template matMenuContent let-task="task">
+        <div class="menu-item"
+             *ngFor="let item of taskActionMenus"
+             (click)="item.click(task)"
+             [style.color]="item.icon === 'fa-light fa-trash-can'?'red':''"
+        >
+            <i [ngClass]="item.icon" [style.color]="item.icon === 'fa-light fa-trash-can'?'red':''"></i>
+            <span>{{item.title|translate}}</span>
+        </div>
+
+        <div class="menu-section-item">
+            <span>Due date</span>
+            <div class="scheduler-holder">
+                <span [style.color]="'#7ECC49'">
+                    <i class="fa-light fa-calendar-day fa-xl"></i>
+                </span>
+                <span [style.color]="'#FAD000'">
+                    <i class="fa-light fa-sun-bright fa-xl"></i>
+                </span>
+                <span [style.color]="'#14AAF5'">
+                    <i class="fa-light fa-calendar-week fa-xl"></i>
+                </span>
+                <span [style.color]="'#E05194'">
+                    <i class="fa-light fa-briefcase-arrow-right fa-xl"></i>
+                </span>
+                <span>
+                    <i class="fa-light fa-ellipsis-stroke fa-xl"></i>
+                </span>
+            </div>
+        </div>
+    </ng-template>
+</mat-menu>

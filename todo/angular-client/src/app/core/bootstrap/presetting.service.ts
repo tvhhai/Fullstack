@@ -1,8 +1,6 @@
 import { Injectable } from "@angular/core";
-import { LoaderService } from "@shared/services/loader.service";
 import { BehaviorSubject, Observable } from "rxjs";
 import { PreferenceService } from "../../features/preferences/preference.service";
-import { HttpClient } from "@angular/common/http";
 import { AppSettings } from "@core/models/app-settings";
 import { isEmptyObj } from "@shared/helpers";
 import { Preference } from "../../features/preferences/model/preference.model";
@@ -13,9 +11,7 @@ import { AuthService } from "@core/authentication/services/auth.service";
     providedIn: "root"
 })
 export class PreSettingService {
-    constructor(private loaderService: LoaderService,
-                private preferenceService: PreferenceService,
-                private http: HttpClient,
+    constructor(private preferenceService: PreferenceService,
                 private authService: AuthService) {
     }
 
@@ -50,7 +46,6 @@ export class PreSettingService {
                                 this.setDataPreSetting(res.data);
                             }
                         });
-
                     } else {
                         this.preferenceService.getData().subscribe({
                             next: (res) => {
