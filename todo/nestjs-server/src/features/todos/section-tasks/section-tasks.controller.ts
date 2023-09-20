@@ -63,16 +63,35 @@ export class SectionTasksController {
     return this.sectionTasksService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
+  @Patch('title/:id')
+  async update(
+    @Param('id') id: number,
     @Body() updateSectionTaskDto: UpdateSectionTaskDto,
   ) {
-    return this.sectionTasksService.update(+id, updateSectionTaskDto);
+    try {
+      const data = await this.sectionTasksService.update(
+        id,
+        updateSectionTaskDto,
+      );
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Success',
+        data: data,
+      };
+    } catch (error) {}
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.sectionTasksService.remove(+id);
+  async remove(@Param('id') id: number) {
+    try {
+      await this.sectionTasksService.remove(id);
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Success',
+        data: [],
+      };
+    } catch (error) {}
   }
 }

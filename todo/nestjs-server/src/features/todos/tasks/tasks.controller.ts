@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
-import { UpdateTaskDto } from './dto/update-task.dto';
+import { UpdateTaskDto, UpdateTaskIndexDto } from './dto/update-task.dto';
 
 @Controller('api/tasks')
 export class TasksController {
@@ -46,17 +46,50 @@ export class TasksController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tasksService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.tasksService.findOne(id);
+  }
+
+  // @Patch(':id')
+  // update(@Param('id') id: number, @Body() updateTaskDto: UpdateTaskDto) {
+  //   return this.tasksService.update(id, updateTaskDto);
+  // }
+
+  @Patch('move')
+  async updateIndex(@Body() updateTaskDto: UpdateTaskIndexDto) {
+    try {
+      const tasks = await this.tasksService.updateIndex(updateTaskDto);
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Success',
+        data: tasks,
+      };
+    } catch (err) {}
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
-    return this.tasksService.update(+id, updateTaskDto);
+  async update(@Param('id') id: number, @Body() updateTaskDto: UpdateTaskDto) {
+    try {
+      const task = await this.tasksService.update(id, updateTaskDto);
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Success',
+        data: task,
+      };
+    } catch (err) {}
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tasksService.remove(+id);
+  async remove(@Param('id') id: number) {
+    try {
+      await this.tasksService.remove(id);
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Success',
+        data: [],
+      };
+    } catch (err) {}
   }
 }

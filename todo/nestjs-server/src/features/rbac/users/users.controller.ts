@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/req/update-user.dto';
-import { DataRes } from '../../../shared/dto/res/data-res.dto';
+import { DataRes } from '@shared/dto/res/data-res.dto';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/req/create-user.dto';
 import { get } from 'lodash';

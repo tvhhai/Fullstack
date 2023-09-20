@@ -12,7 +12,7 @@ export class SectionTasksService {
     private readonly sectionTaskRepository: Repository<SectionTask>,
   ) {}
 
-  async createAndUpdate(data: CreateSectionTaskDto): Promise<SectionTask> {
+  async createAndUpdate(data: CreateSectionTaskDto): Promise<Awaited<SectionTask>[]> {
     const projectTask = await this.create(data);
 
     if (Array.isArray(data.sectionTaskUpdateIndex)) {
@@ -24,8 +24,7 @@ export class SectionTasksService {
       });
     }
 
-    await this.updateMulti(data);
-    return projectTask;
+    return await this.updateMulti(data);
   }
 
   create(data: CreateSectionTaskDto): Promise<SectionTask> {
@@ -42,11 +41,28 @@ export class SectionTasksService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} sectionTask`;
+    const data = this.sectionTaskRepository.findOne({
+      where: { id },
+    });
+    if (!data) {
+      throw new Error('Section not found');
+    }
+    return data;
   }
 
-  update(id: number, updateSectionTaskDto: UpdateSectionTaskDto) {
-    return `This action updates a #${id} sectionTask`;
+  async update(
+    id: number,
+    updateSectionTaskDto: UpdateSectionTaskDto,
+  ): Promise<SectionTask> {
+    const data = await this.sectionTaskRepository.findOne({
+      where: { id },
+    });
+
+    const updatedData = {
+      ...data,
+      ...updateSectionTaskDto.sectionTaskReq,
+    };
+    return this.sectionTaskRepository.save(updatedData);
   }
 
   updateMulti(data: UpdateSectionTaskDto) {
@@ -66,6 +82,6 @@ export class SectionTasksService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} sectionTask`;
+    return this.sectionTaskRepository.delete(id);
   }
 }

@@ -65,15 +65,32 @@ export class ProjectTasksController {
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateProjectTaskDto: UpdateProjectTaskDto,
   ) {
-    return this.projectTasksService.update(+id, updateProjectTaskDto);
+    try {
+      const data = await this.projectTasksService.update(
+        +id,
+        updateProjectTaskDto,
+      );
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Success',
+        data: data,
+      };
+    } catch (err) {}
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.projectTasksService.remove(+id);
+  async remove(@Param('id') id: number) {
+    try {
+      await this.projectTasksService.remove(id);
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Success',
+        data: [],
+      };
+    } catch (err) {}
   }
 }

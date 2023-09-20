@@ -32,6 +32,9 @@ export class ProjectTasksService {
       order: {
         sectionTasks: {
           index: 'ASC',
+          tasks: {
+            index: 'ASC',
+          },
         },
         tasks: {
           index: 'ASC',
@@ -44,11 +47,22 @@ export class ProjectTasksService {
     return data;
   }
 
-  update(id: number, updateProjectTaskDto: UpdateProjectTaskDto) {
-    return `This action updates a #${id} projectTask`;
+  async update(id: number, updateProjectTaskDto: UpdateProjectTaskDto) {
+    const data = await this.projectTaskRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+
+    const updatedData = {
+      ...data,
+      ...updateProjectTaskDto,
+    };
+
+    return this.projectTaskRepository.save(updatedData);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} projectTask`;
+    return this.projectTaskRepository.delete(id);
   }
 }
