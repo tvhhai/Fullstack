@@ -1,6 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateProjectTaskDto } from './create-project-task.dto';
-import { IsNotEmpty } from 'class-validator';
 import { ViewState } from '@features/todos/project-tasks/enum/project-tasks.enum';
 import { User } from '@features/rbac/users/entities/user.entity';
 

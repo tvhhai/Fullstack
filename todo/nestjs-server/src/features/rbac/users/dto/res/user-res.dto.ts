@@ -20,4 +20,8 @@ export class UserRes {
   @Expose()
   @IsEmail()
   email: string;
+
+  @Expose()
+  @IsString()
+  username: string;
 }

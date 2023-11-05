@@ -14,7 +14,13 @@ export class ProjectTasksService {
   ) {}
 
   create(data: CreateProjectTaskDto): Promise<ProjectTask> {
+    data.titleSlug = this.changeToSlug(data.title);
+    data.isShowCompleteTask = false;
     return this.projectTaskRepository.save(data);
+  }
+
+  changeToSlug(data: string) {
+    return data.replace(/\s/g, '-').toLowerCase();
   }
 
   findAll(user: User): Promise<ProjectTask[]> {
@@ -22,6 +28,7 @@ export class ProjectTasksService {
       where: {
         user: { id: user.id },
       },
+      relations: ['sectionTasks', 'tasks', 'sectionTasks.tasks'],
     });
   }
 
@@ -46,6 +53,8 @@ export class ProjectTasksService {
     }
     return data;
   }
+
+
 
   async update(id: number, updateProjectTaskDto: UpdateProjectTaskDto) {
     const data = await this.projectTaskRepository.findOne({

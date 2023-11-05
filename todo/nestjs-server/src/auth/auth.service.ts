@@ -5,11 +5,13 @@ import * as bcrypt from 'bcrypt';
 import * as randomToken from 'rand-token';
 import * as dayjs from 'dayjs';
 import { UserRes } from '@features/rbac/users/dto/res/user-res.dto';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { CreateUserDto } from '@features/rbac/users/dto/req/create-user.dto';
 import { get, unset } from 'lodash';
 import { User } from '@features/rbac/users/entities/user.entity';
+import { COOKIE_NAME } from '@shared/constants/common.constant';
+import { IToken } from '@shared/model/permissions.model';
 
 @Injectable()
 export class AuthService {
@@ -24,13 +26,14 @@ export class AuthService {
     password: string,
   ): Promise<UserRes | null> {
     const user = await this.usersService.findUser(username);
-
+    console.log(user);
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return null;
     }
 
     return {
       id: user.id,
+      username: user.username,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
@@ -52,6 +55,30 @@ export class AuthService {
     });
   }
 
+  async handleRefreshToken(token: string, req: Request, res: Response) {
+    const refreshTokenData = await this.findRefreshToken(token);
+
+    const refreshToken = await this.verifyRefreshTokenExpiration(
+      refreshTokenData,
+    );
+
+    const accessToken = await this.getJwtToken(req.user as UserRes);
+
+    const secretData = {
+      accessToken,
+      refreshToken,
+    };
+
+    this.setCookie(res, COOKIE_NAME, secretData);
+    return secretData;
+  }
+
+  async getAccessToken(req: Request) {
+    const token: IToken = req.cookies;
+    const { accessToken } = token[COOKIE_NAME];
+    return this.jwtService.verify(accessToken);
+  }
+
   async getRefreshToken(id: number): Promise<string> {
     const expiration = dayjs().add(
       this.configService.get<number>('jwtConfig.jwtRefreshExpiresIn'),
@@ -66,6 +93,7 @@ export class AuthService {
     };
 
     await this.usersService.update(id, userDataToUpdate);
+
     return userDataToUpdate.refreshToken;
   }
 

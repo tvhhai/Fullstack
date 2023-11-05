@@ -10,11 +10,17 @@ export class ProjectTask extends BaseEntity {
   @Column({ length: 50 })
   title: string;
 
+  @Column({ length: 50 })
+  titleSlug: string;
+
   @Column({ length: 10 })
   view: ViewState;
 
   @Column({ length: 10 })
   color: string;
+
+  @Column()
+  isShowCompleteTask: boolean;
 
   @ManyToOne(() => User, (user) => user.projectTask)
   user: User;

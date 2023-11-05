@@ -6,11 +6,15 @@ export class CreateProjectTaskDto {
   @IsNotEmpty()
   title: string;
 
+  titleSlug: string;
+
   @IsNotEmpty()
   color: string;
 
   @IsNotEmpty()
   view: ViewState;
+
+  isShowCompleteTask: boolean;
 
   user: User;
 }

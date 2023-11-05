@@ -23,8 +23,7 @@ import { COOKIE_NAME } from '@shared/constants/common.constant';
 
 @Controller('api')
 export class AuthController {
-  constructor(private authService: AuthService) {
-  }
+  constructor(private authService: AuthService) {}
 
   @Public()
   @UseGuards(LocalGuards)
@@ -55,11 +54,7 @@ export class AuthController {
 
   @Public()
   @Post('auth/sign-up')
-  async registerAuth(
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
-    @Body() createUserDto: CreateUserDto,
-  ) {
+  async registerAuth(@Body() createUserDto: CreateUserDto) {
     try {
       await this.authService.signUp(createUserDto);
       const dataResponse: DataRes<[]> = {
@@ -103,34 +98,35 @@ export class AuthController {
   async refreshToken(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
-  ) {
+  ): Promise<DataRes<[]>> {
     try {
-      const refreshTokenData = await this.authService.findRefreshToken(
-        get(req, 'cookies.auth-cookie.refreshToken'),
-      );
+      const refreshToken = get(req, 'cookies.auth-cookie.refreshToken');
+      await this.authService.handleRefreshToken(refreshToken, req, res);
 
-      const refreshToken = await this.authService.verifyRefreshTokenExpiration(
-        refreshTokenData,
-      );
-
-      const accessToken = await this.authService.getJwtToken(
-        req.user as UserRes,
-      );
-
-      const secretData = {
-        accessToken,
-        refreshToken,
-      };
-
-      this.authService.setCookie(res, COOKIE_NAME, secretData);
-      const dataResponse: DataRes<[]> = {
+      return {
         statusCode: HttpStatus.OK,
         message: 'Token is refreshed successfully!',
         data: [],
       };
-      return dataResponse;
-    } catch (error) {
-    }
+    } catch (error) {}
+  }
+
+  @UseGuards(JwtGuards)
+  @Get('token/tokenExpiresIn')
+  async getTokenExpiresIn(
+    @Req() req: Request,
+  ): Promise<DataRes<{ expiresIn: number }>> {
+    try {
+      const token = await this.authService.getAccessToken(req);
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Success',
+        data: {
+          expiresIn: token.exp * 1000,
+        },
+      };
+    } catch (error) {}
   }
 
   @UseGuards(JwtGuards)

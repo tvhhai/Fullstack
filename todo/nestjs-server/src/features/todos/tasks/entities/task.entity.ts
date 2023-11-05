@@ -21,6 +21,12 @@ export class Task extends BaseEntity {
   @Column()
   priority: ETaskPriority;
 
+  @Column()
+  duaDate: string;
+
+  @Column()
+  duaDateTitle: string;
+
   @ManyToOne(() => SectionTask, (sectionTask) => sectionTask.tasks, {
     onDelete: 'CASCADE',
   })
