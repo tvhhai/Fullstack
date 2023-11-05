@@ -1,18 +1,18 @@
 export enum ColorScheme {
-  Vivid = 'vivid',
-  Natural = 'natural',
-  Cool = 'cool',
-  Fire = 'fire',
   Air = 'air',
   Aqua = 'aqua',
+  Cool = 'cool',
+  Fire = 'fire',
   Flame = 'flame',
-  Ocean = 'ocean',
   Forest = 'forest',
   Horizon = 'horizon',
+  Natural = 'natural',
   Neons = 'neons',
-  Picnic = 'picnic',
   Night = 'night',
   NightLights = 'nightLights',
+  Ocean = 'ocean',
+  Picnic = 'picnic',
+  Vivid = 'vivid',
 }
 
 // export enum LegendPosition {

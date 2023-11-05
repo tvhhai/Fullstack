@@ -2,46 +2,46 @@ import {PieChartOptions} from "@shared/components/common/chart/pie-chart/model/p
 
 export class PieChartConstant {
     public static readonly DATA_CONFIG_PIE_CHART_DEFAULT: PieChartOptions = {
-        plotOptions: {
-            pie: {
-                donut: {
-                    size: '75%',
-                    labels: {
-                        show: true,
-                        name: {},
-                        value: {}
-                    }
-                }
-            }
+        chart: {
+            type: "donut"
         },
         dataLabels: {
             enabled: false,
         },
-        series: [0],
-        chart: {
-            type: "donut"
-        },
         labels: [],
         legend: {
-            show: true,
-            position: 'bottom',
             floating: false,
+            position: 'bottom',
+            show: true,
         },
-        tooltip: {
-            y: {}
-        },
-        responsive: [],
         noData: {
-            text: 'No data available',
             align: 'center',
-            verticalAlign: 'middle',
             offsetX: 0,
             offsetY: 0,
             style: {
                 color: undefined,
-                fontSize: '14px',
-                fontFamily: undefined
+                fontFamily: undefined,
+                fontSize: '14px'
+            },
+            text: 'No data available',
+            verticalAlign: 'middle'
+        },
+        plotOptions: {
+            pie: {
+                donut: {
+                    labels: {
+                        name: {},
+                        show: true,
+                        value: {}
+                    },
+                    size: '75%'
+                }
             }
+        },
+        responsive: [],
+        series: [0],
+        tooltip: {
+            y: {}
         }
     }
 

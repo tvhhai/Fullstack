@@ -1,20 +1,24 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from "@angular/core";
-import { ProjectService } from "./project.service";
-import { ActivatedRoute } from "@angular/router";
-import { ButtonColor, ButtonTypes } from "@shared/components/common/button/button.enum";
-import { ISectionTask, ITask } from "../task/model/task.model";
-import { IProject, IProjectReq } from "./model/project.model";
-import { isEmptyArray, isEmptyObj } from "@shared/helpers";
-import { ViewState } from "../todos.enum";
-import { ViewMode } from "../todos.model";
-import { MatMenuTrigger } from "@angular/material/menu";
-import { AppConstant } from "@shared/constants";
+import {
+    ButtonColor,
+    ButtonTypes,
+} from '@shared/components/common/button/button.enum';
+import { ViewEncapsulation, Component, ViewChild, OnInit } from '@angular/core';
+import { isEmptyArray, isEmptyObj } from '@shared/helpers';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { MenuService } from '@core/menu/menu.service';
+import { ActivatedRoute } from '@angular/router';
+
+import { ISectionTask, ITask } from '../task/model/task.model';
+import { IProjectReq, IProject } from './model/project.model';
+import { ProjectService } from './project.service';
+import { ViewState } from '../todos.enum';
+import { ViewMode } from '../todos.model';
 
 @Component({
-    selector: "app-project",
-    templateUrl: "./project.component.html",
-    styleUrls: ["./project.component.scss"],
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    selector: 'app-project',
+    styleUrls: ['./project.component.scss'],
+    templateUrl: './project.component.html',
 })
 export class ProjectComponent implements OnInit {
     protected readonly ButtonTypes = ButtonTypes;
@@ -22,36 +26,38 @@ export class ProjectComponent implements OnInit {
     protected readonly ViewState = ViewState;
     protected readonly isEmptyArray = isEmptyArray;
 
-    @ViewChild("aaa") aaa!: MatMenuTrigger;
-    @ViewChild("bbb") bbb!: MatMenuTrigger;
+    @ViewChild('actionViewProject') actionViewProject!: MatMenuTrigger;
+    @ViewChild('bbb') bbb!: MatMenuTrigger;
     @ViewChild(MatMenuTrigger) menu2!: MatMenuTrigger;
 
-    title: string = "";
+    title = '';
     prjTaskId!: number;
-    data: { tasks: ITask[], sectionTasks: ISectionTask[] } = {
+    prjData!: IProject;
+    data: { sectionTasks: ISectionTask[]; tasks: ITask[] } = {
+        sectionTasks: [],
         tasks: [],
-        sectionTasks: []
     };
     view: ViewState = ViewState.List;
+    isShowCompleteTask = false;
     viewMode: ViewMode = {
-        [ViewState.List]: {
-            name: "List",
-            value: ViewState.List
-
-        },
         [ViewState.Board]: {
-            name: "Board",
-            value: ViewState.Board
-        }
+            name: 'Board',
+            value: ViewState.Board,
+        },
+        [ViewState.List]: {
+            name: 'List',
+            value: ViewState.List,
+        },
     };
 
     constructor(
         private projectService: ProjectService,
         private route: ActivatedRoute,
+        private menuService: MenuService
     ) {
         route.params.subscribe(() => {
-            const url = this.route.snapshot.paramMap.get("subPath") || "";
-            const parts = url.split("-");
+            const url = this.route.snapshot.paramMap.get('subPath') || '';
+            const parts = url.split('-');
 
             // const name = parts[0];
             this.prjTaskId = Number(parts[1]);
@@ -60,24 +66,49 @@ export class ProjectComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.projectService.get().subscribe(res => {
+            console.log(res);
+            if (res.id) {
+                this.title = res.title;
+                this.view = res.view;
+                this.isShowCompleteTask = res.isShowCompleteTask;
+                this.prjData = res;
+            }
+        });
     }
 
     getProject(id: number) {
         this.projectService.getById(id).subscribe(res => {
             if (!isEmptyObj(res.data)) {
-                this.title = res.data.title;
-                this.view = res.data.view;
                 this.data = this.parseDataResponse(res.data);
-            } else {
-                window.location.href = AppConstant.PAGE.TODAY_PAGE;
+                this.updateTaskCountMenu(res.data);
+
+                this.projectService.set(res.data);
+            }
+        });
+    }
+
+    updateTaskCountMenu(prjData: IProject) {
+        this.menuService.getAll().subscribe(menu => {
+            const projectMenu = menu.find(val => val.id === 'project');
+
+            if (projectMenu) {
+                const projectItem = projectMenu.child?.find(
+                    child => child.id === prjData.id
+                );
+
+                if (projectItem) {
+                    projectItem.countTask =
+                        this.projectService.countTask(prjData);
+                }
             }
         });
     }
 
     parseDataResponse(dataResponse: IProject) {
-        const data: { tasks: ITask[], sectionTasks: ISectionTask[] } = {
+        const data: { sectionTasks: ISectionTask[]; tasks: ITask[] } = {
+            sectionTasks: dataResponse.sectionTasks,
             tasks: dataResponse.tasks,
-            sectionTasks: dataResponse.sectionTasks
         };
         return data;
     }
@@ -91,13 +122,26 @@ export class ProjectComponent implements OnInit {
     }
 
     changeView(view: ViewState) {
-        const data: IProjectReq = {
-            view: view,
-        };
+        if (this.view !== view) {
+            const data: IProjectReq = {
+                view: view,
+            };
 
-        this.projectService.update(this.prjTaskId, data).subscribe(() => {
-            this.view = view;
-        });
+            this.projectService.update(this.prjTaskId, data).subscribe(res => {
+                this.view = view;
+            });
+        }
+        // else {
+        //     this.actionViewProject.closeMenu();
+        // }
     }
 
+    handleShowCompleteTask(isShowCompleteTask: boolean) {
+        const data: IProjectReq = {
+            isShowCompleteTask: !isShowCompleteTask,
+        };
+        this.projectService.update(this.prjTaskId, data).subscribe(res => {
+            this.getProject(res.data.id);
+        });
+    }
 }

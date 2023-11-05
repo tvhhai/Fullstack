@@ -1,20 +1,20 @@
 export enum ButtonTypes {
   Basic = 'basic',
-  Raised = 'raised',
-  Outline = 'stroked',
   Flat = 'flat',
-  Icon = 'icon',
-  IconFat = 'iconFat',
-  IconCircle = 'iconMiniFat',
-  IconSquareOutline = 'IconSquareOutline',
-  IconSquareContained = 'IconSquareContained',
   GroupIcon='GroupIcon',
   GroupText='GroupText',
+  Icon = 'icon',
+  IconCircle = 'iconMiniFat',
+  IconFat = 'iconFat',
+  IconSquareContained = 'IconSquareContained',
+  IconSquareOutline = 'IconSquareOutline',
+  Outline = 'stroked',
+  Raised = 'raised',
 }
 
 export enum ButtonColor {
-  Primary = 'primary',
   Accent = 'accent',
-  Warn = 'warn',
   Basic = 'basic',
+  Primary = 'primary',
+  Warn = 'warn',
 }

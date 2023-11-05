@@ -1,19 +1,23 @@
 export interface IMenuItem {
   id: number | string;
-  type: 'section' | 'link' | 'sub' | 'extLink' | 'extTabLink';
-  name: string;
-  icon?: string;
-  route: string;
   child?: IMenuChildrenItem[];
+  color?: string;
+  countTask: number;
+  icon?: string;
+  name: string;
   permissions?: IMenuPermissions;
-  color?: string
+  route: string;
+  type: 'section' | 'link' | 'sub';
 }
 
-export interface IMenuChildrenItem extends IMenuItem{
-  type: 'link' | 'sub' | 'extLink' | 'extTabLink';
+export interface IMenuChildrenItem extends IMenuItem {
+  childOfProject: boolean;
+  countTask: number;
+  type: 'link' | 'sub';
+  view?: string;
 }
 
 export interface IMenuPermissions {
-  only?: string | string[];
-  except?: string | string[];
+  except?: string[] | string;
+  only?: string[] | string;
 }

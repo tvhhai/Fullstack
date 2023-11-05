@@ -1,0 +1,18 @@
+<div class="snackbar-container">
+  <span>
+    {{ data.message }}
+  </span>
+  <button
+    *ngIf="data.action"
+    mat-button
+    type="button"
+    color="warn"
+    (click)="doAction()">
+    {{ data.titleAction }}
+  </button>
+  <i
+    *ngIf="data.dismiss"
+    [style.color]="'white'"
+    class="dismiss fa-light fa-xmark"
+    (click)="dismiss()"></i>
+</div>

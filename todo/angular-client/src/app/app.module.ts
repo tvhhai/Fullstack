@@ -1,43 +1,41 @@
-import { NgModule, isDevMode, forwardRef } from "@angular/core";
-import { Router } from "@angular/router";
-import { HttpClientModule, HttpClient } from "@angular/common/http";
-import { BrowserModule } from "@angular/platform-browser";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { CustomCurrencyMaskConfig } from '@shared/configs/currency-mask.config';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { BASE_URL } from '@core/interceptor/base-url.interceptor';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { LoaderService } from '@shared/services/loader.service';
+import { httpInterceptorProviders } from '@core/interceptor';
+import { appInitializerProviders } from '@core/initializer';
+import { BrowserModule } from '@angular/platform-browser';
+import { CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxPermissionsModule } from 'ngx-permissions';
+import { SharedModule } from '@shared/shared.module';
+import { LayoutModule } from '@angular/cdk/layout';
+import { CoreModule } from '@core/core.module';
+import { environment } from '@env/environment';
+import { ToastrModule } from 'ngx-toastr';
+import { NgModule } from '@angular/core';
+// import { Router } from "@angular/router";
 
-import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
-import { ToastrModule } from "ngx-toastr";
-import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
-import { TranslateHttpLoader } from "@ngx-translate/http-loader";
-import { LayoutModule } from "@angular/cdk/layout";
-import { CoreModule } from "@core/core.module";
-import { SharedModule } from "@shared/shared.module";
-import { NgIconsModule } from "@ng-icons/core";
+import {
+    MAT_SNACK_BAR_DATA,
+    MatSnackBarRef,
+} from '@angular/material/snack-bar';
 
-
-// Component
-import { AppComponent } from "./app.component";
-import { NgxPermissionsModule } from "ngx-permissions";
-import { BASE_URL } from "@core/interceptor/base-url.interceptor";
-import { environment } from "@env/environment";
-
-//Providers
-import { httpInterceptorProviders } from "@core/interceptor";
-import { appInitializerProviders } from "@core/initializer";
-import { LoaderService } from "@shared/services/loader.service";
-import { FeaturesModule } from "./features/features.module";
-import { AppRoutingModule } from "./app-routing.module";
-import { CURRENCY_MASK_CONFIG } from "ng2-currency-mask";
-import { CustomCurrencyMaskConfig } from "@shared/configs/currency-mask.config";
-import { iconoirIconsPack } from "./iconoir-icon-pack";
-import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { SelectComponent } from "@shared/components/common/select/select.component";
+import { SettingsDialogComponent } from './features/settings/settings.dialog.component';
+import { FeaturesModule } from './features/features.module';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
 
 // Required for AOT compilation
 export function TranslateHttpLoaderFactory(http: HttpClient) {
-    return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
+    return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 @NgModule({
+    bootstrap: [AppComponent],
     declarations: [AppComponent],
     imports: [
         BrowserModule,
@@ -49,14 +47,17 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
         AppRoutingModule,
         SharedModule,
         FeaturesModule,
-        ToastrModule.forRoot(),
+        ToastrModule.forRoot({
+            autoDismiss: true,
+            maxOpened: 5,
+        }),
         NgxPermissionsModule.forRoot(),
         TranslateModule.forRoot({
             loader: {
+                deps: [HttpClient],
                 provide: TranslateLoader,
                 useFactory: TranslateHttpLoaderFactory,
-                deps: [HttpClient]
-            }
+            },
         }),
         // ServiceWorkerModule.register("ngsw-worker.js", {
         //     enabled: !isDevMode(),
@@ -64,7 +65,6 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
         //     // or after 30 seconds (whichever comes first).
         //     registrationStrategy: "registerWhenStable:30000"
         // })
-        NgIconsModule.withIcons(iconoirIconsPack),
     ],
     providers: [
         appInitializerProviders,
@@ -72,14 +72,14 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
         LoaderService,
         { provide: BASE_URL, useValue: environment.baseUrl },
         { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
+        { provide: MatSnackBarRef, useValue: {} },
+        { provide: MAT_SNACK_BAR_DATA, useValue: {} },
     ],
-    bootstrap: [AppComponent]
 })
 export class AppModule {
-    // Diagnostic only: inspect router configuration
-    constructor(router: Router) {
-        // Use a custom replacer to display function names in the route configs
-        // const replacer = (key, value) => (typeof value === 'function') ? value.name : value;
-        // console.log('Routes: ', JSON.stringify(router.config, replacer, 2));
-    }
+    // constructor(router: Router) {
+    // Use a custom replacer to display function names in the route configs
+    // const replacer = (key, value) => (typeof value === 'function') ? value.name : value;
+    // console.log('Routes: ', JSON.stringify(router.config, replacer, 2));
+    // }
 }

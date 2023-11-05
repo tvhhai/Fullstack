@@ -1,35 +1,39 @@
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { DataRes } from "@shared/model";
-import { ITableSettings } from "@shared/components/common/ag-grid/model/ag-grid.model";
-import { HttpService } from "@shared/services/http.service";
+import { ITableSettings } from '@shared/components/common/ag-grid/model/ag-grid.model';
+import { HttpService } from '@shared/services/http.service';
+import { Injectable } from '@angular/core';
+import { DataRes } from '@shared/model';
+import { Observable } from 'rxjs';
 
 @Injectable({
-    providedIn: "root",
+  providedIn: 'root',
 })
 export class AgGridService {
-    constructor(private httpService: HttpService) {
-    }
+  constructor(private httpService: HttpService) {}
 
-    selectedRows: any[] = [];
+  selectedRows: any[] = [];
 
-    private readonly api = "api/table-settings";
+  private readonly api = 'api/table-settings';
 
-    getData(tableId: string): Observable<DataRes<ITableSettings>> {
-        return this.httpService.performRequest<DataRes<ITableSettings>>(
-            "get", this.api + "/" + tableId
-        );
-    }
+  getData(tableId: string): Observable<DataRes<ITableSettings>> {
+    return this.httpService.performRequest<DataRes<ITableSettings>>(
+      'get',
+      this.api + '/' + tableId
+    );
+  }
 
-    create(data: any): Observable<DataRes<ITableSettings>> {
-        return this.httpService.performRequest<DataRes<ITableSettings>>(
-            "post", this.api, data
-        );
-    }
+  create(data: any): Observable<DataRes<ITableSettings>> {
+    return this.httpService.performRequest<DataRes<ITableSettings>>(
+      'post',
+      this.api,
+      data
+    );
+  }
 
-    update(tableId: string, data: any): Observable<DataRes<ITableSettings>> {
-        return this.httpService.performRequest<DataRes<ITableSettings>>(
-            "patch", this.api + "/" + tableId, data
-        );
-    }
+  update(tableId: string, data: any): Observable<DataRes<ITableSettings>> {
+    return this.httpService.performRequest<DataRes<ITableSettings>>(
+      'patch',
+      this.api + '/' + tableId,
+      data
+    );
+  }
 }

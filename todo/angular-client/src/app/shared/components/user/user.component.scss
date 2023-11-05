@@ -1,7 +1,74 @@
 @import "../../style/partials/variables";
+@import "../../../shared/style/partials/mixin";
 
 .avatar {
   width: spacing(6);
   height: spacing(6);
   border-radius: 100%;
+  display: flex;
+}
+
+.profile-menu {
+  background: red;
+  padding: 0 8px;
+
+  &.mat-mdc-menu-panel {
+    max-width: 276px;
+    width: 276px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, .12);
+
+    .mat-mdc-menu-item {
+      border-radius: 4px;
+      padding: 0;
+
+      .mat-mdc-menu-item-text {
+        font-size: 13px !important;
+      }
+    }
+  }
+
+  .user-menu-setting {
+    @include flex-align-center;
+    //flex-direction: column;
+
+    .avatar {
+      margin-right: 8px;
+    }
+
+    .user-detail {
+      display: flex;
+      flex-direction: column;
+
+      span {
+        color: grey;
+      }
+
+    }
+  }
+
+  .menuitem {
+    @include flex-align-center;
+    min-height: 32px;
+
+    .icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 8px;
+
+    }
+  }
+
+  .item-hover {
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0 4px;
+
+    &:hover {
+      background-color: rgb(238, 238, 238);
+    }
+  }
 }

@@ -1,4 +1,5 @@
 @use "@angular/material" as mat;
+@import 'app/shared/style/partials/variables';
 
 // regular style toast
 @import "ngx-toastr/toastr";
@@ -21,6 +22,11 @@ body {
 
 html,
 body {
+  --mdc-checkbox-state-layer-size: 18px;
+  --mat-toolbar-standard-height: #{
+    $toolbar-height-desktop
+  };
+
   height: 100%;
 
   ul {
@@ -30,25 +36,6 @@ body {
 
   a {
     text-decoration: none;
-  }
-
-  .icon-today {
-    min-width: 22px;
-    min-height: 22px;
-    border: 1px solid green;
-    border-radius: 4px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: fit-content;
-    position: relative;
-    &:before {
-      content:'';
-      border: 1px solid green;
-      position: absolute;
-      width: 80%;
-    }
-
   }
 
   .dot-icon {
@@ -131,7 +118,7 @@ body {
     left: 0;
   }
 
-  --mdc-checkbox-state-layer-size: 18px;
+
 }
 
 

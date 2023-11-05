@@ -1,25 +1,21 @@
-import { EDateFormat, ETimeFormat } from "@shared/enum/dayjs-format";
+import { EDateFormat, ETimeFormat } from '@shared/enum/dayjs-format';
 
 export interface AppSettings {
-    language: LanguageType;
-    currency: Currency | string;
-    dateFormat: EDateFormat;
-    timeFormat: ETimeFormat;
-    themeOptions: ThemeOptions;
-    themeColor: string;
+  [key: string]: string | object;
+  currency: Currency | string;
+  dateFormat: EDateFormat;
+  language: LanguageType;
+  themeColor: string;
+  themeOptions: ThemeOptions;
 
-    [key: string]: string | object;
+  timeFormat: ETimeFormat;
 }
 
 export interface Currency {
-    locale: "en-US" | "vi-VN";
-    currencyCode: "USD" | "VND";
+  currencyCode: 'USD' | 'VND';
+  locale: 'en-US' | 'vi-VN';
 }
 
-export type ThemeOptions = "light" | "dark";
+export type ThemeOptions = 'light' | 'dark';
 
-export type LanguageType = "en" | "vn";
-
-
-
-
+export type LanguageType = 'en' | 'vn';

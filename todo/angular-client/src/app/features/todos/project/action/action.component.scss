@@ -1,0 +1,26 @@
+@import "../../../../shared/style/partials/mixin";
+
+.project-actions {
+  @include flex-center;
+  width: 28px;
+  height: 28px;
+
+  small {
+    color: grey;
+    font-weight: unset;
+  }
+
+  > div {
+    display: none;
+  }
+
+  &:hover {
+    small {
+      display: none;
+    }
+
+    > div {
+      display: block;
+    }
+  }
+}

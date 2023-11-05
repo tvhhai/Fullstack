@@ -1,18 +1,19 @@
-export interface Auth {}
-
 export interface User {
-  [prop: string]: any;
+    id: number | string;
 
-  id?: number | string | null;
-  username?: string;
-  email?: string;
-  avatar?: string;
-  roles?: any[];
-  permissions?: any[];
+    [prop: string]: any;
+
+    avatar: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    permissions: any[];
+    roles: any[];
+    username: string;
 }
 
 export interface UserResponse {
-  data: User;
-  message: string;
-  statusCode: number;
+    data: User;
+    message: string;
+    statusCode: number;
 }

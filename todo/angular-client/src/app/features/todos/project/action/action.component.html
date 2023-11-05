@@ -1,0 +1,33 @@
+<div class="project-actions">
+    <small *ngIf="project.countTask">
+        {{project.countTask}}
+    </small>
+    <div *ngIf="isProject" [matMenuTriggerFor]="projectActionMenu">
+        <i class="fa-regular fa-ellipsis fa-lg"></i>
+    </div>
+</div>
+
+<mat-menu #projectActionMenu="matMenu" xPosition="after" class="menu-task-action">
+    <ng-template matMenuContent>
+        <ng-container *ngFor="let item of projectActionMenuItems">
+            <div *ngIf="item.icon !=='fa-light fa-pen-line'; else editProject"
+                 class="menu-item"
+                 (click)="item.click()"
+                 [style.color]="item.icon === 'fa-light fa-trash-can'?'red':''"
+            >
+
+                <i [ngClass]="item.icon" [style.color]="item.icon === 'fa-light fa-trash-can'?'red':''"></i>
+                <span>{{item.title|translate}}</span>
+            </div>
+
+            <ng-template #editProject>
+                <div class="menu-item">
+                    <add-edit-project [viewMode]="EViewMode.Edit" [dataEdit]="project" class="w-100">
+                        <i [ngClass]="item.icon" [style.color]="item.icon === 'fa-light fa-trash-can'?'red':''"></i>
+                        <span>{{item.title|translate}}</span>
+                    </add-edit-project>
+                </div>
+            </ng-template>
+        </ng-container>
+    </ng-template>
+</mat-menu>

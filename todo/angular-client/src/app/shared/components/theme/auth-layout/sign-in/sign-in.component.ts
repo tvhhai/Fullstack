@@ -1,23 +1,23 @@
-import { Component } from '@angular/core';
 import {
     AbstractControl,
     FormBuilder,
     FormControl,
-    FormGroup,
     Validators,
+    FormGroup,
 } from '@angular/forms';
 import { AuthService } from '@core/authentication/services/auth.service';
 import { LoaderService } from '@shared/services/loader.service';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
     selector: 'app-sign-in',
-    templateUrl: './sign-in.component.html',
     styleUrls: ['./sign-in.component.scss'],
+    templateUrl: './sign-in.component.html',
 })
-export class SignInComponent {
+export class SignInComponent implements OnInit {
     form: FormGroup = new FormGroup({
-        username: new FormControl(''),
         password: new FormControl(''),
+        username: new FormControl(''),
         // rememberMe: new FormControl(false),
     });
 
@@ -25,25 +25,24 @@ export class SignInComponent {
         private formBuilder: FormBuilder,
         private authService: AuthService,
         private loaderService: LoaderService
-    ) {
-    }
+    ) {}
 
     ngOnInit(): void {
         this.form = this.formBuilder.group({
-            username: [
-                'admin',
-                [
-                    Validators.required,
-                    Validators.minLength(3),
-                    Validators.maxLength(20),
-                ],
-            ],
             password: [
                 'switch',
                 [
                     Validators.required,
                     Validators.minLength(6),
                     Validators.maxLength(40),
+                ],
+            ],
+            username: [
+                'admin',
+                [
+                    Validators.required,
+                    Validators.minLength(3),
+                    Validators.maxLength(20),
                 ],
             ],
             // rememberMe: [false]
@@ -60,12 +59,12 @@ export class SignInComponent {
             return;
         }
 
-        const { username, password } = this.form.value;
+        const { password, username } = this.form.value;
         this.authService.login(username, password).subscribe({
-            next: () => {
+            error: () => {
                 this.loaderService.isLoading.next(false);
             },
-            error: () => {
+            next: () => {
                 this.loaderService.isLoading.next(false);
             },
         });

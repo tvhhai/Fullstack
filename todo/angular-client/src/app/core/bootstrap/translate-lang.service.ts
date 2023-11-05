@@ -1,29 +1,27 @@
-import { Injectable } from "@angular/core";
-import { TranslateService } from "@ngx-translate/core";
+import { TranslateService } from '@ngx-translate/core';
+import { Injectable } from '@angular/core';
 
 @Injectable({
-    providedIn: "root"
+  providedIn: 'root',
 })
 export class TranslateLangService {
-    constructor(
-        private translate: TranslateService,
-    ) {
-    }
+  constructor(private translate: TranslateService) {}
 
-    load() {
+  load() {
+    return new Promise<void>(resolve => {
+      const defaultLang = 'en';
 
-        return new Promise<void>((resolve) => {
-            const defaultLang: string = "en";
+      this.translate.setDefaultLang(defaultLang);
 
-            this.translate.setDefaultLang(defaultLang);
-
-            this.translate.use(defaultLang).subscribe({
-                next: () =>
-                    console.log(`Successfully initialized '${defaultLang}' language.'`),
-                error: () =>
-                    console.error(`Problem with '${defaultLang}' language initialization.'`),
-                complete: () => resolve()
-            });
-        });
-    }
+      this.translate.use(defaultLang).subscribe({
+        complete: () => resolve(),
+        error: () =>
+          console.error(
+            `Problem with '${defaultLang}' language initialization.'`
+          ),
+        next: () =>
+          console.log(`Successfully initialized '${defaultLang}' language.'`),
+      });
+    });
+  }
 }

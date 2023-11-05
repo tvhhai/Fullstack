@@ -1,0 +1,61 @@
+<div class="setting-container">
+    <div>
+        <div class="col-md-6">
+            <mat-label class="fw-bold">
+                {{ 'setting.general.languages.title' | translate }}
+            </mat-label>
+            <div class="">
+                <app-select
+                    [arrObjVal]="currencySettings"
+                    [(modelValue)]="a"
+                    (selectionChange)="onChangeCurrency($event)"
+                    class="mb-2 app-input"></app-select>
+            </div>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div>
+        <h3 class="fw-bold">
+            {{ 'setting.general.dateTime.title' | translate }}
+        </h3>
+
+        <div class="col-md-6">
+            <mat-label class="fw-bold">
+                {{ 'setting.general.dateTime.timezone' | translate }}
+            </mat-label>
+            <div class="">
+                <app-select
+                    [arrObjVal]="currencySettings"
+                    [(modelValue)]="a"
+                    (selectionChange)="onChangeCurrency($event)"
+                    class="mb-2 app-input"></app-select>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <mat-label class="fw-bold">
+                {{ 'setting.general.dateTime.timeFormat' | translate }}
+            </mat-label>
+            <div class="">
+                <app-select
+                    [arrObjVal]="currencySettings"
+                    [(modelValue)]="a"
+                    (selectionChange)="onChangeCurrency($event)"
+                    class="mb-2 app-input"></app-select>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <mat-label class="fw-bold">
+                {{ 'setting.general.dateTime.dateFormat' | translate }}
+            </mat-label>
+            <div class="">
+                <app-select
+                    [arrObjVal]="currencySettings"
+                    [(modelValue)]="a"
+                    (selectionChange)="onChangeCurrency($event)"
+                    class="mb-2 app-input"></app-select>
+            </div>
+        </div>
+    </div>
+</div>

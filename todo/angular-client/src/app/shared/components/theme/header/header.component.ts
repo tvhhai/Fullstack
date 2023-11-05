@@ -1,22 +1,22 @@
 import {
-  Component,
-  EventEmitter,
-  Inject,
-  Input,
-  Optional,
-  Output,
   ViewEncapsulation,
-} from '@angular/core';
+  EventEmitter,
+  Component,
+  Optional,
+  Inject,
+  Output,
+  OnInit, Input,
+} from "@angular/core";
 import { FormControl } from '@angular/forms';
 import { DOCUMENT } from '@angular/common';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  selector: 'app-header',
+  styleUrls: ['./header.component.scss'],
+  templateUrl: './header.component.html',
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit{
   @Output() clicked = new EventEmitter<number>();
   @Input() opened!: boolean;
 
@@ -25,6 +25,7 @@ export class HeaderComponent {
   private htmlElement!: HTMLHtmlElement;
 
   constructor(@Optional() @Inject(DOCUMENT) private document: Document) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.htmlElement = this.document.querySelector('html')!;
   }
 

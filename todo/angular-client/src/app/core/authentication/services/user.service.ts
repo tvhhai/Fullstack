@@ -1,29 +1,40 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
-import { User } from "../models/auth";
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+
+import { User } from '../models/auth';
 
 @Injectable({
-    providedIn: "root"
+    providedIn: 'root',
 })
 export class UserService {
-    constructor() {
-    }
-
     private currentUserSubject: BehaviorSubject<User> =
-        new BehaviorSubject<User>({});
+        new BehaviorSubject<User>({
+            id: '',
+            avatar: '',
+            email: '',
+            firstName: '',
+            lastName: '',
+            permissions: [],
+            roles: [],
+            username: '',
+        });
 
     public currentUser$: Observable<User> =
         this.currentUserSubject.asObservable();
+
+    public backToUrlAfterCloseSettingDialog = '';
+
+    constructor() {}
 
     getCurrentUserObj() {
         return this.currentUserSubject.getValue();
     }
 
-    get(): Observable<User> {
-        return this.currentUser$;
-    }
-
     set(user: User) {
         this.currentUserSubject.next(user);
+    }
+
+    get(): Observable<User> {
+        return this.currentUser$;
     }
 }

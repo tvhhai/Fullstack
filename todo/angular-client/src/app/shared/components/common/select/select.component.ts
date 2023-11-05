@@ -1,36 +1,32 @@
 import {
-    Component,
-    EventEmitter,
-    Input,
-    Output,
     ViewEncapsulation,
-} from "@angular/core";
-import { isEmptyArray } from "@shared/helpers";
-import { MatSelectChange } from "@angular/material/select";
-import { ObjSelection } from "@shared/model";
+    EventEmitter,
+    Component,
+    Output,
+    Input,
+} from '@angular/core';
+import { MatSelectChange } from '@angular/material/select';
+import { isEmptyArray } from '@shared/helpers';
+import { ObjSelection } from '@shared/model';
 
 @Component({
-    selector: "app-select",
-    templateUrl: "./select.component.html",
-    styleUrls: ["./select.component.scss"],
     encapsulation: ViewEncapsulation.None,
+    selector: 'app-select',
+    styleUrls: ['./select.component.scss'],
+    templateUrl: './select.component.html',
 })
 export class SelectComponent {
     @Input() modelValue: any;
-    @Input() formCtrlName: string = "";
+    @Input() formCtrlName = '';
     @Input() formGroup: any;
-    @Input() showColor: boolean = false;
-    @Input("arrVal") arrVal!: (string | number)[];
-    @Input("arrObjVal") arrObjVal!: ObjSelection[];
+    @Input() showColor = false;
+    @Input() arrVal!: (string | number)[];
+    @Input() arrObjVal!: ObjSelection[];
 
     @Output() selectionChange = new EventEmitter<MatSelectChange>();
     @Output() modelValueChange = new EventEmitter<any>();
 
-    constructor() {
-    }
-
-    ngOnInit() {
-    }
+    constructor() {}
 
     public isListEmpty = isEmptyArray;
 

@@ -1,36 +1,26 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {ButtonColor, ButtonTypes} from "@shared/components/common/button/button.enum";
-import {EViewMode} from "@shared/enum/view-mode.enum";
+import {
+  ButtonColor,
+  ButtonTypes,
+} from '@shared/components/common/button/button.enum';
+import { EventEmitter, Component, Output, Input } from '@angular/core';
+import { EViewMode } from '@shared/enum/view-mode.enum';
 
 @Component({
   selector: 'app-card-layout',
+  styleUrls: ['./card-layout.component.scss'],
   templateUrl: './card-layout.component.html',
-  styleUrls: ['./card-layout.component.scss']
 })
 export class CardLayoutComponent {
   protected readonly ButtonTypes = ButtonTypes;
+  protected readonly ButtonColor = ButtonColor;
 
   @Input() viewMode!: EViewMode;
   @Input() title!: string;
-  @Input() showBackToView: boolean = false;
+  @Input() showBackToView = false;
 
-
-  @Output() save = new EventEmitter();
-  @Output() cancel = new EventEmitter();
   @Output() backToView = new EventEmitter();
-
 
   onBackToView() {
     this.backToView.emit();
   }
-
-  onSaveClick() {
-    this.save.emit();
-  }
-
-  onCancelClick() {
-    this.cancel.emit();
-  }
-
-  protected readonly ButtonColor = ButtonColor;
 }

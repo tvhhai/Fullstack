@@ -1,93 +1,152 @@
-import { Component, TemplateRef, ViewChild } from "@angular/core";
-import { DialogComponent } from "@shared/components/common/dialog/dialog.component";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import {
+    TemplateRef,
+    Component,
+    ViewChild,
+    OnInit,
+    Input,
+} from '@angular/core';
+import { DialogComponent } from '@shared/components/common/dialog/dialog.component';
+import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { EViewMode } from '@shared/enum/view-mode.enum';
+import { MenuService } from '@core/menu/menu.service';
+import { MatDialog } from '@angular/material/dialog';
 
-
-import { MatDialog } from "@angular/material/dialog";
-import { ViewState } from "../../todos.enum";
-import { ProjectService } from "../project.service";
-import { MenuService } from "@core/menu/menu.service";
-import { TodoConstant } from "../../todos.constant";
-import { IColorPrj } from "../../todos.model";
+import { IProjectReq } from '../model/project.model';
+import { ProjectService } from '../project.service';
+import { TodoConstant } from '../../todos.constant';
+import { IColorPrj } from '../../todos.model';
+import { ViewState } from '../../todos.enum';
 
 @Component({
-    selector: "add-edit-project",
-    templateUrl: "./add-edit.component.html",
-    styleUrls: ["./add-edit.component.scss"]
+    selector: 'add-edit-project',
+    styleUrls: ['./add-edit.component.scss'],
+    templateUrl: './add-edit.component.html',
 })
-export class AddEditComponent {
+export class AddEditProjectComponent implements OnInit {
     constructor(
         private projectService: ProjectService,
         private dialog: MatDialog,
-        private menu: MenuService,
-    ) {
-    }
+        private menu: MenuService
+    ) {}
 
-    @ViewChild("dialogTemplate") dialogTemplate!: TemplateRef<any>;
+    @ViewChild('dialogTemplate') dialogTemplate!: TemplateRef<any>;
+    @Input() viewMode: EViewMode = EViewMode.Create;
+    @Input() dataEdit: any;
+    protected readonly EViewMode = EViewMode;
+
     menu$ = this.menu.getAll();
     colors: IColorPrj[] = TodoConstant.COLOR_PROJECT;
-    views: any = [
-        { name: "List", value: ViewState.List, },
-        { name: "Board", value: ViewState.Board, },
+    views: { value: ViewState; name: string }[] = [
+        { name: 'List', value: ViewState.List },
+        { name: 'Board', value: ViewState.Board },
     ];
+
     color: any = {};
     form: FormGroup = new FormGroup({
-        title: new FormControl("", Validators.required,),
-        color: new FormControl("#808080",),
+        color: new FormControl('#808080'),
+        title: new FormControl('', Validators.required),
         view: new FormControl(ViewState.List),
     });
 
-    onItemsPerPageChange(e: any): void {
-        console.log(e);
-    }
-
     ngOnInit() {
-        // console.log(this.menu$);
+        if (this.viewMode === EViewMode.Edit) {
+            this.setFormData(this.dataEdit);
+        }
     }
 
-    addProject() {
-        this.openDialog();
+    onAddProject() {
+        this.openDialog(this.viewMode);
     }
 
-    openDialog() {
+    onEditProject() {
+        this.openDialog(this.viewMode);
+    }
+
+    setFormData(data: any) {
+        this.form.patchValue({
+            color: data.color,
+            title: data.name,
+            view: data.view,
+        });
+    }
+
+    openDialog(viewMode: EViewMode) {
         const dialogRef = this.dialog.open(DialogComponent, {
             data: {
-                title: "todo.project.add",
-                template: this.dialogTemplate,
-                labelApply: "common.ok",
                 isDisable: () => {
                     return this.form.invalid;
                 },
+                template: this.dialogTemplate,
+                title:
+                    viewMode === EViewMode.Create
+                        ? 'todo.project.add'
+                        : 'todo.project.edit',
             },
         });
 
-        dialogRef.afterClosed().subscribe((result) => {
+        dialogRef.afterClosed().subscribe(result => {
             if (result) {
                 const data = this.form.value;
-                this.projectService.create(data).subscribe({
-                    next: (res) => {
-                        const dataResponse = res.data;
-                        this.menu$.subscribe(
-                            {
-                                next: (res) => {
-                                    res.forEach(val => {
-                                        if (val.id === "project") {
-                                            val.child?.push({
-                                                id: dataResponse.title + "-" + dataResponse.id,
-                                                name: data.title,
-                                                route: dataResponse.title + "-" + dataResponse.id,
-                                                type: "link",
-                                                icon: "",
-                                                color: data.color
-                                            });
-                                        }
-                                    });
-                                }
-                            }
-                        );
-                    }
-                });
+
+                this.viewMode === EViewMode.Create
+                    ? this.handleAddProject(data)
+                    : this.handleEditProject(data);
             }
+        });
+    }
+
+    handleAddProject(data: IProjectReq) {
+        this.projectService.create(data).subscribe({
+            next: res => {
+                const dataResponse = res.data;
+                this.menu$.subscribe({
+                    next: res => {
+                        res.forEach(val => {
+                            if (val.id === 'project') {
+                                val.child?.push({
+                                    id: dataResponse.id,
+                                    childOfProject: true,
+                                    color: data.color,
+                                    countTask: 0,
+                                    icon: '',
+                                    name: data.title ?? '',
+                                    route:
+                                        dataResponse.titleSlug +
+                                        '-' +
+                                        dataResponse.id,
+                                    type: 'link',
+                                });
+                            }
+                        });
+                    },
+                });
+            },
+        });
+    }
+
+    handleEditProject(data: IProjectReq) {
+        this.projectService.update(this.dataEdit.id, data).subscribe({
+            next: res => {
+                const dataResponse = res.data;
+                this.menu$.subscribe({
+                    next: res => {
+                        const projectMenu = res.find(
+                            val => val.id === 'project'
+                        );
+                        if (projectMenu) {
+                            const projectItem = projectMenu.child?.find(
+                                child => child.id === dataResponse.id
+                            );
+                            if (projectItem) {
+                                projectItem.name = dataResponse.title;
+                                projectItem.color = dataResponse.color;
+                                projectItem.view = dataResponse.view;
+                                this.projectService.set(dataResponse);
+                            }
+                        }
+                    },
+                });
+            },
         });
     }
 }

@@ -1,68 +1,69 @@
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
-import { environment } from "@env/environment.prod";
-import { AuthGuard } from "@core/authentication/guards/auth.guard";
-
-import { AdminLayoutComponent } from "@shared/components/theme/admin-layout/admin-layout.component";
-import { AuthLayoutComponent } from "@shared/components/theme/auth-layout/auth-layout.component";
-import { SignInComponent } from "@shared/components/theme/auth-layout/sign-in/sign-in.component";
-import { SignUpComponent } from "@shared/components/theme/auth-layout/sign-up/sign-up.component";
+import { AdminLayoutComponent } from '@shared/components/theme/admin-layout/admin-layout.component';
+import { AuthLayoutComponent } from '@shared/components/theme/auth-layout/auth-layout.component';
+import { SignInComponent } from '@shared/components/theme/auth-layout/sign-in/sign-in.component';
+import { SignUpComponent } from '@shared/components/theme/auth-layout/sign-up/sign-up.component';
+import { AuthGuard } from '@core/authentication/guards/auth.guard';
+import { RouterModule, Routes } from '@angular/router';
+import { environment } from '@env/environment.prod';
+import { NgModule } from '@angular/core';
 
 const appRoutes: Routes = [
     {
-        path: "",
-        component: AdminLayoutComponent,
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         children: [
-            { path: "", redirectTo: "today", pathMatch: "full" },
+            { path: '', pathMatch: 'full', redirectTo: 'today' },
             {
-                path: "",
                 loadChildren: () =>
-                    import("././features/todos/todos.module").then(
-                        (m) => m.TodosModule
-                    )
+                    import('././features/todos/todos.module').then(
+                        m => m.TodosModule
+                    ),
+                path: '',
             },
-            // {
-            //     path: "apps",
-            //     loadChildren: () =>
-            //         import("./features/applications/applications.module").then((m) => m.ApplicationsModule)
-            // }, {
-            //     path: "preferences",
-            //     loadChildren: () =>
-            //         import("./features/preferences/preference.module").then((m) => m.PreferenceModule)
-            // }
-        ]
+            {
+                path: 'settings',
+                pathMatch: 'full',
+                redirectTo: 'settings/account',
+            },
+            {
+                loadChildren: () =>
+                    import('././features/settings/settings.module').then(
+                        m => m.SettingsModule
+                    ),
+                path: 'settings',
+            },
+        ],
+        component: AdminLayoutComponent,
+        path: '',
     },
     {
-        path: "auth",
-        component: AuthLayoutComponent,
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         children: [
-            { path: "sign-in", component: SignInComponent },
-            { path: "sign-up", component: SignUpComponent }
-        ]
+            { component: SignInComponent, path: 'sign-in' },
+            { component: SignUpComponent, path: 'sign-up' },
+        ],
+        component: AuthLayoutComponent,
+        path: 'auth',
     },
     {
-        path: "",
         loadChildren: () =>
-            import("./features/errors/errors.module").then((m) => m.ErrorsModule)
-    }
+            import('./features/errors/errors.module').then(m => m.ErrorsModule),
+        path: '',
+    },
 ];
 
 @NgModule({
+    exports: [RouterModule],
     imports: [
         RouterModule.forRoot(appRoutes, {
             enableTracing: false, // <-- debugging purposes only
-            useHash: environment.useHash
+            useHash: environment.useHash,
             // preloadingStrategy: SelectivePreloadingStrategyService,
-        })
+        }),
     ],
-    exports: [RouterModule]
 })
-export class AppRoutingModule {
-}
+export class AppRoutingModule {}
 
 /*
 Copyright Google LLC. All Rights Reserved.

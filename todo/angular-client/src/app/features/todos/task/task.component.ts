@@ -1,53 +1,66 @@
 import {
-    Component,
-    EventEmitter,
-    Input,
-    OnChanges,
-    Output,
-    SimpleChange,
-    SimpleChanges, ViewChild,
     ViewEncapsulation,
-} from "@angular/core";
+    SimpleChanges,
+    EventEmitter,
+    SimpleChange,
+    Component,
+    OnChanges,
+    ViewChild,
+    Output,
+    OnInit,
+    Input,
+} from '@angular/core';
+import {
+    arraysEqualIgnoreOrder,
+    isEmptyArray,
+    isEmptyObj,
+    deepEqual,
+    isDefined,
+} from '@shared/helpers';
+import {
+    transferArrayItem,
+    moveItemInArray,
+    CdkDragDrop,
+} from '@angular/cdk/drag-drop';
 import {
     ButtonColor,
     ButtonTypes,
-} from "@shared/components/common/button/button.enum";
-import { TaskService } from "./task.service";
+} from '@shared/components/common/button/button.enum';
+import { SnackBarService } from '@shared/components/common/snack-bar/snack-bar.service';
+import { DialogComponent } from '@shared/components/common/dialog/dialog.component';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { TranslateService } from '@ngx-translate/core';
+import { MatDialog } from '@angular/material/dialog';
+import { cloneDeep, isEqual } from 'lodash';
+import { noop } from 'rxjs';
+
 import {
-    IDataSectionTaskReq,
-    ISectionTask,
-    ISectionTaskReq,
     ISectionTaskUpdateIndexReq,
-    ITask,
+    ITaskActionMenuSectionItem,
+    IDataSectionTaskReq,
+    ITaskActionMenuItem,
+    ISectionTaskReq,
+    ISectionTask,
     ITaskReq,
-} from "./model/task.model";
+    ITask,
+} from './model/task.model';
 import {
-    arraysEqualIgnoreOrder,
-    deepEqual,
-    isDefined,
-    isEmptyArray,
-    isEmptyObj,
-} from "@shared/helpers";
-import { ActionMode, ETaskPriority, ViewState } from "../todos.enum";
-import {
-    CdkDragDrop,
-    moveItemInArray,
-    transferArrayItem,
-} from "@angular/cdk/drag-drop";
-import { cloneDeep, isEqual } from "lodash";
-import { DialogComponent } from "@shared/components/common/dialog/dialog.component";
-import { MatDialog } from "@angular/material/dialog";
-import { TranslateService } from "@ngx-translate/core";
-import { MatMenuTrigger } from "@angular/material/menu";
-import { noop } from "rxjs";
+    ETaskSectionItemId,
+    ETaskPriority,
+    ActionMode,
+    EDueDateId,
+    ViewState,
+} from '../todos.enum';
+import { IProject } from '../project/model/project.model';
+import { TaskService } from './task.service';
 
 @Component({
-    selector: "app-task",
-    templateUrl: "./task.component.html",
-    styleUrls: ["./task.component.scss"],
     encapsulation: ViewEncapsulation.None,
+    selector: 'app-task',
+    styleUrls: ['./task.component.scss'],
+    templateUrl: './task.component.html',
 })
-export class TaskComponent implements OnChanges {
+export class TaskComponent implements OnChanges, OnInit {
     protected readonly ButtonTypes = ButtonTypes;
     protected readonly ButtonColor = ButtonColor;
     protected readonly ViewState = ViewState;
@@ -55,157 +68,279 @@ export class TaskComponent implements OnChanges {
     protected readonly isEmptyArray = isEmptyArray;
     protected readonly isEmptyObj = isEmptyObj;
 
-    @ViewChild("taskActionMenu") taskActionMenu!: MatMenuTrigger;
+    @ViewChild('taskActionMenu') taskActionMenu!: MatMenuTrigger;
     @Input() prjTaskId!: number;
+    @Input() prjData!: IProject;
     @Input() data!: {
+        sectionTasks: ISectionTask[];
         tasks: ITask[];
-        sectionTasks: ISectionTask[]
     };
     @Input() view!: string;
-    @Output() saveTask = new EventEmitter();
-    @Output() saveSection = new EventEmitter();
+    @Output() syncData = new EventEmitter();
 
     dataBk!: {
+        sectionTasks: ISectionTask[];
         tasks: ITask[];
-        sectionTasks: ISectionTask[]
     };
-    taskName: string = "";
+    taskName = '';
     currentView!: string;
-    taskDescription: string = "";
-    sectionName: string = "";
-    cdkTaskId: string = "0";
+    taskDescription = '';
+    sectionName = '';
+    cdkTaskId = '0';
     cdkSectionId: string[] = [];
     cdkSectionIdAndTaskId: string[] = [this.cdkTaskId];
-    viewTaskEditorInTask: boolean = false;
-    viewSectionEditorStandalone: boolean = false;
-    listIconAction: {
-        icon: string;
+    viewTaskEditorInTask = false;
+    viewSectionEditorStandalone = false;
+
+    iconActions: {
         click: (task: ITask) => void;
-        openMenu: boolean
+        openMenu: boolean;
+        icon: string;
     }[] = [
         {
-            icon: "fa-light fa-pen fa-lg",
-            click: (task) => this.onEditTask(task),
-            openMenu: false
+            click: task => this.onEditTask(task),
+            icon: 'fa-light fa-pen fa-lg',
+            openMenu: false,
         },
         {
-            icon: "fa-light fa-calendar-days fa-lg",
-            click: (task) => this.b(task),
-            openMenu: false
+            click: task => this.b(task),
+            icon: 'fa-light fa-calendar-days fa-lg',
+            openMenu: false,
         },
         {
-            icon: "fa-light fa-message-captions fa-lg",
-            click: (task) => this.c(task),
-            openMenu: false
+            click: task => this.c(task),
+            icon: 'fa-light fa-message-captions fa-lg',
+            openMenu: false,
         },
         {
-            icon: "fa-light fa-ellipsis-stroke fa-xl",
-            click: () => noop(),
-            openMenu: true
+            click: task => this.handleTaskActionMenu(task),
+            icon: 'fa-light fa-ellipsis fa-xl',
+            openMenu: true,
         },
     ];
-
+    listIconAction = this.iconActions;
     sectionActions: {
-        icon: string;
-        title: string;
         click: (sectionTask: ISectionTask) => void;
-    }[] = [
-        {
-            icon: "fa-light fa-pen-line",
-            title: "todo.section.edit",
-            click: (sectionTask) => this.onEditSectionTask(sectionTask),
-        },
-        {
-            icon: "fa-light fa-circle-arrow-right",
-            title: "todo.section.move",
-            click: (sectionTask) => this.onEditSectionTask(sectionTask),
-        },
-        {
-            icon: "fa-light fa-copy",
-            title: "todo.section.duplicate",
-            click: (sectionTask) => this.onEditSectionTask(sectionTask),
-        },
-        {
-            icon: "fa-light fa-trash-can",
-            title: "todo.section.delete",
-            click: (sectionTask) => this.onDeleteSectionTask(sectionTask),
-        },
-    ];
-
-    taskActionMenus: {
-        icon: string;
         title: string;
-        click: (task: ITask) => void;
+        icon: string;
     }[] = [
         {
-            icon: "fa-light fa-arrow-up-to-line",
-            title: "todo.task.addAbove",
-            click: () => noop(),
+            click: sectionTask => this.onEditSectionTask(sectionTask),
+            icon: 'fa-light fa-pen-line',
+            title: 'todo.section.edit',
         },
         {
-            icon: "fa-light fa-arrow-down-to-line",
-            title: "todo.task.addBelow",
-            click: () => noop(),
+            click: sectionTask => this.onEditSectionTask(sectionTask),
+            icon: 'fa-light fa-circle-arrow-right',
+            title: 'todo.section.move',
         },
         {
-            icon: "fa-light fa-pen-line",
-            title: "todo.task.edit",
-            click: (task) => this.onEditTask(task),
+            click: sectionTask => this.onEditSectionTask(sectionTask),
+            icon: 'fa-light fa-copy',
+            title: 'todo.section.duplicate',
         },
         {
-            icon: "fa-light fa-copy",
-            title: "common.duplicate",
-            click: () => noop(),
-        },
-        {
-            icon: "fa-light fa-trash-can",
-            title: "todo.task.delete",
-            click: () => noop(),
+            click: sectionTask => this.onDeleteSectionTask(sectionTask),
+            icon: 'fa-light fa-trash-can',
+            title: 'todo.section.delete',
         },
     ];
+    taskMenuItems: ITaskActionMenuItem[] = [
+        {
+            id: 'up',
+            click: () => noop(),
+            divider: false,
+            icon: 'fa-light fa-arrow-up-to-line',
+            title: 'todo.task.addAbove',
+        },
+        {
+            id: 'down',
+            click: () => noop(),
+            divider: false,
+            icon: 'fa-light fa-arrow-down-to-line',
+            title: 'todo.task.addBelow',
+        },
+        {
+            id: 'edit',
+            click: task => this.onEditTask(task),
+            divider: true,
+            icon: 'fa-light fa-pen-line',
+            title: 'todo.task.edit',
+        },
+        {
+            id: 'duplicate',
+            click: () => noop(),
+            divider: false,
+            icon: 'fa-light fa-copy',
+            title: 'common.duplicate',
+        },
+        {
+            id: 'delete',
+            click: task => this.onDeleteTask(task),
+            divider: false,
+            icon: 'fa-light fa-trash-can',
+            title: 'todo.task.delete',
+        },
+    ];
+    taskMenuSectionItemDueDate: ITaskActionMenuItem = {
+        id: ETaskSectionItemId.DueDate,
+        children: [
+            {
+                id: EDueDateId.Today,
+                active: false,
+                click: () => noop(),
+                color: '#7ECC49',
+                hide: false,
+                icon: 'fa-light fa-calendar-day fa-xl',
+                title: 'common.today',
+            },
+            {
+                id: EDueDateId.Tomorrow,
+                active: false,
+                click: () => noop(),
+                color: '#FAD000',
+                hide: false,
+                icon: 'fa-light fa-sun-bright fa-xl',
+                title: 'common.tomorrow',
+            },
+            {
+                id: EDueDateId.ThisWeek,
+                active: false,
+                click: () => noop(),
+                color: '#14AAF5',
+                hide: false,
+                icon: 'fa-light fa-calendar-week fa-xl',
+                title: 'common.thisWeek',
+            },
+            {
+                id: EDueDateId.NextWeek,
+                active: false,
+                click: () => noop(),
+                color: '#E05194',
+                hide: false,
+                icon: 'fa-light fa-briefcase-arrow-right fa-xl',
+                title: 'common.nextWeek',
+            },
+            {
+                id: EDueDateId.NoDate,
+                active: false,
+                click: () => noop(),
+                color: 'red',
+                hide: false,
+                icon: 'fa-light fa-circle-xmark fa-xl',
+                title: 'common.noDate',
+            },
+            {
+                id: EDueDateId.PickDate,
+                active: false,
+                click: () => noop(),
+                color: '',
+                hide: false,
+                icon: 'fa-light fa-ellipsis-stroke fa-xl',
+                title: 'common.more',
+            },
+        ],
+        click: () => noop(),
+        icon: '',
+        title: 'Due date',
+    };
+    taskMenuSectionItemPriority: ITaskActionMenuItem = {
+        id: ETaskSectionItemId.Priority,
+        children: [
+            {
+                id: ETaskPriority.Priority1,
+                active: false,
+                click: () => noop(),
+                color: '#fc4b6c',
+                hide: false,
+                icon: 'fa-sharp fa-solid fa-flag fa-lg',
+                title: ETaskPriority.Priority1,
+            },
+            {
+                id: ETaskPriority.Priority2,
+                active: false,
+                click: () => noop(),
+                color: '#ffb22b',
+                hide: false,
+                icon: 'fa-sharp fa-solid fa-flag fa-lg',
+                title: ETaskPriority.Priority2,
+            },
+            {
+                id: ETaskPriority.Priority3,
+                active: false,
+                click: () => noop(),
+                color: '#1e88e5',
+                hide: false,
+                icon: 'fa-sharp fa-solid fa-flag fa-lg',
+                title: ETaskPriority.Priority3,
+            },
+            {
+                id: ETaskPriority.Priority4,
+                active: false,
+                click: () => noop(),
+                color: '',
+                hide: false,
+                icon: 'fa-sharp fa-light fa-flag fa-lg',
+                title: ETaskPriority.Priority4,
+            },
+        ],
+        click: () => noop(),
+        divider: true,
+        icon: '',
+        title: 'Priority',
+    };
+    taskActionMenus: ITaskActionMenuItem[] = [];
     priorityBackground: Record<any, string> = {
-        [ETaskPriority.Priority1]: "#f9e7eb",
-        [ETaskPriority.Priority2]: "#fff8ec",
-        [ETaskPriority.Priority3]: "#ecf6ff",
-        [ETaskPriority.Priority4]: "",
+        [ETaskPriority.Priority1]: '#f9e7eb',
+        [ETaskPriority.Priority2]: '#fff8ec',
+        [ETaskPriority.Priority3]: '#ecf6ff',
+        [ETaskPriority.Priority4]: '',
     };
 
     priorityColors: Record<any, string> = {
-        [ETaskPriority.Priority1]: "#fc4b6c",
-        [ETaskPriority.Priority2]: "#ffb22b",
-        [ETaskPriority.Priority3]: "#1e88e5",
-        [ETaskPriority.Priority4]: "",
+        [ETaskPriority.Priority1]: '#fc4b6c',
+        [ETaskPriority.Priority2]: '#ffb22b',
+        [ETaskPriority.Priority3]: '#1e88e5',
+        [ETaskPriority.Priority4]: '',
     };
 
     constructor(
         private taskService: TaskService,
         private dialog: MatDialog,
-        private translate: TranslateService
-    ) {
-    }
+        private translate: TranslateService,
+        private _snackBar: SnackBarService
+    ) {}
 
     ngOnInit(): void {
-        console.log("ngOnInit");
+        console.log('ngOnInit');
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes["view"]) {
-            this.handleViewChange(changes["view"]);
+        console.log(changes['prjData']);
+        if (changes['view']) {
+            this.handleViewChange(changes['view']);
         }
-        if (changes["data"]) {
+        if (changes['data']) {
             this.handleDataChange();
         }
     }
 
     private handleViewChange(viewChange: SimpleChange) {
         this.currentView = viewChange.currentValue;
-        if (this.currentView === ViewState.Board) {
-            this.setupListIconAction();
-        }
+        this.setupListIconAction();
     }
 
     private setupListIconAction() {
-        this.listIconAction = this.listIconAction.filter(value => value.openMenu);
+        const iconActions = cloneDeep(this.iconActions);
+        this.listIconAction =
+            this.currentView === ViewState.Board
+                ? iconActions.filter(value => {
+                      if (value.openMenu) {
+                          value.icon = 'fa-light fa-ellipsis-stroke fa-xl';
+                      }
+                      return value.openMenu;
+                  })
+                : iconActions;
     }
 
     private handleDataChange() {
@@ -214,7 +349,7 @@ export class TaskComponent implements OnChanges {
     }
 
     private collectCdkSectionIds() {
-        this.cdkSectionId = this.data.sectionTasks.map((task) =>
+        this.cdkSectionId = this.data.sectionTasks.map(task =>
             task.id.toString()
         );
         this.cdkSectionIdAndTaskId = this.cdkSectionIdAndTaskId.concat(
@@ -222,33 +357,127 @@ export class TaskComponent implements OnChanges {
         );
     }
 
+    onDeleteTask(task: ITask) {
+        const dialogRef = this.dialog.open(DialogComponent, {
+            data: {
+                labelApply: 'common.delete',
+                message: this.translate.instant('common.deleteItemMsg1', {
+                    name: task.title,
+                }),
+                title: 'todo.task.delete',
+            },
+        });
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.handleDeleteTask(task.id);
+            }
+        });
+    }
+
+    handleDeleteTask(taskId: number) {
+        this.taskService.deleteTask(taskId).subscribe(() => {
+            this.syncData.emit();
+        });
+    }
+
+    handleTaskActionMenu(task: ITask) {
+        this.handleTaskMenuSectionItemDueDate(task);
+        this.activeTaskMenuSectionItemPriority(task);
+
+        this.taskActionMenus = [];
+        const taskMenuItems = Array.from(this.taskMenuItems);
+        taskMenuItems.splice(
+            3,
+            0,
+            this.taskMenuSectionItemDueDate,
+            this.taskMenuSectionItemPriority
+        );
+        this.taskActionMenus = taskMenuItems;
+    }
+
+    handleTaskMenuSectionItemDueDate(task: ITask) {
+        const menuItems = this.taskMenuSectionItemDueDate.children;
+        const duaDateTitle = task.duaDateTitle;
+
+        if (menuItems && !isEmptyArray(menuItems)) {
+            this.resetMenuItems(menuItems, 'hide');
+            if (duaDateTitle === EDueDateId.PickDate) {
+                this.resetMenuItems(menuItems, 'hide');
+            } else {
+                if (
+                    task.duaDateTitle === EDueDateId.NoDate ||
+                    !task.duaDateTitle
+                ) {
+                    const noDateItem = menuItems.find(
+                        item => item.id === EDueDateId.NoDate
+                    );
+                    if (noDateItem) {
+                        noDateItem.hide = true;
+                    }
+                } else {
+                    const data = menuItems.find(
+                        item => item.id === duaDateTitle
+                    );
+                    if (data) {
+                        data.hide = true;
+                    }
+                }
+            }
+        }
+    }
+
+    activeTaskMenuSectionItemPriority(task: ITask) {
+        const priority = task.priority;
+
+        const menuItems = this.taskMenuSectionItemPriority.children;
+        if (menuItems && !isEmptyArray(menuItems)) {
+            this.resetMenuItems(menuItems, 'active');
+
+            menuItems.forEach(val => {
+                if (priority === val.id) {
+                    val.active = true;
+                }
+            });
+        }
+    }
+
+    resetMenuItems(
+        menuItems: ITaskActionMenuSectionItem[],
+        keyReset: 'active' | 'hide'
+    ) {
+        menuItems.forEach(
+            (item: ITaskActionMenuSectionItem) => (item[keyReset] = false)
+        );
+    }
+
     onEditTask(task: ITask) {
-        // console.log(task);
         task.viewTaskEditor = true;
         this.taskName = task.title;
     }
 
     handleEditTask(task: ITask) {
         const taskReq: ITaskReq = {
-            title: this.taskName,
             description: task.description,
             index: task.index,
+            title: this.taskName,
         };
 
         this.taskService.updateTask(task.id, taskReq).subscribe(() => {
-            this.saveTask.emit();
+            this.syncData.emit();
         });
     }
 
     b(task: ITask) {
+        console.log(task);
     }
 
     c(task: ITask) {
+        console.log(task);
     }
 
-    onOpenTaskActionMenu(task: ITask) {
-        this.taskActionMenu.openMenu();
-    }
+    // onOpenTaskActionMenu(task: ITask) {
+    //     this.taskActionMenu.openMenu();
+    // }
 
     taskComplete(task: ITask) {
         console.log(task);
@@ -257,7 +486,7 @@ export class TaskComponent implements OnChanges {
         };
 
         this.taskService.updateTask(task.id, data).subscribe(() => {
-            this.saveTask.emit();
+            this.syncData.emit();
             this.clearForm();
         });
     }
@@ -267,11 +496,11 @@ export class TaskComponent implements OnChanges {
         this.viewTaskEditorInTask = false;
         if (item) {
             item.actionMode = ActionMode.Add;
-            this.data.sectionTasks.forEach((val) => {
+            this.data.sectionTasks.forEach(val => {
                 val.viewTaskEditor = item.id === val.id;
             });
         } else {
-            this.data.sectionTasks.forEach((val) => {
+            this.data.sectionTasks.forEach(val => {
                 val.viewTaskEditor = false;
             });
             this.viewTaskEditorInTask = true;
@@ -282,11 +511,11 @@ export class TaskComponent implements OnChanges {
         this.viewSectionEditorStandalone = false;
         if (item) {
             item.actionMode = ActionMode.Add;
-            this.data.sectionTasks.forEach((val) => {
+            this.data.sectionTasks.forEach(val => {
                 val.viewSectionEditor = item.id === val.id;
             });
         } else {
-            this.data.sectionTasks.forEach((val) => {
+            this.data.sectionTasks.forEach(val => {
                 val.viewSectionEditor = false;
             });
             this.viewSectionEditorStandalone = true;
@@ -302,19 +531,22 @@ export class TaskComponent implements OnChanges {
     onDeleteSectionTask(item: ISectionTask) {
         const dialogRef = this.dialog.open(DialogComponent, {
             data: {
-                title: "todo.section.delete",
-                labelApply: "common.delete",
+                labelApply: 'common.delete',
                 message: item.tasks.length
-                    ? this.translate.instant("todo.task.msg.deleteWithTask", {
-                        section: item.title,
-                        task: item.tasks.length,
-                    })
-                    : this.translate.instant("todo.task.msg.deleteWithoutTask", {
-                        section: item.title,
-                    }),
+                    ? this.translate.instant('todo.task.msg.deleteWithTask', {
+                          section: item.title,
+                          task: item.tasks.length,
+                      })
+                    : this.translate.instant(
+                          'todo.task.msg.deleteWithoutTask',
+                          {
+                              section: item.title,
+                          }
+                      ),
+                title: 'todo.section.delete',
             },
         });
-        dialogRef.afterClosed().subscribe((result) => {
+        dialogRef.afterClosed().subscribe(result => {
             if (result) {
                 this.handleDeleteSectionTask(item.id);
             }
@@ -323,27 +555,35 @@ export class TaskComponent implements OnChanges {
 
     handleDeleteSectionTask(sectionId: number) {
         this.taskService.deleteSection(sectionId).subscribe(() => {
-            this.saveSection.emit();
+            this.syncData.emit();
         });
     }
 
     onCancelSaveTask(item: ITask) {
-        item ? (item.viewTaskEditor = false) : (this.viewTaskEditorInTask = false);
-        this.taskName = "";
+        item
+            ? (item.viewTaskEditor = false)
+            : (this.viewTaskEditorInTask = false);
+        this.taskName = '';
     }
 
     onCancelSaveSection(item: ISectionTask) {
+        if (item) {
+            item.viewSectionEditor = false;
+            delete item.actionMode;
+        } else {
+            this.viewSectionEditorStandalone = false;
+        }
         item
             ? ((item.viewSectionEditor = false), delete item.actionMode)
             : (this.viewSectionEditorStandalone = false);
-        this.sectionName = "";
+        this.sectionName = '';
     }
 
     onSaveTask(item: ITask, lengthTask: number) {
         const taskReq: ITaskReq = {
-            title: this.taskName,
             description: this.taskDescription,
             index: lengthTask + 1,
+            title: this.taskName,
         };
 
         item
@@ -351,15 +591,15 @@ export class TaskComponent implements OnChanges {
             : (taskReq.projectTask = this.prjTaskId);
 
         this.taskService.createTask(taskReq).subscribe(() => {
-            this.saveTask.emit();
+            this.syncData.emit();
             this.clearForm();
         });
     }
 
     clearForm() {
-        this.taskName = "";
-        this.taskDescription = "";
-        this.sectionName = "";
+        this.taskName = '';
+        this.taskDescription = '';
+        this.sectionName = '';
     }
 
     isValidTask = (): boolean => {
@@ -379,10 +619,10 @@ export class TaskComponent implements OnChanges {
             id: 0,
             index: index,
             isExpand: false,
-            viewTaskEditor: false,
-            viewSectionEditor: false,
             tasks: [],
             title: name,
+            viewSectionEditor: false,
+            viewTaskEditor: false,
         };
     }
 
@@ -390,12 +630,18 @@ export class TaskComponent implements OnChanges {
         const sectionTasksSize = this.data.sectionTasks.length;
 
         if (isDefined(insertPosition)) {
-            this.view === ViewState.List ? (insertPosition += 1) : insertPosition;
+            this.view === ViewState.List
+                ? (insertPosition += 1)
+                : insertPosition;
             const dataSectionTasksReq = this.prepareDataSectionTasksDefault(
                 this.sectionName,
                 insertPosition
             );
-            this.data.sectionTasks.splice(insertPosition, 0, dataSectionTasksReq);
+            this.data.sectionTasks.splice(
+                insertPosition,
+                0,
+                dataSectionTasksReq
+            );
         } else {
             const dataSectionTasksReq = this.prepareDataSectionTasksDefault(
                 this.sectionName,
@@ -422,13 +668,13 @@ export class TaskComponent implements OnChanges {
 
     prepareDataReqAndSaveSection(item: ISectionTask, index: number) {
         const sectionTaskReq: ISectionTaskReq = {
-            title: this.sectionName,
-            projectTask: this.prjTaskId,
             index: index,
+            projectTask: this.prjTaskId,
+            title: this.sectionName,
         };
 
         const sectionTaskUpdateIndex: ISectionTaskUpdateIndexReq[] =
-            this.data.sectionTasks.map((val) => ({
+            this.data.sectionTasks.map(val => ({
                 id: val.id,
                 index: val.index,
             }));
@@ -436,7 +682,7 @@ export class TaskComponent implements OnChanges {
         this.taskService
             .createAndUpdateSection({ sectionTaskReq, sectionTaskUpdateIndex })
             .subscribe(() => {
-                this.saveSection.emit();
+                this.syncData.emit();
                 this.onCancelSaveSection(item);
             });
     }
@@ -449,7 +695,7 @@ export class TaskComponent implements OnChanges {
             sectionTaskUpdateIndex: [],
         };
         this.taskService.updateTitleSection(item.id, data).subscribe(() => {
-            this.saveSection.emit();
+            this.syncData.emit();
             this.onCancelSaveSection(item);
         });
     }
@@ -495,7 +741,7 @@ export class TaskComponent implements OnChanges {
         //     section.index = i;
         // });
         this.updateIndex(this.data.sectionTasks);
-        console.log(this.data.sectionTasks);
+        // console.log(this.data.sectionTasks);
     }
 
     updateIndexTask() {
@@ -505,7 +751,10 @@ export class TaskComponent implements OnChanges {
             tasks: tasks,
         };
         this.taskService.updateIndexTask(data).subscribe(() => {
-            this.saveTask.emit();
+            this.syncData.emit();
+            this._snackBar.open({
+                message: 'Order changed',
+            });
         });
     }
 
@@ -513,8 +762,8 @@ export class TaskComponent implements OnChanges {
         const section = this.data.sectionTasks;
         const sectionBk = this.dataBk.sectionTasks;
 
-        section.forEach((val) => {
-            const sectionBkItem = sectionBk.find((item) => item.id === val.id);
+        section.forEach(val => {
+            const sectionBkItem = sectionBk.find(item => item.id === val.id);
 
             if (!sectionBkItem) {
                 return;
@@ -522,7 +771,7 @@ export class TaskComponent implements OnChanges {
 
             if (
                 !deepEqual(val.tasks, sectionBkItem.tasks) ||
-                !arraysEqualIgnoreOrder(val.tasks, sectionBkItem.tasks, "id")
+                !arraysEqualIgnoreOrder(val.tasks, sectionBkItem.tasks, 'id')
             ) {
                 const data = {
                     sectionTask: val.id,
@@ -530,7 +779,7 @@ export class TaskComponent implements OnChanges {
                 };
 
                 this.taskService.updateIndexTask(data).subscribe(() => {
-                    this.saveTask.emit();
+                    this.syncData.emit();
                 });
             }
         });

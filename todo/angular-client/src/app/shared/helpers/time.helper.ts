@@ -1,7 +1,7 @@
-import * as dayjs from "dayjs";
-import * as timezone from "dayjs/plugin/timezone";
-import * as utc from "dayjs/plugin/utc";
-import { EDateFormat, EDuration, ETimeFormat } from "@shared/enum/dayjs-format";
+import { EDateFormat, ETimeFormat, EDuration } from '@shared/enum/dayjs-format';
+import * as timezone from 'dayjs/plugin/timezone';
+import * as utc from 'dayjs/plugin/utc';
+import * as dayjs from 'dayjs';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -14,17 +14,17 @@ dayjs.extend(timezone);
  * @returns True if the input is valid, false otherwise.
  */
 function isValidInput(
-        value: string | number | undefined,
-        dateFormat: EDateFormat | null,
-        timeFormat: ETimeFormat | null
+  value: undefined | string | number,
+  dateFormat: EDateFormat | null,
+  timeFormat: ETimeFormat | null
 ) {
-    return (
-            !value &&
-            dateFormat &&
-            Object.values(EDateFormat).includes(dateFormat) &&
-            timeFormat &&
-            Object.values(ETimeFormat).includes(timeFormat)
-    );
+  return (
+    !value &&
+    dateFormat &&
+    Object.values(EDateFormat).includes(dateFormat) &&
+    timeFormat &&
+    Object.values(ETimeFormat).includes(timeFormat)
+  );
 }
 
 /**
@@ -36,16 +36,16 @@ function isValidInput(
  * @returns The formatted date and time.
  */
 export function formatDateTime(
-        milliseconds?: number,
-        dateStr?: string,
-        dateFormat: EDateFormat = EDateFormat.DEFAULT,
-        timeFormat: ETimeFormat = ETimeFormat.DEFAULT
+  milliseconds?: number,
+  dateStr?: string,
+  dateFormat: EDateFormat = EDateFormat.DEFAULT,
+  timeFormat: ETimeFormat = ETimeFormat.DEFAULT
 ) {
-    const value = milliseconds || dateStr;
-    if (isValidInput(value, dateFormat, timeFormat)) {
-        return "";
-    }
-    return dayjs(value).format(dateFormat + " " + timeFormat);
+  const value = milliseconds || dateStr;
+  if (isValidInput(value, dateFormat, timeFormat)) {
+    return '';
+  }
+  return dayjs(value).format(dateFormat + ' ' + timeFormat);
 }
 
 /**
@@ -75,15 +75,15 @@ export function formatDateTime(
  * @returns The formatted time.
  */
 export function formatTime(
-        milliseconds?: number,
-        dateStr?: string,
-        timeFormat: ETimeFormat = ETimeFormat.DEFAULT
+  milliseconds?: number,
+  dateStr?: string,
+  timeFormat: ETimeFormat = ETimeFormat.DEFAULT
 ) {
-    const value = milliseconds || dateStr;
-    if (isValidInput(value, null, timeFormat)) {
-        return "";
-    }
-    return dayjs(value).format(timeFormat);
+  const value = milliseconds || dateStr;
+  if (isValidInput(value, null, timeFormat)) {
+    return '';
+  }
+  return dayjs(value).format(timeFormat);
 }
 
 /**
@@ -93,30 +93,44 @@ export function formatTime(
  * @returns The time range.
  * @throws Error if numberOfYearsAgo is negative.
  */
-export function getTimeRange(duration: EDuration, numberOfYearsAgo: number = 0): {
-    startDate: Date;
-    endDate: Date;
+export function getTimeRange(
+  duration: EDuration,
+  numberOfYearsAgo = 0
+): {
+  startDate: Date;
+  endDate: Date;
 } {
-    const today = dayjs();
-    let firstDayOfTargetMonth: Date, lastDayOfTargetMonth: Date;
-    if (numberOfYearsAgo < 0) {
-        throw new Error("Number of years ago should be a positive number. If it's equal to 0, then return the range for this month.");
-    } else if (numberOfYearsAgo===0) {
-        firstDayOfTargetMonth = today.startOf(duration).toDate();
-        lastDayOfTargetMonth = today.endOf(duration).toDate();
+  const today = dayjs();
+  let firstDayOfTargetMonth: Date, lastDayOfTargetMonth: Date;
+  if (numberOfYearsAgo < 0) {
+    throw new Error(
+      "Number of years ago should be a positive number. If it's equal to 0, then return the range for this month."
+    );
+  } else if (numberOfYearsAgo === 0) {
+    firstDayOfTargetMonth = today.startOf(duration).toDate();
+    lastDayOfTargetMonth = today.endOf(duration).toDate();
+  } else {
+    if (numberOfYearsAgo === 1) {
+      firstDayOfTargetMonth = today
+        .subtract(numberOfYearsAgo, duration)
+        .startOf(duration)
+        .toDate();
+      lastDayOfTargetMonth = today
+        .subtract(numberOfYearsAgo, duration)
+        .endOf(duration)
+        .toDate();
     } else {
-        if (numberOfYearsAgo===1) {
-            firstDayOfTargetMonth = today.subtract(numberOfYearsAgo, duration).startOf(duration).toDate();
-            lastDayOfTargetMonth = today.subtract(numberOfYearsAgo, duration).endOf(duration).toDate();
-        } else {
-            firstDayOfTargetMonth = today.subtract(numberOfYearsAgo - 1, duration).startOf(duration).toDate();
-            lastDayOfTargetMonth = today.endOf(duration).toDate();
-        }
+      firstDayOfTargetMonth = today
+        .subtract(numberOfYearsAgo - 1, duration)
+        .startOf(duration)
+        .toDate();
+      lastDayOfTargetMonth = today.endOf(duration).toDate();
     }
-    return {
-        startDate: firstDayOfTargetMonth,
-        endDate: lastDayOfTargetMonth
-    };
+  }
+  return {
+    endDate: lastDayOfTargetMonth,
+    startDate: firstDayOfTargetMonth,
+  };
 }
 
 /**
@@ -124,13 +138,13 @@ export function getTimeRange(duration: EDuration, numberOfYearsAgo: number = 0):
  * @returns The time range for today.
  */
 export function getTodayTimeRange(): { startTime: Date; endTime: Date } {
-    const today = dayjs();
-    const startTime = today.startOf("day").toDate();
-    const endTime = today.endOf("day").toDate();
-    return {
-        startTime,
-        endTime
-    };
+  const today = dayjs();
+  const startTime = today.startOf('day').toDate();
+  const endTime = today.endOf('day').toDate();
+  return {
+    endTime,
+    startTime,
+  };
 }
 
 /**
@@ -140,10 +154,10 @@ export function getTodayTimeRange(): { startTime: Date; endTime: Date } {
  * @returns An array of dates.
  */
 export function getDaysAgo(day: string, dayAgo: number): Date[] {
-    const currentDate = dayjs(day);
-    return Array.from({ length: dayAgo }, (_, index) =>
-            currentDate.subtract(dayAgo - index, "day").toDate()
-    );
+  const currentDate = dayjs(day);
+  return Array.from({ length: dayAgo }, (_, index) =>
+    currentDate.subtract(dayAgo - index, 'day').toDate()
+  );
 }
 
 /**
@@ -153,10 +167,10 @@ export function getDaysAgo(day: string, dayAgo: number): Date[] {
  * @returns An array of dates.
  */
 export function getDaysAfter(day: any, dayAfter: number): Date[] {
-    const currentDate = dayjs(day);
-    return Array.from({ length: dayAfter }, (_, index) =>
-            currentDate.add(index + 1, "day").toDate()
-    );
+  const currentDate = dayjs(day);
+  return Array.from({ length: dayAfter }, (_, index) =>
+    currentDate.add(index + 1, 'day').toDate()
+  );
 }
 
 /**
@@ -165,18 +179,18 @@ export function getDaysAfter(day: any, dayAfter: number): Date[] {
  * @returns The sorted object.
  */
 export function sortObjectByKeyIsDate(obj: any): any {
-    // Sort the keys of the object
-    const sortedKeys = Object.keys(obj).sort((a, b) => {
-        // Convert the keys to Date objects
-        const dateA = new Date(a);
-        const dateB = new Date(b);
-        // Compare the Date objects
-        return dateA.getTime() - dateB.getTime();
-    });
-    // Create a new object with the sorted keys
-    const sortedObj: any = {};
-    sortedKeys.forEach(key => {
-        sortedObj[key] = obj[key];
-    });
-    return sortedObj;
+  // Sort the keys of the object
+  const sortedKeys = Object.keys(obj).sort((a, b) => {
+    // Convert the keys to Date objects
+    const dateA = new Date(a);
+    const dateB = new Date(b);
+    // Compare the Date objects
+    return dateA.getTime() - dateB.getTime();
+  });
+  // Create a new object with the sorted keys
+  const sortedObj: any = {};
+  sortedKeys.forEach(key => {
+    sortedObj[key] = obj[key];
+  });
+  return sortedObj;
 }

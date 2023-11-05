@@ -1,21 +1,21 @@
 export enum EDateFormat {
-    MEDIUM = "MMM DD, YYYY",
-    // DEFAULT = 'MMM DD, YYYY',
-    DEFAULT = "DD/MM/YYYY",
-    FULL = "dddd, MMMM DD, YYYY",
-    SHORT = "M/D/YY",
-    LONG = "MMMM DD, YYYY"
+  // DEFAULT = 'MMM DD, YYYY',
+  DEFAULT = 'DD/MM/YYYY',
+  FULL = 'dddd, MMMM DD, YYYY',
+  LONG = 'MMMM DD, YYYY',
+  MEDIUM = 'MMM DD, YYYY',
+  SHORT = 'M/D/YY',
 }
 
 export enum EDuration {
-    MONTH = "month",
-    YEAR = "year",
+  MONTH = 'month',
+  YEAR = 'year',
 }
 
 export enum ETimeFormat {
-    MEDIUM = "hh:mm:ss A",
-    DEFAULT = "hh:mm:ss",
-    FULL = "hh:mm:ss A Z",
-    SHORT = "hh:mm A",
-    LONG = "hh:mm:ss A Z"
+  DEFAULT = 'hh:mm:ss',
+  FULL = 'hh:mm:ss A Z',
+  LONG = 'hh:mm:ss A Z',
+  MEDIUM = 'hh:mm:ss A',
+  SHORT = 'hh:mm A',
 }

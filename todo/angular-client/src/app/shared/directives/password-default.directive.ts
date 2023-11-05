@@ -1,29 +1,21 @@
 import {
-    Directive,
-    ElementRef,
-    Host,
     HostListener,
+    ElementRef,
+    Directive,
+    OnInit,
     Input,
-    Optional,
-    Renderer2,
 } from '@angular/core';
-import { FormGroup, NgControl, NgModel } from '@angular/forms';
-import { CommonConstant } from "@shared/constants";
+import { CommonConstant } from '@shared/constants';
+import { FormGroup } from '@angular/forms';
 
 @Directive({
     selector: '[appPasswordDefaultDirective]',
 })
-export class PasswordDefaultDirective {
-    @Input() appPasswordDefaultDirective: boolean = false;
+export class PasswordDefaultDirective implements OnInit {
+    @Input() appPasswordDefaultDirective = false;
     @Input() formData!: FormGroup;
 
-    constructor(
-        private el: ElementRef,
-        private renderer: Renderer2,
-        private ngControl: NgControl,
-        @Host() @Optional() private ngModel: NgModel
-    ) {
-    }
+    constructor(private el: ElementRef) {}
 
     ngOnInit() {
         this.assignFakePassword();
@@ -33,8 +25,8 @@ export class PasswordDefaultDirective {
         if (this.appPasswordDefaultDirective) {
             if (this.formData) {
                 this.formData.patchValue({
-                    password: CommonConstant.FAKE_PASSWORD,
                     confirmPassword: CommonConstant.FAKE_PASSWORD,
+                    password: CommonConstant.FAKE_PASSWORD,
                 });
             }
         }
@@ -63,7 +55,8 @@ export class PasswordDefaultDirective {
             key === 'Delete' ||
             key === ' ' ||
             (key.length === 1 && /[0-9a-zA-Z]/.test(key)) ||
-            (key.length === 1 && /[!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]/.test(key))
+            (key.length === 1 &&
+                /[!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]/.test(key))
         );
     }
 

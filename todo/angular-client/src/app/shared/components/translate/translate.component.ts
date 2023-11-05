@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: ' app-translate',
-  templateUrl: './translate.component.html',
   styleUrls: ['./translate.component.scss'],
+  templateUrl: './translate.component.html',
 })
 export class TranslateComponent {
   i18n: string = localStorage.getItem('lang') || 'en';

@@ -1,9 +1,12 @@
-import {ButtonColor, ButtonTypes} from "@shared/components/common/button/button.enum";
+import {
+  ButtonColor,
+  ButtonTypes,
+} from '@shared/components/common/button/button.enum';
 
 export interface ButtonGroup {
-  type: ButtonTypes;
-  color: ButtonColor;
   click: () => void;
+  color: ButtonColor;
   disable: () => boolean;
   icon: string;
+  type: ButtonTypes;
 }

@@ -6,10 +6,18 @@
   .header-toolbar {
     padding: 0 8px;
     //background: white;
-  }
+    .right-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 0 12px;
+      //border: 1px solid #fff;
+    }
 
-  .example-spacer {
-    flex: 1 1 auto;
+
+    .example-spacer {
+      flex: 1 1 auto;
+    }
   }
 
   .header-toolbar-bottom {

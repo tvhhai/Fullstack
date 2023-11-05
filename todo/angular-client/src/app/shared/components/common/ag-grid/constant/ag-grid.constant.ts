@@ -1,26 +1,26 @@
 export class AgGridConstant {
     public static readonly AG_GRID_CHECKBOX_SELECTION = {
-        field: "",
-        suppressMovable: true,
-        lockPosition: "left",
-        colId: "app-ag-grid-check-box",
-        pinned: "left",
-        width: 54,
-        minWidth: 54,
-        maxWidth: 54,
         checkboxSelection: true,
-        headerCheckboxSelection: true,
-        sortable: false,
+        colId: "app-ag-grid-check-box",
+        field: "",
         filter: false,
-        resizable: false
+        headerCheckboxSelection: true,
+        lockPosition: "left",
+        maxWidth: 54,
+        minWidth: 54,
+        pinned: "left",
+        resizable: false,
+        sortable: false,
+        suppressMovable: true,
+        width: 54
     };
 
     public static readonly DEFAULT_COL_DEFS = {
         editable: false,
-        sortable: true,
         filter: true,
+        lockPinned: true, // Don't allow pinning for this example
         resizable: true,
-        lockPinned: true // Don't allow pinning for this example
+        sortable: true
     };
 
     public static readonly ITEMS_PER_PAGE_OPTIONS = [

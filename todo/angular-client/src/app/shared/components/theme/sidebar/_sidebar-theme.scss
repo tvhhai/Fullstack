@@ -8,40 +8,51 @@
 
 @mixin sidebar-item {
   .sidebar-menu {
+
+    > .sidebar-item:has(.active-link) {
+      > .menu-toggle .menu-heading {
+        background-color: $hoverActiveLinkBgrLight;
+
+      }
+    }
+
     > .sidebar-item {
       align-items: center;
       cursor: pointer;
       list-style: none;
       position: relative;
 
-      &:hover:not(.active-link) {
-        > .menu-heading {
+      a {
+        color: $linkColorLight;
+      }
+
+      &.show-menu {
+        .collapse-sub-menu {
+          display: block;
+        }
+      }
+
+      &:hover {
+        > .menu-toggle .menu-heading, > .menu-heading {
           background-color: $hoverActiveLinkBgrLight;
           color: $activeLinkColorLight;
+          position: relative;
 
           .icon-group {
             color: $linkColorLight;
           }
         }
-      }
 
-      a {
-        color: $linkColorLight;
-      }
-
-      &.active:before,
-      &:hover:before {
-        opacity: 1;
-      }
-
-      &.active-link {
-        position: relative;
-
-        > a {
+        > .active-link {
           background-color: $activeLinkBgrLight;
-          color: $activeLinkColorLight;
-          font-weight: 500;
         }
+      }
+
+      .active-link {
+        position: relative;
+        background-color: $activeLinkBgrLight;
+        color: $activeLinkColorLight;
+        font-weight: 500;
 
         &:before {
           content: "";
@@ -55,35 +66,30 @@
         }
       }
 
-      &.show-menu {
-        .collapse-sub-menu {
-          display: block;
-        }
-      }
-
       .menu-heading {
         @include flex-align-center;
-        padding: spacing(3) spacing(4);
-        height: 40px;
+        padding: spacing(0) spacing(4);
 
-        .menu-name {
+
+        a {
+          @include flex-align-center;
           flex: 1;
           text-align: initial;
-        }
+          height: 40px;
 
-        .menu-icon {
-          @include flex-center;
-          flex-shrink: 0;
-          width: 24px;
-          height: 24px;
-          margin-right: 8px;
-          color: $linkColorLight;
-        }
-      }
+          .menu-name {
+            flex: 1;
+            text-align: initial;
+          }
 
-      .menu-toggle {
-        .menu-name {
-          font-weight: bold;
+          .menu-icon {
+            @include flex-center;
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            color: $linkColorLight;
+          }
         }
       }
 
@@ -94,15 +100,7 @@
         }
 
         > .menu-toggle {
-          border-top: 1px solid #eee;
-          padding-top: 12px;
-
-          .menu-icon {
-            min-width: 0;
-          }
-
-
-          > .icon-group .menu-caret i {
+          .icon-group .menu-caret i {
             transform: rotate(-90deg);
           }
         }
@@ -135,6 +133,18 @@
       max-height: 0;
       position: relative;
       transition: max-height 0.15s ease-out;
+    }
+
+    .menu-toggle {
+      margin-top: 16px;
+
+      .menu-icon {
+        min-width: 0;
+      }
+
+      .menu-name {
+        font-weight: bold;
+      }
     }
   }
 }

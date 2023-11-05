@@ -1,11 +1,20 @@
-import {Component, EventEmitter, Input, Output, ViewEncapsulation} from '@angular/core';
-import {ButtonColor, ButtonTypes,} from '@shared/components/common/button/button.enum';
+import {
+  ViewEncapsulation,
+  EventEmitter,
+  Component,
+  Output,
+  Input,
+} from '@angular/core';
+import {
+  ButtonColor,
+  ButtonTypes,
+} from '@shared/components/common/button/button.enum';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'app-button',
-  templateUrl: './button.component.html',
   styleUrls: ['./button.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  templateUrl: './button.component.html',
 })
 export class ButtonComponent {
   public ButtonTypes = ButtonTypes;
@@ -14,9 +23,13 @@ export class ButtonComponent {
   @Input() btnColor!: ButtonColor;
   @Input() btnText!: string;
   @Input() btnDisabled: (() => boolean) | boolean = false;
+
   get isDisabled(): boolean {
-    return typeof this.btnDisabled === 'function' ? this.btnDisabled() : this.btnDisabled;
+    return typeof this.btnDisabled === 'function'
+      ? this.btnDisabled()
+      : this.btnDisabled;
   }
+
   @Input() ariaLabel!: string;
   @Input() btnIcon!: string;
 

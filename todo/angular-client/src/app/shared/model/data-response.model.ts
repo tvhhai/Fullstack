@@ -1,5 +1,5 @@
 export interface DataRes<T> {
-  statusCode: number;
-  message: string;
   data: T;
+  message: string;
+  statusCode: number;
 }

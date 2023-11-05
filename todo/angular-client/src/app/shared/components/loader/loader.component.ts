@@ -1,19 +1,20 @@
-import { Component } from '@angular/core';
-import { LoaderService } from '../../services/loader.service';
+import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
+
+import { LoaderService } from '../../services/loader.service';
 
 @Component({
   selector: 'app-loader',
-  templateUrl: './loader.component.html',
   styleUrls: ['./loader.component.scss'],
+  templateUrl: './loader.component.html',
   // encapsulation: ViewEncapsulation.None
 })
-export class LoaderComponent {
-  isShowLoading: boolean = false;
+export class LoaderComponent implements OnDestroy {
+  isShowLoading = false;
   subscription: Subscription;
 
   constructor(private loaderService: LoaderService) {
-    this.subscription = this.loaderService.isLoading.subscribe((value) => {
+    this.subscription = this.loaderService.isLoading.subscribe(value => {
       this.isShowLoading = value;
     });
   }

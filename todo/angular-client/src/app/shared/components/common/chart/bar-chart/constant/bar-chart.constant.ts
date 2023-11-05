@@ -1,47 +1,48 @@
-import {BarChartOptions} from "@shared/components/common/chart/bar-chart/model/bar-chart.model";
+import { BarChartOptions } from '@shared/components/common/chart/bar-chart/model/bar-chart.model';
 
 export class BarChartConstant {
-    public static readonly DATA_CONFIG_BAR_CHART_DEFAULT: BarChartOptions = {
-        plotOptions: {},
-        dataLabels: {
-            enabled: false,
-        },
-        series: [{
-            name: "series",
-            data: [0]
-        }],
-        chart: {
-            type: "bar"
-        },
-        labels: ['labels'],
-        legend: {
-            show: true,
-            position: 'bottom',
-            floating: false,
-        },
-        tooltip: {
-            y: {}
-        },
-        responsive: [],
-        xaxis: {
-            categories: [],
-        },
-        yaxis: {},
-        stroke: {},
-        fill: {},
-        title: {},
-        noData: {
-            text: 'No data available',
-            align: 'center',
-            verticalAlign: 'middle',
-            offsetX: 0,
-            offsetY: -10,
-            style: {
-                color: undefined,
-                fontSize: '22px',
-                fontFamily: undefined
-            }
-        }
-    }
-
+  public static readonly DATA_CONFIG_BAR_CHART_DEFAULT: BarChartOptions = {
+    chart: {
+      type: 'bar',
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    fill: {},
+    labels: ['labels'],
+    legend: {
+      floating: false,
+      position: 'bottom',
+      show: true,
+    },
+    noData: {
+      align: 'center',
+      offsetX: 0,
+      offsetY: -10,
+      style: {
+        color: undefined,
+        fontFamily: undefined,
+        fontSize: '22px',
+      },
+      text: 'No data available',
+      verticalAlign: 'middle',
+    },
+    plotOptions: {},
+    responsive: [],
+    series: [
+      {
+        data: [0],
+        name: 'series',
+      },
+    ],
+    stroke: {},
+    title: {},
+    tooltip: {
+      y: {},
+    },
+    xaxis: {
+      categories: [],
+    },
+    yaxis: {},
+  };
 }

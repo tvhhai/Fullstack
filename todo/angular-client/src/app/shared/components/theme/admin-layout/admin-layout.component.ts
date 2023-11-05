@@ -1,16 +1,21 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ViewChild } from "@angular/core";
-import { MatSidenav } from "@angular/material/sidenav";
-import { BreakpointObserver } from "@angular/cdk/layout";
-import { PreSettingService } from "@core/bootstrap/presetting.service";
-import { TranslateService } from "@ngx-translate/core";
-import { IMenuItem } from "@core/menu/menu.model";
+import {
+    ChangeDetectorRef,
+    AfterViewInit,
+    Component,
+    ViewChild,
+    OnInit,
+} from '@angular/core';
+import { PreSettingService } from '@core/bootstrap/presetting.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { MatSidenav } from '@angular/material/sidenav';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-    selector: "app-admin-layout",
-    templateUrl: "./admin-layout.component.html",
-    styleUrls: ["./admin-layout.component.scss"],
+    selector: 'app-admin-layout',
+    styleUrls: ['./admin-layout.component.scss'],
+    templateUrl: './admin-layout.component.html',
 })
-export class AdminLayoutComponent implements AfterViewInit {
+export class AdminLayoutComponent implements AfterViewInit, OnInit {
     @ViewChild(MatSidenav)
     sidenav!: MatSidenav;
     opened!: boolean;
@@ -23,31 +28,34 @@ export class AdminLayoutComponent implements AfterViewInit {
         private cdr: ChangeDetectorRef
     ) {
         this.settings.subscribe({
-            next: (data) => {
+            next: data => {
                 this.translate.use(data.language);
-            }
+            },
         });
     }
 
     ngOnInit() {
+        console.log();
     }
 
     ngAfterViewInit() {
-        this.breakpointObserver.observe(["(max-width: 800px)"]).subscribe((res) => {
-            if (res.matches) {
-                if (this.sidenav.mode !== "over") {
-                    this.sidenav.close();
-                    this.sidenav.mode = "over";
+        this.breakpointObserver
+            .observe(['(max-width: 800px)'])
+            .subscribe(res => {
+                if (res.matches) {
+                    if (this.sidenav.mode !== 'over') {
+                        this.sidenav.close();
+                        this.sidenav.mode = 'over';
+                    }
+                } else {
+                    if (this.sidenav.mode !== 'side') {
+                        this.sidenav.open();
+                        this.sidenav.mode = 'side';
+                    }
                 }
-            } else {
-                if (this.sidenav.mode !== "side") {
-                    this.sidenav.open();
-                    this.sidenav.mode = "side";
-                }
-            }
-            this.setIsOpenSidebar(this.sidenav.opened);
-            this.cdr.detectChanges();
-        });
+                this.setIsOpenSidebar(this.sidenav.opened);
+                this.cdr.detectChanges();
+            });
     }
 
     toggleSideNav() {

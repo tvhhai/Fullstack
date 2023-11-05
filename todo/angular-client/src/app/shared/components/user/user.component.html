@@ -1,25 +1,73 @@
-<button class="" mat-button [matMenuTriggerFor]="menu">
-  <img
-    matButtonIcon
+<img
+    [matMenuTriggerFor]="profileMenu"
     class="avatar"
     [src]="
-      (user$ | async)?.avatar || './assets/images/default_image_profile.png'
+        (user$ | async)?.avatar || './assets/images/default_image_profile.png'
     "
     width="24"
-    alt="avatar"
-  />
+    role="button"
+    alt="avatar" />
 
-  <span class="mx-2">{{ (user$ | async)?.username }}</span>
-</button>
+<mat-menu #profileMenu="matMenu" xPosition="before" class="profile-menu">
+    <div class="item-hover" (click)="openDialogSetting('account')">
+        <div class="user-menu-setting">
+            <img
+                class="avatar"
+                [src]="
+                    (user$ | async)?.avatar ||
+                    './assets/images/default_image_profile.png'
+                "
+                width="24"
+                role="button"
+                alt="avatar" />
 
-<mat-menu #menu="matMenu" xPosition="before">
-  <button routerLink="user/profile" mat-menu-item>
-    <mat-icon>account_circle</mat-icon>
-    <span>{{ "rbac.user.profile" | translate }}</span>
-  </button>
+            <div class="user-detail">
+                <strong>
+                    {{ (user$ | async)?.['lastName'] }}
+                    {{ (user$ | async)?.['firstName'] }}</strong
+                >
+                <span>
+                    {{ (user$ | async)?.email }}
+                </span>
+            </div>
+        </div>
 
-  <button mat-menu-item (click)="logout()">
-    <mat-icon>exit_to_app</mat-icon>
-    <span>{{ "auth.logout" | translate }}</span>
-  </button>
+        <div class="menuitem">
+            <span class="icon">
+                <i class="fa-light fa-gear fa-lg"></i>
+            </span>
+            <span>{{ 'common.settings' | translate }} </span>
+        </div>
+    </div>
+
+    <mat-divider class="my-1"></mat-divider>
+
+    <div class="menuitem item-hover" (click)="openDialogSetting('theme')">
+        <span class="icon">
+            <i class="fa-light fa-palette fa-lg"></i>
+        </span>
+        <span>{{ 'common.theme' | translate }} </span>
+    </div>
+
+    <div class="menuitem item-hover">
+        <span class="icon">
+            <i class="fa-light fa-gear fa-lg"></i>
+        </span>
+        <span>{{ 'common.activityLog' | translate }} </span>
+    </div>
+
+    <mat-divider class="my-1"></mat-divider>
+
+    <div class="menuitem item-hover" (click)="logout()">
+        <span class="icon">
+            <i class="fa-light fa-arrow-right-from-bracket fa-lg"></i>
+        </span>
+        <span>{{ 'auth.logout' | translate }} </span>
+    </div>
+
+    <mat-divider class="my-1"></mat-divider>
+
+    <span class="menuitem item-hover d-inline-flex px-2 py-1">
+        <span>v1.0.0 </span>
+    </span>
 </mat-menu>

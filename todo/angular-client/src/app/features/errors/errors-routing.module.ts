@@ -1,16 +1,17 @@
-import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { NotFoundComponent } from './not-found/not-found.component';
+import { NgModule } from '@angular/core';
+
 import { ForbiddenComponent } from './forbidden/forbidden.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [
-  { path: '403', component: ForbiddenComponent },
-  { path: '404', component: NotFoundComponent },
+  { component: ForbiddenComponent, path: '403' },
+  { component: NotFoundComponent, path: '404' },
   { path: '**', redirectTo: '404' },
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
+  imports: [RouterModule.forChild(routes)],
 })
 export class ErrorsRoutingModule {}

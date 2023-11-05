@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { EventEmitter, Component, Output, Input } from '@angular/core';
 
 @Component({
   selector: 'app-pagination',
-  templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.scss'],
+  templateUrl: './pagination.component.html',
 })
 export class PaginationComponent {
   @Input() dataPagination!: any[];
@@ -15,8 +15,8 @@ export class PaginationComponent {
   @Input() totalRow!: number;
   @Input() itemsPerPage!: number;
 
-  @Input() showPageInfo: boolean = false;
-  @Input() displayedRecordRange: boolean = false;
+  @Input() showPageInfo = false;
+  @Input() displayedRecordRange = false;
 
   @Output() pageChange = new EventEmitter<number>();
 

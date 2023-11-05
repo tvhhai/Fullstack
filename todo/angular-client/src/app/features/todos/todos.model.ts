@@ -1,16 +1,15 @@
-import { ViewState } from "./todos.enum";
-
+import { ViewState } from './todos.enum';
 
 export type ViewModeItem = {
-    name: string;
-    value: ViewState;
+  value: ViewState;
+  name: string;
 };
 
 export type ViewMode = {
-    [key in ViewState]: ViewModeItem;
+  [key in ViewState]: ViewModeItem;
 };
 
 export interface IColorPrj {
-    name: string,
-    value: string;
-};
+  name: string;
+  value: string;
+}

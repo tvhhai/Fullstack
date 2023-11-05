@@ -4,7 +4,15 @@
     "name": "Name",
     "view": "View",
     "duplicate": "Duplicate",
+    "today": "Today",
+    "next": "Next",
+    "thisWeek": "This Week",
+    "nextWeek": "Next Week",
+    "tomorrow": "Tomorrow",
+    "yesterday": "Yesterday",
+    "noDate": "No Date",
     "color": "Color",
+    "more": "More",
     "description": "Description",
     "username": "Username",
     "note": "Note",
@@ -28,12 +36,17 @@
     "delete": "Delete",
     "custom": "Custom",
     "settings": "Settings",
+    "theme": "Theme",
+    "activityLog": "Activity Logs",
     "refresh": "Refresh",
     "fullscreen": "Full Screen",
     "report": "Report",
     "confirmDelete": "Confirm Delete",
-    "deleteItemMsg": "Are you sure you want to delete {{count}} selected item{{s}}?"
+    "deleteItemMsg": "Are you sure you want to delete {{count}} selected item{{s}}?",
+    "deleteItemMsg1": "Are you sure you want to delete <b>{{name}}</b>?"
   },
+  "openHelpTooltip": "Open help & information",
+  "openNotificationTooltip": "Open notifications",
   "status": {
     "low": "Low",
     "medium": "Medium",
@@ -113,7 +126,15 @@
     "project": {
       "title": "Projects",
       "add": "Add Project",
-      "edit": "Edit Project"
+      "edit": "Edit Project",
+      "taskName": "Task Name",
+      "addAbove": "Add project above",
+      "addBelow": "Add project below",
+      "delete": "Delete project",
+      "duplicate": "Duplicate project",
+      "move": "Move task",
+      "layout": "Layout",
+      "completeTask": "Complete task"
     },
     "task": {
       "title": "Task",
@@ -144,11 +165,6 @@
     "title": "Preferences",
     "userSetting": {
       "title": "User Setting",
-      "languages": {
-        "title": "Language",
-        "english": "English",
-        "vietnamese": "Vietnamese"
-      },
       "currency": "Base Currency",
       "dateFormat": "Date Format",
       "timeFormat": "Time Format",
@@ -157,6 +173,32 @@
     },
     "systemSetting": {
       "title": "System Setting"
+    }
+  },
+  "setting": {
+    "title": "Setting",
+    "account": {
+      "title": "Account"
+    },
+    "sidebar": {
+      "title": "Sidebar"
+    },
+    "theme": {
+      "title": "Theme"
+    },
+    "general": {
+      "title": "General",
+      "languages": {
+        "title": "Language",
+        "english": "English",
+        "vietnamese": "Vietnamese"
+      },
+      "dateTime": {
+        "title": "Date & time",
+        "timezone": "Time zone",
+        "timeFormat": "Time format",
+        "dateFormat": "Date format"
+      }
     }
   },
   "chart": {

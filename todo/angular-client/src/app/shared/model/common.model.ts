@@ -1,12 +1,12 @@
 export interface SelectionTimeRange {
-  title: string,
-  value: string,
-  checked: boolean,
-  startDate: Date | "",
-  endDate: Date | ""
+  checked: boolean;
+  endDate: Date | '';
+  startDate: Date | '';
+  title: string;
+  value: string;
 }
 
 export interface ObjSelection {
-  value: string;
   name: string;
+  value: string;
 }

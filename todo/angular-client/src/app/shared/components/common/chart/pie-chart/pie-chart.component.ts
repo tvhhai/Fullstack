@@ -1,21 +1,20 @@
-import {Component, Input} from '@angular/core';
-import {isEmptyArray} from "@shared/helpers";
-import {PieChartOptions} from "@shared/components/common/chart/pie-chart/model/pie-chart.model";
-
+import { PieChartOptions } from '@shared/components/common/chart/pie-chart/model/pie-chart.model';
+import { Component, OnInit, Input } from '@angular/core';
+import { isEmptyArray } from '@shared/helpers';
 
 @Component({
-    selector: 'app-pie-chart',
-    templateUrl: './pie-chart.component.html',
-    styleUrls: ['./pie-chart.component.scss']
+  selector: 'app-pie-chart',
+  styleUrls: ['./pie-chart.component.scss'],
+  templateUrl: './pie-chart.component.html',
 })
-export class PieChartComponent {
-    protected readonly isEmptyArray = isEmptyArray;
+export class PieChartComponent implements OnInit {
+  protected readonly isEmptyArray = isEmptyArray;
 
-    @Input() chartOptions!: PieChartOptions;
+  @Input() chartOptions!: PieChartOptions;
 
-    constructor() {
-    }
+  constructor() {}
 
-    ngOnInit() {
-    }
+  ngOnInit() {
+    console.log();
+  }
 }

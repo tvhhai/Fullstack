@@ -1,23 +1,19 @@
-import { NgModule } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
+import { SharedModule } from '@shared/shared.module';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
-import { PreferencesRoutingModule } from './preference-routing.module';
-import { UserSettingComponent } from './user-setting/user-setting.component';
 import { SystemSettingComponent } from './system-setting/system-setting.component';
-import {TranslateModule} from "@ngx-translate/core";
-import {SharedModule} from "@shared/shared.module";
-
+import { UserSettingComponent } from './user-setting/user-setting.component';
+import { PreferencesRoutingModule } from './preference-routing.module';
 
 @NgModule({
-  declarations: [
-    UserSettingComponent,
-    SystemSettingComponent
-  ],
+    declarations: [UserSettingComponent, SystemSettingComponent],
     imports: [
         CommonModule,
         PreferencesRoutingModule,
         TranslateModule,
-        SharedModule
-    ]
+        SharedModule,
+    ],
 })
-export class PreferenceModule { }
+export class PreferenceModule {}

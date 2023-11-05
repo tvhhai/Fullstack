@@ -1,11 +1,11 @@
-import {Component, Input, ViewEncapsulation} from '@angular/core';
-import {ButtonGroup} from "@shared/components/common/button-group/button-group.model";
+import { ButtonGroup } from '@shared/components/common/button-group/button-group.model';
+import { ViewEncapsulation, Component, Input } from '@angular/core';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'app-button-group',
-  templateUrl: './button-group.component.html',
   styleUrls: ['./button-group.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  templateUrl: './button-group.component.html',
 })
 export class ButtonGroupComponent {
   @Input() btnGroupData!: ButtonGroup[];

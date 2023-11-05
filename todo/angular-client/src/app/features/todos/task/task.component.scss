@@ -594,16 +594,40 @@ $background-hover: rgb(238, 238, 238);
 
 .menu-task-action {
   .menu-section-item {
+    padding: 4px;
+    margin: 0 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    > span {
+      font-size: 12px;
+    }
+
     .scheduler-holder {
       @include flex-align-center;
       gap: 12px;
+
+      .active {
+        border: 1px solid #ddd;
+      }
 
       span {
         @include flex-center;
         width: 32px;
         height: 32px;
+        border-radius: 4px;
+        cursor: pointer;
+
+        &:hover {
+          background: $background-hover;
+        }
       }
     }
+  }
+
+  .mat-divider{
+    margin: 4px 0;
   }
 }
 

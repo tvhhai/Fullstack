@@ -1,11 +1,11 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ElementRef, Component, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-forbidden',
-  templateUrl: './forbidden.component.html',
   styleUrls: ['./forbidden.component.scss'],
+  templateUrl: './forbidden.component.html',
 })
-export class ForbiddenComponent {
+export class ForbiddenComponent implements AfterViewInit {
   @ViewChild('myDiv') myDiv: ElementRef | any;
 
   ngAfterViewInit() {
