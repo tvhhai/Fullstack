@@ -51,6 +51,7 @@ import {
     EDueDateId,
     ViewState,
 } from '../todos.enum';
+import { TaskItemDetailComponent } from './dialog/task-item-detail/task-item-detail.component';
 import { IProject } from '../project/model/project.model';
 import { TaskService } from './task.service';
 
@@ -312,11 +313,11 @@ export class TaskComponent implements OnChanges, OnInit {
     ) {}
 
     ngOnInit(): void {
-        console.log('ngOnInit');
+        // console.log('ngOnInit');
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        console.log(changes['prjData']);
+        // console.log(changes['prjData']);
         if (changes['view']) {
             this.handleViewChange(changes['view']);
         }
@@ -781,6 +782,28 @@ export class TaskComponent implements OnChanges, OnInit {
                 this.taskService.updateIndexTask(data).subscribe(() => {
                     this.syncData.emit();
                 });
+            }
+        });
+    }
+
+    abc() {
+        console.log('aaaaaaaa');
+        this.openDialog();
+    }
+
+    openDialog() {
+        const dialogRef = this.dialog.open(TaskItemDetailComponent, {
+            data: {},
+            height: '95%',
+            position: {
+                top: ``,
+            },
+            width: '950px',
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                /* empty */
             }
         });
     }

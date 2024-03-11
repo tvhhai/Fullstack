@@ -23,6 +23,7 @@ import {
     MAT_SNACK_BAR_DATA,
     MatSnackBarRef,
 } from '@angular/material/snack-bar';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 import { SettingsDialogComponent } from './features/settings/settings.dialog.component';
 import { FeaturesModule } from './features/features.module';
@@ -47,6 +48,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
         AppRoutingModule,
         SharedModule,
         FeaturesModule,
+        CKEditorModule,
         ToastrModule.forRoot({
             autoDismiss: true,
             maxOpened: 5,

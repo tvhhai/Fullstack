@@ -1,0 +1,21 @@
+<header class="header">
+    <div>
+        <div class="title">hahahaah</div>
+        <div class="button-container">
+            <div class="close" (click)="onCancelClick()">
+                <i class="fa-light fa-xmark-large fa-lg"></i>
+            </div>
+        </div>
+    </div>
+</header>
+
+<mat-divider></mat-divider>
+<main id="main">
+    <div class="content">
+        <ckeditor
+            [editor]="Editor"
+            data="<p>Hello, world!</p>"
+            (ready)="onReady($event)"></ckeditor>
+    </div>
+    <div class="menu">menu</div>
+</main>

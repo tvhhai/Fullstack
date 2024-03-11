@@ -1,30 +1,36 @@
+import { AuthService } from '@core/authentication/services/auth.service';
 import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    declarations: [AppComponent],
-    imports: [RouterTestingModule]
-  }));
+    beforeEach(() =>
+        TestBed.configureTestingModule({
+            declarations: [AppComponent, AuthService, HttpClient],
+            imports: [RouterTestingModule],
+        })
+    );
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
+    it('should create the app', () => {
+        const fixture = TestBed.createComponent(AppComponent);
+        const app = fixture.componentInstance;
+        expect(app).toBeTruthy();
+    });
 
-  it(`should have as title 'angular-client'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('angular-client');
-  });
+    it(`should have as title 'angular-client'`, () => {
+        const fixture = TestBed.createComponent(AppComponent);
+        const app = fixture.componentInstance;
+        expect(app.title).toEqual('angular-client');
+    });
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('angular-client app is running!');
-  });
+    it('should render title', () => {
+        const fixture = TestBed.createComponent(AppComponent);
+        fixture.detectChanges();
+        const compiled = fixture.nativeElement as HTMLElement;
+        expect(compiled.querySelector('.content span')?.textContent).toContain(
+            'angular-client app is running!'
+        );
+    });
 });

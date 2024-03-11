@@ -23,6 +23,7 @@ body {
 html,
 body {
   --mdc-checkbox-state-layer-size: 18px;
+  --mdc-dialog-container-shape: 8px;
   --mat-toolbar-standard-height: #{
     $toolbar-height-desktop
   };
@@ -30,8 +31,8 @@ body {
   height: 100%;
 
   ul {
-    padding: 0;
-    margin: 0;
+    //padding: 0;
+    //margin: 0;
   }
 
   a {

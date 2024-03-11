@@ -1,0 +1,40 @@
+header {
+  padding: 0 16px;
+
+  > div {
+    display: flex;
+    height: 48px;
+    align-items: center;
+
+    .title {
+      flex-grow: 1;
+    }
+
+    .button-container {
+      div {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+main {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+
+  .content {
+    width: 100%;
+    padding: 16px;
+  }
+
+  .menu {
+    flex-shrink: 0;
+    width: 260px;
+    background-color: #fcfaf8
+  }
+}
+
+ul li {
+
+}

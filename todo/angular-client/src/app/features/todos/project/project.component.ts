@@ -67,7 +67,7 @@ export class ProjectComponent implements OnInit {
 
     ngOnInit() {
         this.projectService.get().subscribe(res => {
-            console.log(res);
+            // console.log(res);
             if (res.id) {
                 this.title = res.title;
                 this.view = res.view;

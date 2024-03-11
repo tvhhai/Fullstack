@@ -1,5 +1,5 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { TemplateRef, Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 
 import { ButtonColor, ButtonTypes } from '../button/button.enum';
 import { DataDialog } from './dialog.model';

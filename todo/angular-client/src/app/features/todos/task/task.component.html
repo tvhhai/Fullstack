@@ -245,7 +245,8 @@
         class="task-item"
         [style.background-color]="priorityBackground[task.priority]"
         [ngClass]="{ 'task-item-board': view === ViewState.Board }"
-        *ngIf="!task.viewTaskEditor">
+        *ngIf="!task.viewTaskEditor"
+        (click)="abc()">
         <div class="overflow-actions"></div>
         <div class="task-checkbox">
             <mat-checkbox

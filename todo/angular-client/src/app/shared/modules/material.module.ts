@@ -119,7 +119,7 @@ import { NgModule } from '@angular/core';
                 position: {
                     top: `100px`,
                 },
-                width: '100%',
+                // width: '100%',
             },
         },
         {
