@@ -1,4 +1,10 @@
-import { HttpInterceptor, HttpResponse, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
+import {
+  HttpInterceptor,
+  HttpResponse,
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+} from '@angular/common/http';
 import { Observable, throwError, mergeMap, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
