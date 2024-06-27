@@ -8,15 +8,12 @@
 
 @mixin sidebar-item {
   .sidebar-menu {
-    ul {
-      padding: 0;
-      margin: 0;
-    }
+    padding: 0;
+    margin: 0;
 
     > .sidebar-item:has(.active-link) {
       > .menu-toggle .menu-heading {
         background-color: $hoverActiveLinkBgrLight;
-
       }
     }
 

@@ -786,19 +786,20 @@ export class TaskComponent implements OnChanges, OnInit {
         });
     }
 
-    abc() {
-        console.log('aaaaaaaa');
-        this.openDialog();
+    abc(task: ITask) {
+        // console.log('aaaaaaaa', task);
+        this.openDialog(task);
     }
 
-    openDialog() {
+    openDialog(task: ITask) {
+        console.log(task);
         const dialogRef = this.dialog.open(TaskItemDetailComponent, {
             data: {},
             height: '95%',
             position: {
                 top: ``,
             },
-            width: '950px',
+            width: '990px',
         });
 
         dialogRef.afterClosed().subscribe(result => {

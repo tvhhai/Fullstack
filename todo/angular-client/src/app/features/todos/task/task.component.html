@@ -245,8 +245,7 @@
         class="task-item"
         [style.background-color]="priorityBackground[task.priority]"
         [ngClass]="{ 'task-item-board': view === ViewState.Board }"
-        *ngIf="!task.viewTaskEditor"
-        (click)="abc()">
+        *ngIf="!task.viewTaskEditor">
         <div class="overflow-actions"></div>
         <div class="task-checkbox">
             <mat-checkbox
@@ -255,7 +254,7 @@
                 [color]="'primary'"
                 class="app-checkbox-circle app-checkbox-hide-ripple"></mat-checkbox>
         </div>
-        <div class="item-content">
+        <div class="item-content" (click)="abc(task)">
             <div
                 class="task-title"
                 [ngClass]="{ 'task-done': task.done }"
@@ -325,6 +324,7 @@
                     <input
                         class="app-input task-name"
                         [(ngModel)]="taskName"
+                        appAutoFocus
                         placeholder="{{ 'todo.task.taskName' | translate }}" />
                     <input
                         class="app-input task-description"

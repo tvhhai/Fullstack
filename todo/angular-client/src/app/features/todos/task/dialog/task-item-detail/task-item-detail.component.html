@@ -14,8 +14,21 @@
     <div class="content">
         <ckeditor
             [editor]="Editor"
-            data="<p>Hello, world!</p>"
+            [(ngModel)]="model.editorData"
+            (ngModelChange)="change()"
             (ready)="onReady($event)"></ckeditor>
+        <div>
+            <app-button
+                [btnType]="ButtonTypes.Flat"
+                [btnColor]="ButtonColor.Basic"
+                [btnText]="'common.cancel'"
+                (click)="onCancelClick()"></app-button>
+            <app-button
+                [btnType]="ButtonTypes.Flat"
+                [btnColor]="ButtonColor.Primary"
+                [btnText]="'common.save'"
+                (click)="onConfirmClick()"></app-button>
+        </div>
     </div>
     <div class="menu">menu</div>
 </main>

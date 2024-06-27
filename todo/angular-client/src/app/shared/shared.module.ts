@@ -1,5 +1,6 @@
 import { NotificationComponent } from '@shared/components/theme/notification/notification.component';
 import { HelpPageComponent } from '@shared/components/theme/help-page/help-page.component';
+import { AutoFocusDirective } from '@shared/directives/auto-focus.directive';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
@@ -106,6 +107,7 @@ const DIRECTIVES: any[] = [
     PasswordDefaultDirective,
     PasswordMeterDirective,
     PasswordViewDirective,
+    AutoFocusDirective,
 ];
 const PIPES: any[] = [];
 

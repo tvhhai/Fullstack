@@ -1,20 +1,27 @@
-import { HostBinding, Directive, OnDestroy, Inject, OnInit, Input } from "@angular/core";
-import { IMenuChildrenItem } from "@core/menu/menu.model";
+import {
+    HostBinding,
+    Directive,
+    OnDestroy,
+    Inject,
+    OnInit,
+    Input,
+} from '@angular/core';
+import { IMenuChildrenItem } from '@core/menu/menu.model';
 
-import { NavAccordionDirective } from "./nav-accordion.directive";
+import { NavAccordionDirective } from './nav-accordion.directive';
 
 @Directive({
-    selector: "[appNavAccordionItem]"
+    selector: '[appNavAccordionItem]',
 })
 export class NavAccordionItemDirective implements OnDestroy, OnInit {
     protected nav: NavAccordionDirective;
     protected isExpanded = true;
 
-    @Input() route = "";
+    @Input() route = '';
     @Input() child: IMenuChildrenItem[] = [];
-    @Input() type: "extTabLink" | "extLink" | "link" | "sub" = "link";
+    @Input() type: 'extTabLink' | 'extLink' | 'link' | 'sub' = 'link';
 
-    @HostBinding("class.expanded")
+    @HostBinding('class.expanded')
     @Input()
     get expanded() {
         return this.isExpanded;
@@ -22,7 +29,7 @@ export class NavAccordionItemDirective implements OnDestroy, OnInit {
 
     set expanded(value: boolean) {
         // Only sub menu can be expanded
-        this.isExpanded = this.type === "sub" && value;
+        this.isExpanded = this.type === 'sub' && value;
 
         if (value) {
             this.nav.closeOtherLinks(this);
