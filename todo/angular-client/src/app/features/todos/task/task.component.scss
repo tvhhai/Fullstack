@@ -1,8 +1,8 @@
 @use "@angular/material" as mat;
 @import "../../../shared/style/partials/mixin";
 
-$primary: mat.define-palette(mat.$indigo-palette);
-$accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$primary: mat.m2-define-palette(mat.$m2-indigo-palette);
+$accent: mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400);
 $list-view-max-width: 800px;
 $background-hover: rgb(238, 238, 238);
 
@@ -50,7 +50,7 @@ $background-hover: rgb(238, 238, 238);
         width: 100%;
         @include flex-center;
         flex-direction: row;
-        color: mat.get-color-from-palette($primary);
+        color: mat.m2-get-color-from-palette($primary);
         white-space: nowrap;
 
         &:before,
@@ -58,7 +58,7 @@ $background-hover: rgb(238, 238, 238);
           position: relative;
           content: "";
           height: 1px;
-          background: mat.get-color-from-palette($primary);
+          background: mat.m2-get-color-from-palette($primary);
           width: 50%;
         }
 
@@ -81,7 +81,7 @@ $background-hover: rgb(238, 238, 238);
     }
 
     .cdk-drag-placeholder {
-      border-top: 3px solid mat.get-color-from-palette($primary);
+      border-top: 3px solid mat.m2-get-color-from-palette($primary);
       background: $background-hover;
       border-bottom-right-radius: 8px;
       border-bottom-left-radius: 8px;
@@ -98,7 +98,7 @@ $background-hover: rgb(238, 238, 238);
         content: "";
         width: 9px;
         height: 9px;
-        border: 2px solid mat.get-color-from-palette($primary);
+        border: 2px solid mat.m2-get-color-from-palette($primary);
         border-radius: 50px;
       }
 
@@ -198,7 +198,7 @@ $background-hover: rgb(238, 238, 238);
             top: 0;
             bottom: 0;
             left: 6px;
-            border-left: 1px solid mat.get-color-from-palette($primary);
+            border-left: 1px solid mat.m2-get-color-from-palette($primary);
           }
 
           span {
@@ -207,7 +207,7 @@ $background-hover: rgb(238, 238, 238);
             white-space: nowrap;
             font-size: 14px;
             font-weight: 700;
-            color: mat.get-color-from-palette($primary);
+            color: mat.m2-get-color-from-palette($primary);
             background: white;
           }
         }
@@ -329,7 +329,7 @@ $background-hover: rgb(238, 238, 238);
           }
 
           &:hover {
-            color: mat.get-color-from-palette($primary);
+            color: mat.m2-get-color-from-palette($primary);
           }
         }
       }
@@ -504,10 +504,10 @@ $background-hover: rgb(238, 238, 238);
       color: grey;
 
       &:hover {
-        color: mat.get-color-from-palette($primary);
+        color: mat.m2-get-color-from-palette($primary);
 
         .icon {
-          background: mat.get-color-from-palette($primary);
+          background: mat.m2-get-color-from-palette($primary);
           border-radius: 100%;
           color: white;
         }
@@ -515,7 +515,7 @@ $background-hover: rgb(238, 238, 238);
 
       .icon {
         margin-right: 8px;
-        color: mat.get-color-from-palette($primary);
+        color: mat.m2-get-color-from-palette($primary);
       }
     }
 
@@ -731,7 +731,7 @@ $background-hover: rgb(238, 238, 238);
 
           .icon {
             margin-right: 8px;
-            color: mat.get-color-from-palette($primary);
+            color: mat.m2-get-color-from-palette($primary);
           }
         }
       }

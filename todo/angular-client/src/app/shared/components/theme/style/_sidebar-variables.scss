@@ -1,10 +1,10 @@
 @use '@angular/material' as mat;
 
-$primary: mat.define-palette(mat.$indigo-palette);
+$primary: mat.m2-define-palette(mat.$m2-indigo-palette);
 
 ////////////////////////////////
 
-$primaryColor: mat.get-color-from-palette($primary);
+$primaryColor: mat.m2-get-color-from-palette($primary);
 
 //Light
 $sideBarBgrLight: #fff;

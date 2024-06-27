@@ -234,10 +234,10 @@
     vite "5.2.11"
     watchpack "2.4.1"
 
-"@angular/cdk@17.2.2":
-  version "17.2.2"
-  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-17.2.2.tgz#c3f3335209a2099cbc124c2b1e9b1b8d20488647"
-  integrity sha512-no3FownDI+05SvCGOxduramTJw+V5p/rKebz4msZbsAXXLnOScZPN2rDgMKShl2dQokc6gjsKXsy8fAYpx7NSQ==
+"@angular/cdk@18.0.5":
+  version "18.0.5"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-18.0.5.tgz#83dad629605289cf57fbdb6addcbc28733a347fb"
+  integrity sha512-Yf94Udxip8xjVIJlxwh80h6fUpX5JFcBv3FCFer7DU/YzWdoTL+BTIYF8og+NjlDRt1nSbTxdyU2LVI0rTVkpg==
   dependencies:
     tslib "^2.3.0"
   optionalDependencies:
@@ -318,10 +318,10 @@
     fast-glob "3.3.2"
     yargs "^17.2.1"
 
-"@angular/material@17.2.2":
-  version "17.2.2"
-  resolved "https://registry.yarnpkg.com/@angular/material/-/material-17.2.2.tgz#33e3e11183030d9f4c713b56be3cf49fd1df1f0a"
-  integrity sha512-ToUp8gARTvdze9L7jhEuKqdos221jUCMRD6qzhl07XZRlxVbf/5VXUq2Nn7ei9uN11Ii1UY5pC0GS2XtlyHp4A==
+"@angular/material@18.0.5":
+  version "18.0.5"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-18.0.5.tgz#7c17cd6eaf76fc084d0e68d0b4a8be677de7481c"
+  integrity sha512-8xCyEs9yT7tp7vSBcVww+Adt2ue0oFG2yfISYRNweg0RXC9qk64DDhcIyYhn92xLSnFH1q6mPcjrNw8RmhA10A==
   dependencies:
     "@material/animation" "15.0.0-canary.7f224ddd4.0"
     "@material/auto-init" "15.0.0-canary.7f224ddd4.0"
@@ -366,6 +366,7 @@
     "@material/tab-scroller" "15.0.0-canary.7f224ddd4.0"
     "@material/textfield" "15.0.0-canary.7f224ddd4.0"
     "@material/theme" "15.0.0-canary.7f224ddd4.0"
+    "@material/tokens" "15.0.0-canary.7f224ddd4.0"
     "@material/tooltip" "15.0.0-canary.7f224ddd4.0"
     "@material/top-app-bar" "15.0.0-canary.7f224ddd4.0"
     "@material/touch-target" "15.0.0-canary.7f224ddd4.0"
