@@ -27,7 +27,7 @@
     "@ckeditor/ckeditor5-engine": "^41.2.0",
     "@ckeditor/ckeditor5-utils": "^41.2.0",
     "@ckeditor/ckeditor5-watchdog": "^41.2.0",
-    "@ng-bootstrap/ng-bootstrap": "^14.1.0",
+    "@ng-bootstrap/ng-bootstrap": "^17.0.0",
     "@ngx-translate/core": "^15.0.0",
     "@ngx-translate/http-loader": "^7.0.0",
     "@popperjs/core": "^2.11.6",
