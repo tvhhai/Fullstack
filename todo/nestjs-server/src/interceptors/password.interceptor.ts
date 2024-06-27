@@ -5,7 +5,7 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { map, Observable } from 'rxjs';
-import { FAKE_PASSWORD } from '../shared/constants/common.constant';
+import { FAKE_PASSWORD } from '@shared/constants/common.constant';
 
 @Injectable()
 export class PasswordInterceptor implements NestInterceptor {
