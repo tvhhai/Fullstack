@@ -1,10 +1,4 @@
-import {
-    HttpErrorResponse,
-    HttpInterceptor,
-    HttpRequest,
-    HttpHandler,
-    HttpEvent,
-} from '@angular/common/http';
+import { HttpErrorResponse, HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
 import { SettingConstant } from '@core/constants/auth.constant';
 import { AppConstant } from '@shared/constants/app.constant';
 import { Observable, throwError } from 'rxjs';

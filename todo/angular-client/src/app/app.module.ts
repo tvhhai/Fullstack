@@ -1,7 +1,7 @@
 import { CustomCurrencyMaskConfig } from '@shared/configs/currency-mask.config';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { BASE_URL } from '@core/interceptor/base-url.interceptor';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { LoaderService } from '@shared/services/loader.service';
@@ -35,13 +35,9 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
-@NgModule({
-    bootstrap: [AppComponent],
-    declarations: [AppComponent],
-    imports: [
-        BrowserModule,
+@NgModule({ bootstrap: [AppComponent],
+    declarations: [AppComponent], imports: [BrowserModule,
         BrowserAnimationsModule,
-        HttpClientModule,
         CoreModule,
         LayoutModule,
         NgbModule,
@@ -60,15 +56,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
                 provide: TranslateLoader,
                 useFactory: TranslateHttpLoaderFactory,
             },
-        }),
-        // ServiceWorkerModule.register("ngsw-worker.js", {
-        //     enabled: !isDevMode(),
-        //     // Register the ServiceWorker as soon as the application is stable
-        //     // or after 30 seconds (whichever comes first).
-        //     registrationStrategy: "registerWhenStable:30000"
-        // })
-    ],
-    providers: [
+        })], providers: [
         appInitializerProviders,
         httpInterceptorProviders,
         LoaderService,
@@ -76,8 +64,8 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
         { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
         { provide: MatSnackBarRef, useValue: {} },
         { provide: MAT_SNACK_BAR_DATA, useValue: {} },
-    ],
-})
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AppModule {
     // constructor(router: Router) {
     // Use a custom replacer to display function names in the route configs
