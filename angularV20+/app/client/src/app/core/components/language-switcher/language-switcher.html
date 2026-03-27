@@ -1,0 +1,24 @@
+<button mat-button [matMenuTriggerFor]="menu">
+    {{ currentLanguageLabel }}
+</button>
+
+<mat-menu #menu="matMenu">
+    @for (item of languages; track item.key) {
+        <button
+                mat-menu-item
+                (click)="useLanguage(item.key)"
+        >
+            <div class="flex items-center">
+                <img
+                        class="image-i18n"
+                        [ngSrc]="'./assets/images/i18n/' + item.key + '.png'"
+                        alt=""
+                        width="2560"
+                        height="1348"/>
+                <span>{{ item.value }}</span>
+            </div>
+        </button>
+    } @empty {
+        <li>There are no items.</li>
+    }
+</mat-menu>

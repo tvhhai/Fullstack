@@ -1,0 +1,58 @@
+<div class="flex w-full h-full">
+    <mat-card class="sign-in m-auto">
+        <mat-card-header class="mb-4">
+            <mat-card-title>{{ "auth.sign-in.title" | translate }}!</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+            <form class="form-field-full" [formGroup]="form" (ngSubmit)="onSubmit()">
+                <mat-form-field appearance="outline" class="mb-2">
+                    <mat-label>{{ "common.username" | translate }}</mat-label>
+                    <input matInput type="text" placeholder="" formControlName="username"/>
+
+                    <mat-error>
+                        @if (f['username'].errors?.['required']) {
+                            <span>Username is required</span>
+                        }
+                        @if (f['username'].errors?.['minlength']) {
+                            <span>Username must be at least 3 characters</span>
+                        }
+                        @if (f['username'].errors?.['maxlength']) {
+                            <span>Username must not exceed 20 characters</span>
+                        }
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="mb-2">
+
+                    <mat-label>{{ "common.password" | translate }}</mat-label>
+
+                    <input matInput type="password" placeholder="" formControlName="password" appPasswordView/>
+                    <mat-error>
+                        @if (f['password'].errors?.['required']) {
+                            <span>Password is required</span>
+                        }
+                        @if (f['password'].errors?.['minlength']) {
+                            <span>Password must be at least 6 characters</span>
+                        }
+                        @if (f['password'].errors?.['maxlength']) {
+                            <span>Password must not exceed 40 characters</span>
+                        }
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-checkbox class="mb-2" formControlName="rememberMe">{{ 'auth.sign-in.rememberMe' | translate }}
+                </mat-checkbox>
+
+                <button class="w-full mb-2" mat-raised-button color="primary" [disabled]="this.form.invalid">
+                    {{ "auth.sign-in.title" | translate }}
+                </button>
+
+                <div>
+                    {{ "auth.sign-in.haveNoAccount" | translate }}
+                    <a routerLink="/auth/sign-up">{{ "auth.sign-in.createOneAccount" | translate }}</a>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>

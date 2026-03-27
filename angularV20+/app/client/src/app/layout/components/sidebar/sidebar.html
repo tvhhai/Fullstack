@@ -1,0 +1,49 @@
+<div class="sidebar">
+    <div class="sidebar-header">
+        a
+    </div>
+
+    <div class="sidebar-content">
+        <ul class="menu-list">
+            @for (item of sidebarItems; track item.id) {
+                <li>
+                    @switch (item.type) {
+                        @case ('section') {
+                            <div class="menu-section">{{ item.name }}</div>
+                            <ul class="menu-children">
+                                <app-sidebar-item [item]="item.child"></app-sidebar-item>
+                            </ul>
+                        }
+                        @case ('link') {
+                            <a [routerLink]="item.route">
+                                @if (item.icon) {
+                                    <i class="{{ item.icon }}"></i>
+                                }
+                                {{ item.name }}
+                            </a>
+                        }
+                        @case ('sub') {
+                            <!-- Submenu expandable -->
+                            <div class="menu-sub">
+                                <div class="menu-sub-header">
+                                    @if (item.icon) {
+                                        <i class="{{ item.icon }}"></i>
+                                    }
+                                    {{ item.name }}
+                                </div>
+                                <ul class="submenu">
+                                    <app-sidebar-item [item]="item.child"></app-sidebar-item>
+                                </ul>
+                            </div>
+                        }
+                    }
+                </li>
+            }
+        </ul>
+
+
+    </div>
+    <div class="sidebar-footer">
+        c
+    </div>
+</div>

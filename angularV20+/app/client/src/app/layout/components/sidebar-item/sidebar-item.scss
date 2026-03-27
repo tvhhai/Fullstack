@@ -1,0 +1,40 @@
+.menu-item {
+  .submenu {
+    max-height: 0;
+    width: 100%;
+    overflow: hidden;
+    transition: all 0.2s ease;
+  }
+
+  .dot-icon {
+    width: 8px;
+    height: 8px;
+    border-radius: 100%;
+    background: rgb(206, 203, 227);
+    display: inline-flex;
+    margin-right: 16px;
+  }
+
+  .expand-menu {
+    max-height: 1000px;
+    transition: all 1s ease;
+  }
+
+  .icon-expand i {
+    //display: inline-block;
+    transition: transform 0.2s ease-in-out;
+  }
+
+  .expanded i {
+    transform: rotate(-90deg);
+  }
+
+  .title {
+    background-color: rgba(211, 25, 255, 0.1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+  }
+}

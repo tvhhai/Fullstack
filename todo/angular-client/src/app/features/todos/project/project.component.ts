@@ -128,6 +128,7 @@ export class ProjectComponent implements OnInit {
             };
 
             this.projectService.update(this.prjTaskId, data).subscribe(res => {
+                console.log(res);
                 this.view = view;
             });
         }

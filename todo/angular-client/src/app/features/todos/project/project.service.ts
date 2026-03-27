@@ -38,7 +38,7 @@ export class ProjectService {
         this.dataEditSubject.next(menu);
     }
 
-    countTask(item: any): number {
+    countTask(item: IProject): number {
         const taskCount = item.tasks.filter((task: ITask) => !task.done).length;
 
         let taskInSectionCount = 0;

@@ -1,0 +1,29 @@
+.sidebar-container {
+  height: 100%;
+
+  mat-sidenav {
+    width: 320px;
+    height: 100vh;
+    border-radius: unset;
+  }
+
+  .app-sidebar {
+    //width: 320px;
+    //background: red;
+
+    .mat-toolbar.mat-primary {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+  }
+}
+
+.app-main-container {
+  background: #eef5f9;
+  padding: 24px;
+
+  .card-container {
+    min-height: calc(100vh - 172px);
+  }
+}
